@@ -17,12 +17,12 @@ public class HyPeerWeb {
 		return 0;
 	}
 
-	public void reload(String string) {
+	public void reload(final String string) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public Node getNode(int i) {
+	public Node getNode(final int i) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -37,12 +37,12 @@ public class HyPeerWeb {
 		
 	}
 
-	public void addNode(Node node0) {
+	public void addNode(final Node node0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public boolean contains(Node node0) {
+	public boolean contains(final Node node0) {
 		// TODO Auto-generated method stub
 		return false;
 	}

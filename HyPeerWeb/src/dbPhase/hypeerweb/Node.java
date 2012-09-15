@@ -4,7 +4,7 @@ public class Node {
 
 	public static final Node NULL_NODE = null;
 
-	public Node(int i) {
+	public Node(final int i) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -13,47 +13,47 @@ public class Node {
 		return null;
 	}
 
-	public void setWebId(WebId webId) {
+	public void setWebId(final WebId webId) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void setFold(Node node5) {
+	public void setFold(final Node node5) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void setSurrogateFold(Node node6) {
+	public void setSurrogateFold(final Node node6) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void setInverseSurrogateFold(Node node7) {
+	public void setInverseSurrogateFold(final Node node7) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void addNeighbor(Node node0) {
+	public void addNeighbor(final Node node0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void removeNeighbor(Node node2) {
+	public void removeNeighbor(final Node node2) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void addUpPointer(Node node0) {
+	public void addUpPointer(final Node node0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void removeUpPointer(Node node0) {
+	public void removeUpPointer(final Node node0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void removeDownPointer(Node node1) {
+	public void removeDownPointer(final Node node1) {
 		// TODO Auto-generated method stub
 		
 	}

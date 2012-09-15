@@ -10,7 +10,7 @@ public class Exp {
 	private static final int PHASE_1_TEST_COUNT = 66;
 	private static int errorCount = 0;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		hypeerweb.clear();
     	System.out.println("Testing Phase 1");
 		testSimpleNodeOperationsOnNodeBeforeItHasBeenAddedToHyPeerWeb();
@@ -20,8 +20,8 @@ public class Exp {
 		testTheCreationOfAHyPeerWebFromAnExistingDababase();
         
         if (errorCount > 0) {
-    		double decimalPercent = ((double)PHASE_1_TEST_COUNT - (double) errorCount) / (double) PHASE_1_TEST_COUNT;
-    		int integerPercent = (int) (decimalPercent * 100.0d);
+    		final double decimalPercent = ((double)PHASE_1_TEST_COUNT - (double) errorCount) / (double) PHASE_1_TEST_COUNT;
+    		final int integerPercent = (int) (decimalPercent * 100.0d);
     		System.out.println("    Database Error: Phase 1 Score = " + integerPercent + "%");
         } else {
             System.out.println("    No Database Errors: Phase 1 Score = 100%");
@@ -32,7 +32,7 @@ public class Exp {
 		boolean error = false;
 
 		// testing Node(Integer) constructor
-		Node node = new Node(3);
+		final Node node = new Node(3);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
 
 		if (simpleDomain.getWebId() != 3) {
@@ -87,7 +87,7 @@ public class Exp {
 		error = testAddingAndRemovingUpPointers(node, error);
 		error = testAddingAndRemovingDownPointers(node, error);
 
-		Node node5 = new Node(5);
+		final Node node5 = new Node(5);
 		node.setFold(node5);
 		simpleDomain = node.constructSimplifiedNodeDomain();
 		if (simpleDomain.getFold() != 5) {
@@ -104,7 +104,7 @@ public class Exp {
 			errorCount++;
 		}
 
-		Node node6 = new Node(6);
+		final Node node6 = new Node(6);
 		node.setSurrogateFold(node6);
 		simpleDomain = node.constructSimplifiedNodeDomain();
 		if (simpleDomain.getSurrogateFold() != 6) {
@@ -122,7 +122,7 @@ public class Exp {
 			errorCount++;
 		}
 
-		Node node7 = new Node(7);
+		final Node node7 = new Node(7);
 		node.setInverseSurrogateFold(node7);
 		simpleDomain = node.constructSimplifiedNodeDomain();
 		if (simpleDomain.getInverseSurrogateFold() != 7) {
@@ -148,11 +148,11 @@ public class Exp {
 		hypeerweb.clear();
 	}
 
-	private static boolean testAddingAndRemovingNeighbors(Node node,
-			boolean error) {
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
+	private static boolean testAddingAndRemovingNeighbors(final Node node, final boolean error)
+	{
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
 
 		node.addNeighbor(node0);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
@@ -206,11 +206,11 @@ public class Exp {
 		return error;
 	}
 
-	private static boolean testAddingAndRemovingUpPointers(Node node,
-			boolean error) {
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
+	private static boolean testAddingAndRemovingUpPointers(final Node node, final boolean error)
+	{
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
 
 		node.addUpPointer(node0);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
@@ -264,11 +264,11 @@ public class Exp {
 		return error;
 	}
 
-	private static boolean testAddingAndRemovingDownPointers(Node node,
-			boolean error) {
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
+	private static boolean testAddingAndRemovingDownPointers(final Node node, final boolean error)
+	{
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
 
 		node.addUpPointer(node0);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
@@ -327,9 +327,9 @@ public class Exp {
 	private static void testAddNode() {
 		boolean error = false;
 		hypeerweb.clear();
-		Node node0 = new Node(0);
+		final Node node0 = new Node(0);
 		hypeerweb.addNode(node0);
-		Node node = hypeerweb.getNode(0);
+		final Node node = hypeerweb.getNode(0);
 		if (node == null) {
 			System.err.println("When a node is added to the HyPeerWeb, it should be in the database but hypeerweb.getNode(0) returned null.");
 		}
@@ -350,7 +350,7 @@ public class Exp {
 			errorCount++;
 		}
 
-		SimplifiedNodeDomain simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
+		final SimplifiedNodeDomain simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
 		if (simpleDomain == null) {
 			System.err.println("After adding a newly created node0 to the HyPeerWeb, the node does not exist in the database.");
 			error = true;
@@ -373,14 +373,14 @@ public class Exp {
 		boolean error = false;
 		hypeerweb.clear();
 
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
-		Node node3 = new Node(3);
-		Node node4 = new Node(4);
-		Node node5 = new Node(5);
-		Node node6 = new Node(6);
-		Node node7 = new Node(7);
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
+		final Node node3 = new Node(3);
+		final Node node4 = new Node(4);
+		final Node node5 = new Node(5);
+		final Node node6 = new Node(6);
+		final Node node7 = new Node(7);
 
 		hypeerweb.addNode(node0);
 
@@ -516,13 +516,13 @@ public class Exp {
 		boolean error = false;
 		hypeerweb.clear();
 
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
-		Node node3 = new Node(3);
-		Node node4 = new Node(4);
-		Node node5 = new Node(5);
-		Node node6 = new Node(6);
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
+		final Node node3 = new Node(3);
+		final Node node4 = new Node(4);
+		final Node node5 = new Node(5);
+		final Node node6 = new Node(6);
 
 		hypeerweb.addNode(node0);
 
@@ -607,9 +607,9 @@ public class Exp {
 		boolean error = false;
 		hypeerweb.clear();
 
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
+		final Node node0 = new Node(0);
+		final Node node1 = new Node(1);
+		final Node node2 = new Node(2);
 
 		hypeerweb.addNode(node0);
 		hypeerweb.addNode(node1);
@@ -660,7 +660,7 @@ public class Exp {
 			error = true;
 			errorCount++;
 		} else {
-			SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
+			final SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
 			if (simpleDomain.getNeighbors().size() != 2) {
 				System.err.println("After reloading the original database, there should be only 2 neighbors of node 0 but there are "	+ simpleDomain.getNeighbors().size() + ".");
 				error = true;
@@ -687,13 +687,13 @@ public class Exp {
 				errorCount++;
 			}
 			if (simpleDomain.getFold() != -1) {
-				int fold = simpleDomain.getFold();
+				final int fold = simpleDomain.getFold();
 				System.err.println("After reloading the original database, node 0 should have a null fold but, node " + Integer.toString(fold)	+ " was found instead.");
 				error = true;
 				errorCount++;
 			}
 			if (simpleDomain.getSurrogateFold() != 1) {
-				int surrogateFold = simpleDomain.getSurrogateFold();
+				final int surrogateFold = simpleDomain.getSurrogateFold();
 				System.err.println("After reloading the original database, node 0 should have node1 as a surroguteFold but, " + 
 						           (surrogateFold == -1 ? " the surrogateFold is null."	: (" found node " + Integer.toString(surrogateFold) + ".")));
 				error = true;
@@ -707,7 +707,7 @@ public class Exp {
 			error = true;
 			errorCount++;
 		} else {
-			SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
+			final SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
 			if (simpleDomain.getNeighbors().size() != 1) {
 				System.err.println("After reloading the original database, there should be only 1 neighbor of node 1 but there are "	+ simpleDomain.getNeighbors().size() + ".");
 				error = true;
@@ -734,14 +734,14 @@ public class Exp {
 				errorCount++;
 			}
 			if (simpleDomain.getFold() != 2) {
-				int fold = simpleDomain.getFold();
+				final int fold = simpleDomain.getFold();
 				System.err.println("After reloading the original database, node 1 should have node 2 as a fold but "
 								 + (fold == -1 ? " the fold is null." : (" found node " + Integer.toString(fold) + ".")));
 				error = true;
 				errorCount++;
 			}
 			if (simpleDomain.getSurrogateFold() != 0) {
-				int surrogateFold = simpleDomain.getFold();
+				final int surrogateFold = simpleDomain.getFold();
 				System.err.println("After reloading the original database, node 1 should have node 0 as a surrogateFold but, "
 								 + (surrogateFold == -1 ? " the surrogateFold is null."	: (" found node " + Integer.toString(surrogateFold) + ".")));
 				error = true;
@@ -755,7 +755,7 @@ public class Exp {
 			error = true;
 			errorCount++;
 		} else {
-			SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
+			final SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
 			if (simpleDomain.getNeighbors().size() != 1) {
 				System.err.println("After reloading the original database, there should be only 1 neighbor of node 2 but there are "	+ simpleDomain.getNeighbors().size() + ".");
 				error = true;
@@ -782,14 +782,14 @@ public class Exp {
 				errorCount++;
 			}
 			if (simpleDomain.getFold() != 1) {
-				int fold = simpleDomain.getFold();
+				final int fold = simpleDomain.getFold();
 				System.err.println("After reloading the original database, node 2 should have node 1 as a fold but "
 								 + (fold == -1 ? " the fold is null." : (" found node "	+ Integer.toString(fold) + ".")));
 				error = true;
 				errorCount++;
 			}
 			if (simpleDomain.getSurrogateFold() != -1) {
-				int surrogateFold = simpleDomain.getFold();
+				final int surrogateFold = simpleDomain.getFold();
 				System.err.println("After reloading the original database, node 2 should have node 1 as a surrogateFold but, "
 								+ (surrogateFold == -1 ? " the surrogateFold is null." : (" found node " + Integer.toString(surrogateFold) + ".")));
 				error = true;
