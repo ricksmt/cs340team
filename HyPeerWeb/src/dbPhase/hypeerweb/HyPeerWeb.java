@@ -1,6 +1,11 @@
 package dbPhase.hypeerweb;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 public class HyPeerWeb {
+    
+    private HashMap<Integer, Node> nodes;
 
 	public static HyPeerWeb getSingleton() {
 		// TODO Auto-generated method stub
@@ -17,8 +22,7 @@ public class HyPeerWeb {
 		return 0;
 	}
 
-	public void reload(final String string) {
-		// TODO Auto-generated method stub
+	public void reload(final String dbName) {
 		
 	}
 
@@ -33,8 +37,17 @@ public class HyPeerWeb {
 	}
 
 	public void saveToDatabase() {
-		// TODO Auto-generated method stub
-		
+		//iterate over nodes
+	          //add neights SN to db
+	    HyPeerWebDatabase database = HyPeerWebDatabase.getSingleton();
+	    database.clearNeighbors();
+        database.clearSurNeighbors();
+		for (Entry<Integer, Node> nodeEntry : nodes.entrySet())
+		{
+		    
+		    database.saveNeighbors(node);//these are private methods now
+		    database.saveSurNeighbors(node);
+		}
 	}
 
 	public void addNode(final Node node0) {
