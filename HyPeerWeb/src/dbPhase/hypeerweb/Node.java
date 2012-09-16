@@ -1,9 +1,18 @@
+
+/** 
+ * Surrogate neighbors are called DownPointers.
+ * Inverse surrogate neighbors are called UpPointers.
+ * Refer to: http://students.cs.byu.edu/~cs340ta/spring2012/projects/hypeerwebdesc/ 
+ * 
+ * Node.java
+ * Edited By: Trevor Bentley
+ * 
+ * */
+
 package dbPhase.hypeerweb;
 
 import java.util.HashSet;
 import java.util.Iterator;
-
-//downPointers are also known as surrogateNeighbors upPointers are also known as edgeNodes
 
 public class Node {
     
