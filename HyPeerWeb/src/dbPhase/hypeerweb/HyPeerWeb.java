@@ -1,15 +1,23 @@
 package dbPhase.hypeerweb;
 
-public class HyPeerWeb {
+import java.util.HashSet;
 
-	public static HyPeerWeb getSingleton() {
+public class HyPeerWeb {
+    private HashSet<Node> nodes;
+    
+    HyPeerWeb()
+    {
+        nodes = new HashSet<Node>();
+    }
+	
+    public static HyPeerWeb getSingleton() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+	    nodes.clear();
 	}
 
 	public int size() {
@@ -39,6 +47,7 @@ public class HyPeerWeb {
 
 	public void addNode(final Node node0) {
 		// TODO Auto-generated method stub
+	    nodes.add(node0);
 		
 	}
 
