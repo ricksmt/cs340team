@@ -94,11 +94,6 @@ public class Node {
 		webid = webId;
 	}
 	
-	public WebId getWebId()
-	{
-	    return webid;
-	}
-
 	public void setFold(final Node node) 
 	{
 	    // if node WebId is fold of this.WebId
