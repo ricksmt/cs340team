@@ -27,7 +27,7 @@ public class HyPeerWeb {
 
 	public int size() {
 		// TODO Auto-generated method stub
-	    return nodes.size();
+	    return size;
 	}
 
 	public void reload(final String string) {
