@@ -1,25 +1,34 @@
 package dbPhase.hypeerweb;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class HyPeerWeb {
+    private HashMap<Integer,Node> nodes;
+    private int size;
     
-    private HashMap<Integer, Node> nodes;
-
-	public static HyPeerWeb getSingleton() {
+    HyPeerWeb()
+    {
+        nodes = new HashMap<Integer,Node>();
+        HyPeerWebDatabase hypeerwebDB;
+        size = 0;
+    }
+	
+    public static HyPeerWeb getSingleton() {
 		// TODO Auto-generated method stub
-		return null;
+        HyPeerWeb hyPeerWeb = new HyPeerWeb();
+		return hyPeerWeb;
 	}
 
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+	    nodes.clear();
 	}
 
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+	    return size;
 	}
 
 	public void reload(final String dbName) {
@@ -27,8 +36,9 @@ public class HyPeerWeb {
 	}
 
 	public Node getNode(final int i) {
-		// TODO Auto-generated method stub
-		return null;
+	 // TODO Auto-generated method stub
+	    Node node = nodes.get(i);
+	    return node;
 	}
 
 	public void reload() {
@@ -52,12 +62,13 @@ public class HyPeerWeb {
 
 	public void addNode(final Node node0) {
 		// TODO Auto-generated method stub
-		
+	    nodes.put(size, node0);
+		size++;
 	}
 
 	public boolean contains(final Node node0) {
 		// TODO Auto-generated method stub
-		return false;
+	    return nodes.containsValue(node0);
 	}
 
 }

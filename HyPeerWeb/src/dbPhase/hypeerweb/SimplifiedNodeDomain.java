@@ -31,8 +31,8 @@ public class SimplifiedNodeDomain {
     protected int webId;
     protected int height;
     protected HashSet<Integer> neighbors;
-    protected HashSet<Integer> upPointers;
-    protected HashSet<Integer> downPointers;
+    protected HashSet<Integer> inverseSurrogateNeighbors;
+    protected HashSet<Integer> surrogateNeighbors;
     protected int fold;
     protected int surrogateFold;
     protected int inverseSurrogateFold;
@@ -76,19 +76,19 @@ public class SimplifiedNodeDomain {
     public SimplifiedNodeDomain(final int webId,
                                 final int height,
                                 final HashSet<Integer> neighbors,
-                                final HashSet<Integer> upPointers, 
-                                final HashSet<Integer> downPointers,
+                                final HashSet<Integer> inverseSurrogateNeighbors, 
+                                final HashSet<Integer> surrogateNeighbors,
                                 final int fold, 
                                 final int surrogateFold,
                                 final int inverseSurrogateFold)
     {
-        assert neighbors != null && upPointers != null && downPointers != null;
+        assert neighbors != null && inverseSurrogateNeighbors != null && surrogateNeighbors != null;
         
         this.webId = webId;
         this.height = height;
         this.neighbors = neighbors;
-        this.upPointers = upPointers;
-        this.downPointers = downPointers;
+        this.inverseSurrogateNeighbors = inverseSurrogateNeighbors;
+        this.surrogateNeighbors = surrogateNeighbors;
         this.fold = fold;
         this.surrogateFold = surrogateFold;
         this.inverseSurrogateFold = inverseSurrogateFold;
@@ -142,12 +142,12 @@ public class SimplifiedNodeDomain {
         
         result.append(leadingCharacters);
         result.append("UpPointers:             ");
-        appendSortedListOf(result, upPointers);
+        appendSortedListOf(result, inverseSurrogateNeighbors);
         result.append("\n");
         
         result.append(leadingCharacters);
         result.append("DownPointers:           ");
-        appendSortedListOf(result, downPointers);
+        appendSortedListOf(result, surrogateNeighbors);
         result.append("\n");
         
         result.append(leadingCharacters);
@@ -195,8 +195,8 @@ public class SimplifiedNodeDomain {
             result = webId == SimplifiedNodeDomain.webId &&
                      height == SimplifiedNodeDomain.height &&
                      setEquals(neighbors, SimplifiedNodeDomain.neighbors) &&
-                     setEquals(upPointers, SimplifiedNodeDomain.upPointers)    &&
-                     setEquals(downPointers, SimplifiedNodeDomain.downPointers) &&
+                     setEquals(inverseSurrogateNeighbors, SimplifiedNodeDomain.inverseSurrogateNeighbors)    &&
+                     setEquals(surrogateNeighbors, SimplifiedNodeDomain.surrogateNeighbors) &&
                      fold == SimplifiedNodeDomain.fold &&
                      surrogateFold == SimplifiedNodeDomain.surrogateFold &&
                      inverseSurrogateFold == SimplifiedNodeDomain.inverseSurrogateFold;
@@ -241,8 +241,8 @@ public class SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post result = upPointers
      */
-    public HashSet<Integer> getUpPointers() {
-        return upPointers;
+    public HashSet<Integer> getInverseSurrogateNeighbors() {
+        return inverseSurrogateNeighbors;
     }
 
     /**
@@ -251,8 +251,8 @@ public class SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post result = downPointers
      */
-    public HashSet<Integer> getDownPointers() {
-        return downPointers;
+    public HashSet<Integer> getSurrogateNeighbors() {
+        return surrogateNeighbors;
     }
 
     /**
@@ -310,14 +310,14 @@ public class SimplifiedNodeDomain {
             result = neighborDistance < distance;
         }
 
-        iter = upPointers.iterator();
+        iter = inverseSurrogateNeighbors.iterator();
         while (iter.hasNext() && !result) {
             final int upPointer = iter.next();
             final int upPointerDistance = distanceTo(upPointer, targetId);
             result = upPointerDistance < distance;
         }
 
-        iter = downPointers.iterator();
+        iter = surrogateNeighbors.iterator();
         while (iter.hasNext() && !result) {
             final int downPointer = iter.next();
             final int downPointerDistance = distanceTo(downPointer, targetId);
@@ -363,12 +363,12 @@ public class SimplifiedNodeDomain {
         this.neighbors = neighbors;
     }
     
-    public void setUpPointers(final HashSet<Integer> upPointers) {
-        this.upPointers = upPointers;
+    public void setInverseSurrogateNeighbors(final HashSet<Integer> inverseSurrogateNeighbors) {
+        this.inverseSurrogateNeighbors = inverseSurrogateNeighbors;
     }
     
-    public void setDownPointers(final HashSet<Integer> downPointers) {
-        this.downPointers = downPointers;
+    public void setSurrogateNeighbors(final HashSet<Integer> surrogateNeighbors) {
+        this.surrogateNeighbors = surrogateNeighbors;
     }
 
     //Auxiliary Constants, Variables, Methods, and Classes

@@ -46,13 +46,13 @@ public class Exp {
 			errorCount++;
 
 		}
-		if (simpleDomain.getUpPointers().size() != 0) {
+		if (simpleDomain.getInverseSurrogateNeighbors().size() != 0) {
 			System.err.println("When invoking Node(int) constructor as 'new Node(3)', the number of upPointers should be 0.");
 			error = true;
 			errorCount++;
 
 		}
-		if (simpleDomain.getDownPointers().size() != 0) {
+		if (simpleDomain.getSurrogateNeighbors().size() != 0) {
 			System.err.println("When invoking Node(int) constructor as 'new Node(3)', the number of downPointers should be 0.");
 			error = true;
 			errorCount++;
@@ -212,53 +212,53 @@ public class Exp {
 		final Node node1 = new Node(1);
 		final Node node2 = new Node(2);
 
-		node.addUpPointer(node0);
+		node.addInverseSurrogateNeighbor(node0);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getUpPointers().size() != 1) {
-			System.err.println("When invoking addUpPointer(Node) on a node with no upPointers the number of upPointers should be 1 but is "	+ simpleDomain.getUpPointers().size() + ".");
+		if (simpleDomain.getInverseSurrogateNeighbors().size() != 1) {
+			System.err.println("When invoking addUpPointer(Node) on a node with no upPointers the number of upPointers should be 1 but is "	+ simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 		}
-		if (!simpleDomain.getUpPointers().contains(0)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(0)) {
 			System.err.println("When invoking addUpPointer(Node) on a node with no upPointers node 1 should be an upPointer but is not.");
 		}
 
-		node.addUpPointer(node1);
-		node.addUpPointer(node2);
+		node.addInverseSurrogateNeighbor(node1);
+		node.addInverseSurrogateNeighbor(node2);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getUpPointers().size() != 3) {
-			System.err.println("After adding node0, node1, and node2 as upPointers to node, the number of upPointers should be 3 but is "	+ simpleDomain.getUpPointers().size() + ".");
+		if (simpleDomain.getInverseSurrogateNeighbors().size() != 3) {
+			System.err.println("After adding node0, node1, and node2 as upPointers to node, the number of upPointers should be 3 but is "	+ simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 		}
-		if (!simpleDomain.getUpPointers().contains(0)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(0)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node, node 0 should be a upPointer but is not.");
 		}
-		if (!simpleDomain.getUpPointers().contains(1)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(1)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node, node 1 should be a upPointer but is not.");
 		}
-		if (!simpleDomain.getUpPointers().contains(2)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(2)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node, node 2 should be a upPointer but is not.");
 		}
 
-		node.removeUpPointer(node0);
-		node.removeUpPointer(node2);
+		node.removeInverseSurrogateNeighbor(node0);
+		node.removeInverseSurrogateNeighbor(node2);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getUpPointers().size() != 1) {
+		if (simpleDomain.getInverseSurrogateNeighbors().size() != 1) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, the number of upPointers should be 1 but is " +
-							   simpleDomain.getUpPointers().size());
+							   simpleDomain.getInverseSurrogateNeighbors().size());
 		}
-		if (simpleDomain.getUpPointers().contains(0)) {
+		if (simpleDomain.getInverseSurrogateNeighbors().contains(0)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 0 should NOT be a upPointer but is.");
 		}
-		if (simpleDomain.getUpPointers().contains(2)) {
+		if (simpleDomain.getInverseSurrogateNeighbors().contains(2)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 2 should NOT be a upPointer but is.");
 		}
-		if (!simpleDomain.getUpPointers().contains(1)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(1)) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 1 should be a upPointer but is NOT.");
 		}
 
-		node.removeUpPointer(node1);
+		node.removeInverseSurrogateNeighbor(node1);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getUpPointers().size() != 0) {
+		if (simpleDomain.getInverseSurrogateNeighbors().size() != 0) {
 			System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0, node1, and node2 as upPointers, " +
-							   "the number of upPointers should be 0 but is " + simpleDomain.getUpPointers().size() + ".");
+							   "the number of upPointers should be 0 but is " + simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 		}
 
 		return error;
@@ -270,55 +270,55 @@ public class Exp {
 		final Node node1 = new Node(1);
 		final Node node2 = new Node(2);
 
-		node.addUpPointer(node0);
+		node.addInverseSurrogateNeighbor(node0);
 		SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().size() != 1) {
+		if (simpleDomain.getSurrogateNeighbors().size() != 1) {
 			System.err.println("When invoking addDownPointer(Node) on a node with no downPointers the number of downPointers should be 1 but is " +
-							   simpleDomain.getDownPointers().size() + ".");
+							   simpleDomain.getSurrogateNeighbors().size() + ".");
 		}
-		if (!simpleDomain.getDownPointers().contains(0)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(0)) {
 			System.err.println("When invoking addDownPointer(Node) on a node with no downPointers node 1 should be a downPointer but is not.");
 		}
 
-		node.addUpPointer(node1);
-		node.addUpPointer(node2);
+		node.addInverseSurrogateNeighbor(node1);
+		node.addInverseSurrogateNeighbor(node2);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().size() != 3) {
+		if (simpleDomain.getSurrogateNeighbors().size() != 3) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node, the number of downPointers should be 3 but is "	+ 
-					           simpleDomain.getDownPointers().size() + ".");
+					           simpleDomain.getSurrogateNeighbors().size() + ".");
 		}
-		if (!simpleDomain.getDownPointers().contains(0)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(0)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node, node 0 should be a downPointer but is not.");
 		}
-		if (!simpleDomain.getDownPointers().contains(1)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(1)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node, node 1 should be a downPointer but is not.");
 		}
-		if (!simpleDomain.getDownPointers().contains(2)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(2)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node, node 2 should be a downPointer but is not.");
 		}
 
-		node.removeDownPointer(node0);
-		node.removeDownPointer(node2);
+		node.removeSurrogateNeighbor(node0);
+		node.removeSurrogateNeighbor(node2);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().size() != 1) {
+		if (simpleDomain.getSurrogateNeighbors().size() != 1) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, " + 
-					           "the number of downPointers should be 1 but is "	+ simpleDomain.getDownPointers().size() + ".");
+					           "the number of downPointers should be 1 but is "	+ simpleDomain.getSurrogateNeighbors().size() + ".");
 		}
-		if (simpleDomain.getDownPointers().contains(0)) {
+		if (simpleDomain.getSurrogateNeighbors().contains(0)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 0 should NOT be a downPointer but is.");
 		}
-		if (simpleDomain.getDownPointers().contains(2)) {
+		if (simpleDomain.getSurrogateNeighbors().contains(2)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 2 should NOT be a downPointer but is.");
 		}
-		if (!simpleDomain.getDownPointers().contains(1)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(1)) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 1 should be a downPointer but is NOT.");
 		}
 
-		node.removeDownPointer(node1);
+		node.removeSurrogateNeighbor(node1);
 		simpleDomain = node.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().size() != 0) {
+		if (simpleDomain.getSurrogateNeighbors().size() != 0) {
 			System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0, node1, and node2 as downPointers, " +
-							   "the number of downPointers should be 0 but is " + simpleDomain.getDownPointers().size() + ".");
+							   "the number of downPointers should be 0 but is " + simpleDomain.getSurrogateNeighbors().size() + ".");
 		}
 
 		return error;
@@ -409,7 +409,7 @@ public class Exp {
 			errorCount++;
 		}
 
-		node0.addUpPointer(node3);
+		node0.addInverseSurrogateNeighbor(node3);
 		simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
 		if (simpleDomain == null) {
 			System.err.println("When adding node3 as an UpPointer to node0 which is already in the database,\n"	+
@@ -417,14 +417,14 @@ public class Exp {
 			error = true;
 			errorCount++;
 		}
-		if (simpleDomain != null && simpleDomain.getUpPointers().size() != 1) {
+		if (simpleDomain != null && simpleDomain.getInverseSurrogateNeighbors().size() != 1) {
 			System.err
 					.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n" + 
 							 "    there should be two neighbors of node0 in the database but there are not.");
 			error = true;
 			errorCount++;
 		}
-		if (simpleDomain != null && !simpleDomain.getUpPointers().contains(3)) {
+		if (simpleDomain != null && !simpleDomain.getInverseSurrogateNeighbors().contains(3)) {
 			System.err
 					.println("When adding node3 as an UpPointer to node0 which is already in the database,\n" + 
 							 "    the persistant version of node0 should have node3 as an UpPointer but does not.");
@@ -432,8 +432,8 @@ public class Exp {
 			errorCount++;
 		}
 
-		node0.addUpPointer(node4);
-		node0.addUpPointer(node5);
+		node0.addInverseSurrogateNeighbor(node4);
+		node0.addInverseSurrogateNeighbor(node5);
 		simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
 		if (simpleDomain == null) {
 			System.err.println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n" + 
@@ -441,19 +441,19 @@ public class Exp {
 			error = true;
 			errorCount++;
 		}
-		if (simpleDomain != null && simpleDomain.getDownPointers().size() != 2) {
+		if (simpleDomain != null && simpleDomain.getSurrogateNeighbors().size() != 2) {
 			System.err.println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n" +
 							   "    there should be two downPointers of node0 in the database but there are not.");
 			error = true;
 			errorCount++;
 		}
-		if (simpleDomain != null && !simpleDomain.getDownPointers().contains(4)) {
+		if (simpleDomain != null && !simpleDomain.getSurrogateNeighbors().contains(4)) {
 			System.err.println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n" +
 							   "    the persistant version of node0 should have node4 as a DownPointer but does not.");
 			error = true;
 			errorCount++;
 		}
-		if (simpleDomain != null && !simpleDomain.getDownPointers().contains(5)) {
+		if (simpleDomain != null && !simpleDomain.getSurrogateNeighbors().contains(5)) {
 			System.err.println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n" +
 							   "    the persistant version of node0 should have node5 as a DownPointer but does not.");
 			error = true;
@@ -528,10 +528,10 @@ public class Exp {
 
 		node0.addNeighbor(node1);
 		node0.addNeighbor(node2);
-		node0.addUpPointer(node3);
-		node0.addUpPointer(node4);
-		node0.addUpPointer(node5);
-		node0.addUpPointer(node6);
+		node0.addInverseSurrogateNeighbor(node3);
+		node0.addInverseSurrogateNeighbor(node4);
+		node0.addInverseSurrogateNeighbor(node5);
+		node0.addInverseSurrogateNeighbor(node6);
 
 		node0.removeNeighbor(node1);
 		SimplifiedNodeDomain simpleDomain = node0.constructSimplifiedNodeDomain();
@@ -557,39 +557,39 @@ public class Exp {
 			errorCount++;
 		}
 
-		node0.removeUpPointer(node4);
+		node0.removeInverseSurrogateNeighbor(node4);
 		simpleDomain = node0.constructSimplifiedNodeDomain();
-		if (simpleDomain.getUpPointers().contains(4)) {
+		if (simpleDomain.getInverseSurrogateNeighbors().contains(4)) {
 			System.err.println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n" +
 							   "    node4 was not removed from node0 in the database.");
 			error = true;
 			errorCount++;
 		}
-		if (!simpleDomain.getUpPointers().contains(3)) {
+		if (!simpleDomain.getInverseSurrogateNeighbors().contains(3)) {
 			System.err.println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n" +
 								   "    node3 was also removed.");
 			error = true;
 			errorCount++;
 		}
 
-		node0.removeDownPointer(node5);
+		node0.removeSurrogateNeighbor(node5);
 		simpleDomain = node0.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().contains(5)) {
+		if (simpleDomain.getSurrogateNeighbors().contains(5)) {
 			System.err.println("When removing node5 as a DownPointer of node0 which is already in the HyPeerWeb,\n" +
 							   "    node5 was not removed from node0 in the database.");
 			error = true;
 			errorCount++;
 		}
-		if (!simpleDomain.getDownPointers().contains(6)) {
+		if (!simpleDomain.getSurrogateNeighbors().contains(6)) {
 			System.err.println("When removing node1 as a DownPointer of node0 which is already in the HyPeerWeb,\n" +
 								   "    node6 was also removed.");
 			error = true;
 			errorCount++;
 		}
 
-		node0.removeDownPointer(node6);
+		node0.removeSurrogateNeighbor(node6);
 		simpleDomain = node0.constructSimplifiedNodeDomain();
-		if (simpleDomain.getDownPointers().contains(6)) {
+		if (simpleDomain.getSurrogateNeighbors().contains(6)) {
 			System.err.println("When removing node6 as a DownPointer of node0 which is already in the HyPeerWeb,\n"	+ 
 					           "    node6 was not removed.");
 			error = true;
@@ -620,11 +620,11 @@ public class Exp {
 		node0.setFold(Node.NULL_NODE);
 		node0.setSurrogateFold(node1);
 		node1.addNeighbor(node0);
-		node1.addUpPointer(node2);
+		node1.addInverseSurrogateNeighbor(node2);
 		node1.setFold(node2);
 		node1.setSurrogateFold(node0);
 		node2.addNeighbor(node0);
-		node2.addUpPointer(node1);
+		node2.addInverseSurrogateNeighbor(node1);
 		node2.setFold(node1);
 		hypeerweb.saveToDatabase();
 
@@ -676,13 +676,13 @@ public class Exp {
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getUpPointers().size() != 0) {
-				System.err.println("After reloading the original database, node 0 should have no UpPointers but has " + simpleDomain.getUpPointers().size() + ".");
+			if (simpleDomain.getInverseSurrogateNeighbors().size() != 0) {
+				System.err.println("After reloading the original database, node 0 should have no UpPointers but has " + simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getDownPointers().size() != 0) {
-				System.err.println("After reloading the original database, node 0 should have no DownPointers but has "	+ simpleDomain.getDownPointers().size() + ".");
+			if (simpleDomain.getSurrogateNeighbors().size() != 0) {
+				System.err.println("After reloading the original database, node 0 should have no DownPointers but has "	+ simpleDomain.getSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
@@ -718,18 +718,18 @@ public class Exp {
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getUpPointers().size() != 1) {
-				System.err.println("After reloading the original database, node 1 should have 1 UpPointer but has "	+ simpleDomain.getUpPointers().size() + ".");
+			if (simpleDomain.getInverseSurrogateNeighbors().size() != 1) {
+				System.err.println("After reloading the original database, node 1 should have 1 UpPointer but has "	+ simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
-			if (!simpleDomain.getUpPointers().contains(2)) {
+			if (!simpleDomain.getInverseSurrogateNeighbors().contains(2)) {
 				System.err.println("After reloading the original database, node 1 does not have node 2 as an UpPointer.");
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getDownPointers().size() != 0) {
-				System.err.println("After reloading the original database, node 1 should have no DownPointers but has " + simpleDomain.getDownPointers().size() + ".");
+			if (simpleDomain.getSurrogateNeighbors().size() != 0) {
+				System.err.println("After reloading the original database, node 1 should have no DownPointers but has " + simpleDomain.getSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
@@ -766,17 +766,17 @@ public class Exp {
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getUpPointers().size() != 0) {
-				System.err.println("After reloading the original database, node 2 should have no UpPointers but has " + simpleDomain.getUpPointers().size() + ".");
+			if (simpleDomain.getInverseSurrogateNeighbors().size() != 0) {
+				System.err.println("After reloading the original database, node 2 should have no UpPointers but has " + simpleDomain.getInverseSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
-			if (simpleDomain.getDownPointers().size() != 1) {
-				System.err.println("After reloading the original database, node 2 should have 1 DownPointer but has " + simpleDomain.getDownPointers().size() + ".");
+			if (simpleDomain.getSurrogateNeighbors().size() != 1) {
+				System.err.println("After reloading the original database, node 2 should have 1 DownPointer but has " + simpleDomain.getSurrogateNeighbors().size() + ".");
 				error = true;
 				errorCount++;
 			}
-			if (!simpleDomain.getDownPointers().contains(1)) {
+			if (!simpleDomain.getSurrogateNeighbors().contains(1)) {
 				System.err.println("After reloading the original database, node 2 does not have node 1 as a DownPointer.");
 				error = true;
 				errorCount++;
