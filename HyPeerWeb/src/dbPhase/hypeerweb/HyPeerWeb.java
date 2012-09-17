@@ -1,23 +1,32 @@
 package dbPhase.hypeerweb;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.*;
+
+
 
 public class HyPeerWeb {
     private HashMap<Integer,Node> nodes;
     private int size;
     
+    private static HyPeerWeb singleton;
+    private HyPeerWebDatabase database;
+
+    
     HyPeerWeb()
     {
         nodes = new HashMap<Integer,Node>();
-        HyPeerWebDatabase hypeerwebDB;
+        database = HyPeerWebDatabase.getSingleton();
+
         size = 0;
     }
 	
     public static HyPeerWeb getSingleton() {
-		// TODO Auto-generated method stub
-        HyPeerWeb hyPeerWeb = new HyPeerWeb();
-		return hyPeerWeb;
+        if(singleton == null)
+            singleton = new HyPeerWeb();
+        return singleton;
+
 	}
 
 	public void clear() {
@@ -30,8 +39,13 @@ public class HyPeerWeb {
 	    return nodes.size();
 	}
 
-	public void reload(final String string) {
-		// TODO Auto-generated method stub
+	public void reload(final String string) throws ClassNotFoundException, SQLException, IOException {
+	    HyPeerWebDatabase.initHyPeerWebDatabase(string);
+        database = HyPeerWebDatabase.getSingleton();
+        
+       
+        nodes.clear(); 
+        nodes.putAll(database.loadNodeSet());
 		
 	}
 
@@ -41,8 +55,8 @@ public class HyPeerWeb {
 	    return node;
 	}
 
-	public void reload() {
-		// TODO Auto-generated method stub
+	public void reload() throws ClassNotFoundException, SQLException, IOException {
+		reload(null);
 		
 	}
 
