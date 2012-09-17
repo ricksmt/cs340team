@@ -14,7 +14,7 @@ public class HyPeerWeb {
     private HyPeerWebDatabase database;
 
     
-    HyPeerWeb()
+    HyPeerWeb() throws ClassNotFoundException, SQLException
     {
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
@@ -22,7 +22,8 @@ public class HyPeerWeb {
         size = 0;
     }
 	
-    public static HyPeerWeb getSingleton() {
+    public static HyPeerWeb getSingleton() throws ClassNotFoundException, SQLException 
+    {
         if(singleton == null)
             singleton = new HyPeerWeb();
         return singleton;
@@ -39,10 +40,24 @@ public class HyPeerWeb {
 	    return nodes.size();
 	}
 
-	public void reload(final String string) throws ClassNotFoundException, SQLException, IOException {
-	    HyPeerWebDatabase.initHyPeerWebDatabase(string);
-        database = HyPeerWebDatabase.getSingleton();
-        
+	public void reload(final String string) throws SQLException {
+	    
+	    
+    	    try 
+    	    {
+                HyPeerWebDatabase.initHyPeerWebDatabase(string);
+                database = HyPeerWebDatabase.getSingleton();
+            }
+    	    catch (ClassNotFoundException e) 
+            {
+    	        e.printStackTrace();
+            } 
+    	    catch (SQLException e) 
+    	    {
+                e.printStackTrace();
+            }
+           
+	    
        
         nodes.clear(); 
         nodes.putAll(database.loadNodeSet());
@@ -60,15 +75,15 @@ public class HyPeerWeb {
 		
 	}
 
-	public void saveToDatabase() {
-		// TODO Auto-generated method stub
-		
+	public void saveToDatabase() throws SQLException {
+	    database.save(nodes.values());
 	}
 
 	public void addNode(final Node node0) {
 		// TODO Auto-generated method stub
-	    nodes.put(size, node0);
-		size++;
+	    nodes.put(node0.getWebId(), node0);
+	    //nodes.put(size, node0);
+		//size++;
 	}
 
 	public boolean contains(final Node node0) {

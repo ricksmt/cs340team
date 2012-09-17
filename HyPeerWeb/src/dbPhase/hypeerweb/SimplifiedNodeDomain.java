@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 /**
  * Contains the information for a node needed for automatic testing. Do
- * NOT assume that the domain of this class is the domain of the
+ * <b><u>NOT</u></b> assume that the domain of this class is the domain of the
  * connections of a node.
  *   
  * downPointers are also known as surrogateNeighbors
@@ -31,8 +31,8 @@ public class SimplifiedNodeDomain {
     protected int webId;
     protected int height;
     protected HashSet<Integer> neighbors;
-    protected HashSet<Integer> inverseSurrogateNeighbors;
-    protected HashSet<Integer> surrogateNeighbors;
+    protected HashSet<Integer> upPointers;
+    protected HashSet<Integer> downPointers;
     protected int fold;
     protected int surrogateFold;
     protected int inverseSurrogateFold;
@@ -73,22 +73,22 @@ public class SimplifiedNodeDomain {
      * 6. The simplifiedNodeDomains surrogateFold equals the surrogateFold passed in.
      * 7. The simplifiedNodeDomains inverseSurrogateFold equals the inverseSurrogateFold passed in.
      */
-    public SimplifiedNodeDomain(final int webId,
-                                final int height,
-                                final HashSet<Integer> neighbors,
-                                final HashSet<Integer> inverseSurrogateNeighbors, 
-                                final HashSet<Integer> surrogateNeighbors,
-                                final int fold, 
-                                final int surrogateFold,
-                                final int inverseSurrogateFold)
+    public SimplifiedNodeDomain(int webId,
+                                int height,
+                                HashSet<Integer> neighbors,
+                                HashSet<Integer> upPointers, 
+                                HashSet<Integer> downPointers,
+                                int fold, 
+                                int surrogateFold,
+                                int inverseSurrogateFold)
     {
-        assert neighbors != null && inverseSurrogateNeighbors != null && surrogateNeighbors != null;
+        assert neighbors != null && upPointers != null && downPointers != null;
         
         this.webId = webId;
         this.height = height;
         this.neighbors = neighbors;
-        this.inverseSurrogateNeighbors = inverseSurrogateNeighbors;
-        this.surrogateNeighbors = surrogateNeighbors;
+        this.upPointers = upPointers;
+        this.downPointers = downPointers;
         this.fold = fold;
         this.surrogateFold = surrogateFold;
         this.inverseSurrogateFold = inverseSurrogateFold;
@@ -121,10 +121,10 @@ public class SimplifiedNodeDomain {
      *       appropriate location of the format.
      * 
      */
-    public String toString(final String leadingCharacters) {
+    public String toString(String leadingCharacters) {
         assert leadingCharacters != null;
         
-        final StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer();
         result.append(leadingCharacters);
         result.append("Node:                   ");
         result.append(webId);
@@ -142,12 +142,12 @@ public class SimplifiedNodeDomain {
         
         result.append(leadingCharacters);
         result.append("UpPointers:             ");
-        appendSortedListOf(result, inverseSurrogateNeighbors);
+        appendSortedListOf(result, upPointers);
         result.append("\n");
         
         result.append(leadingCharacters);
         result.append("DownPointers:           ");
-        appendSortedListOf(result, surrogateNeighbors);
+        appendSortedListOf(result, downPointers);
         result.append("\n");
         
         result.append(leadingCharacters);
@@ -186,17 +186,17 @@ public class SimplifiedNodeDomain {
      *         otherSimplifiedNodeDomain is a simplifedNodeNodeDomain AND<br>
      *        the webIds, neighbors, downPointers, fold, surrogateFold, and inverseSurrogateFold of this and the otherSimplifiedNodeDomain are equal.
      */
-    public boolean equals(final Object otherSimplifiedNodeDomain) {
+    public boolean equals(Object otherSimplifiedNodeDomain) {
         boolean result = otherSimplifiedNodeDomain != null
                 && otherSimplifiedNodeDomain instanceof SimplifiedNodeDomain;
 
         if (result) {
-            final SimplifiedNodeDomain SimplifiedNodeDomain = (SimplifiedNodeDomain) otherSimplifiedNodeDomain;
+            SimplifiedNodeDomain SimplifiedNodeDomain = (SimplifiedNodeDomain) otherSimplifiedNodeDomain;
             result = webId == SimplifiedNodeDomain.webId &&
                      height == SimplifiedNodeDomain.height &&
                      setEquals(neighbors, SimplifiedNodeDomain.neighbors) &&
-                     setEquals(inverseSurrogateNeighbors, SimplifiedNodeDomain.inverseSurrogateNeighbors)    &&
-                     setEquals(surrogateNeighbors, SimplifiedNodeDomain.surrogateNeighbors) &&
+                     setEquals(upPointers, SimplifiedNodeDomain.upPointers)    &&
+                     setEquals(downPointers, SimplifiedNodeDomain.downPointers) &&
                      fold == SimplifiedNodeDomain.fold &&
                      surrogateFold == SimplifiedNodeDomain.surrogateFold &&
                      inverseSurrogateFold == SimplifiedNodeDomain.inverseSurrogateFold;
@@ -241,8 +241,8 @@ public class SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post result = upPointers
      */
-    public HashSet<Integer> getInverseSurrogateNeighbors() {
-        return inverseSurrogateNeighbors;
+    public HashSet<Integer> getUpPointers() {
+        return upPointers;
     }
 
     /**
@@ -251,8 +251,8 @@ public class SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post result = downPointers
      */
-    public HashSet<Integer> getSurrogateNeighbors() {
-        return surrogateNeighbors;
+    public HashSet<Integer> getDownPointers() {
+        return downPointers;
     }
 
     /**
@@ -295,32 +295,32 @@ public class SimplifiedNodeDomain {
      * 
      * @pre <i>None</i>
      * @post result = 
-     *         NOT &exist; nodeId ((nodeId &isin; neighbors OR nodeId &isin; upPointers OR nodeID &isin; downPointers OR
-     *             nodeID = fold OR nodeId = surrogateFold OR nodeId = inverseSurrogateFold) AND nodeId >= 0 AND nodeId.distanceTo(targetId) <
+     *         NOT &exist; nodeId ((nodeId &isin; neighbors OR nodeId &isin; upPointers OR nodeID &isin; downPointers OR<br>
+     *             nodeID = fold OR nodeId = surrogateFold OR nodeId = inverseSurrogateFold) AND nodeId &ge; 0 AND nodeId.distanceTo(targetId) <
      *                 nextNodeId.distanceTo(targetId))
      */
-    public boolean containsCloserNode(final int nextNodeId, final int targetId) {
-        final int distance = distanceTo(nextNodeId, targetId);
+    public boolean containsCloserNode(int nextNodeId, int targetId) {
+        int distance = distanceTo(nextNodeId, targetId);
         boolean result = false;
 
         Iterator<Integer> iter = neighbors.iterator();
         while (iter.hasNext() && !result) {
-            final int neighbor = iter.next();
-            final int neighborDistance = distanceTo(neighbor, targetId);
+            int neighbor = iter.next();
+            int neighborDistance = distanceTo(neighbor, targetId);
             result = neighborDistance < distance;
         }
 
-        iter = inverseSurrogateNeighbors.iterator();
+        iter = upPointers.iterator();
         while (iter.hasNext() && !result) {
-            final int upPointer = iter.next();
-            final int upPointerDistance = distanceTo(upPointer, targetId);
+            int upPointer = iter.next();
+            int upPointerDistance = distanceTo(upPointer, targetId);
             result = upPointerDistance < distance;
         }
 
-        iter = surrogateNeighbors.iterator();
+        iter = downPointers.iterator();
         while (iter.hasNext() && !result) {
-            final int downPointer = iter.next();
-            final int downPointerDistance = distanceTo(downPointer, targetId);
+            int downPointer = iter.next();
+            int downPointerDistance = distanceTo(downPointer, targetId);
             result = downPointerDistance < distance;
         }
 
@@ -347,8 +347,8 @@ public class SimplifiedNodeDomain {
     public static int distanceTo(int thisId, int otherId) {
         int result = 0;
         while (thisId != 0 || otherId != 0) {
-            final int digit1 = thisId & 1;
-            final int digit2 = otherId & 1;
+            int digit1 = thisId & 1;
+            int digit2 = otherId & 1;
             if (digit1 != digit2) {
                 result++;
             }
@@ -359,16 +359,16 @@ public class SimplifiedNodeDomain {
     }
 
     // Commands
-    public void setNeighbors(final HashSet<Integer> neighbors) {
+    public void setNeighbors(HashSet<Integer> neighbors) {
         this.neighbors = neighbors;
     }
     
-    public void setInverseSurrogateNeighbors(final HashSet<Integer> inverseSurrogateNeighbors) {
-        this.inverseSurrogateNeighbors = inverseSurrogateNeighbors;
+    public void setUpPointers(HashSet<Integer> upPointers) {
+        this.upPointers = upPointers;
     }
     
-    public void setSurrogateNeighbors(final HashSet<Integer> surrogateNeighbors) {
-        this.surrogateNeighbors = surrogateNeighbors;
+    public void setDownPointers(HashSet<Integer> downPointers) {
+        this.downPointers = downPointers;
     }
 
     //Auxiliary Constants, Variables, Methods, and Classes
@@ -381,14 +381,14 @@ public class SimplifiedNodeDomain {
      * @pre set1 &ne; null AND set2 &ne; null
      * @post |set1| = |set2| AND &forall; i (i &isin; set1 &rArr; i &isin; set2)
      */
-    private boolean setEquals(final HashSet<Integer> set1, final HashSet<Integer> set2) {
+    private boolean setEquals(HashSet<Integer> set1, HashSet<Integer> set2) {
         assert set1 != null && set2 != null;
         
         boolean result = set1.size() == set2.size();
 
-        final Iterator<Integer> iter = set1.iterator();
+        Iterator<Integer> iter = set1.iterator();
         while (iter.hasNext() && result) {
-            final Integer nodeId = iter.next();
+            Integer nodeId = iter.next();
             result = set2.contains(nodeId);
         }
         return result;
@@ -405,8 +405,8 @@ public class SimplifiedNodeDomain {
      * @post result = stringBuffer + the string representation of the integers in the set such that all integers
      *         are separated by a " ".  The integers are also sorted from lowest to highest.
      */
-    protected void appendSortedListOf(final StringBuffer stringBuffer, final HashSet<Integer> set) {
-        final int[] sortedList = new int[set.size()];
+    protected void appendSortedListOf(StringBuffer stringBuffer, HashSet<Integer> set) {
+        int[] sortedList = new int[set.size()];
         int i = 0;
         for (int element : set) {
             sortedList[i] = element;

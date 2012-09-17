@@ -143,4 +143,74 @@ public class Node {
 	{
 	    inverseSurrogateNeighbors.remove(node);
 	}
+	
+	public int getWebId()
+	{
+	    return webid.getValue();
+	}
+	
+	public int getHeight()
+	{
+	    return webid.getHeight();
+	}
+	
+	public int getFoldId()
+	{
+	    return fold == NULL_NODE ? -1 : fold.getWebId();
+	}
+	
+	public int getSurFoldId()
+	{
+	    return surrogateFold == NULL_NODE ? -1 : surrogateFold.getWebId();
+	}
+	
+	public int getInvSurFoldId()
+	{
+	    return inverseSurrogateFold == NULL_NODE ? -1 : inverseSurrogateFold.getWebId();
+	}
+
+    public void addUpPointer(Node node0) {
+        addInverseSurrogateNeighbor(node0);
+        
+    }
+    
+    public void removeUpPointer(Node node){
+        removeInverseSurrogateNeighbor(node);
+    }
+    
+    public void addDownPointer(Node node){
+        addSurrogateNeighbor(node);
+    }
+    
+    public void removeDownPointer(Node node){
+        removeSurrogateNeighbor(node);
+    }
+    
+    public HashSet<Integer> getNeighborsIds(){
+        HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : neighbors){
+            neighborsIds.add(neighbor.getWebId());
+        }
+        
+        return neighborsIds;
+    }
+    
+    public HashSet<Integer> getSurNeighborsIds(){
+        HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : surrogateNeighbors){
+            neighborsIds.add(neighbor.getWebId());
+        }
+        
+        return neighborsIds;
+    }
+    
+    public HashSet<Integer> getInvSurNeighborsIds(){
+        HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : inverseSurrogateNeighbors){
+            neighborsIds.add(neighbor.getWebId());
+        }
+        
+        return neighborsIds;
+    }
+    
 }
