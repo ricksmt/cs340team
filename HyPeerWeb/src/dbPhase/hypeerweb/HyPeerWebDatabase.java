@@ -107,9 +107,9 @@ public class HyPeerWebDatabase {
     private void dropTables() throws SQLException{
         
         Statement dropTables = connection.createStatement();
-        dropTables.addBatch("DROP TABLE IF EXISTS Node");
-        dropTables.addBatch("DROP TABLE IF EXISTS SurrogateNeighbor");
-        dropTables.addBatch("DROP TABLE IF EXISTS Neighbor");
+        dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
+        dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
+        dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
         dropTables.executeBatch();
         dropTables.close();
         
@@ -139,9 +139,9 @@ public class HyPeerWebDatabase {
                 ResultSet nodeSet = nodeStat.executeQuery();
                 
                 if(nodeSet.next()){                    
-                    if(nodeSet.getInt("Fold")>0) currNode.setFold(nodes.get(nodeSet.getInt("Fold")));
-                    if(nodeSet.getInt("InvSurFold")>0) currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
-                    if(nodeSet.getInt("SurFold")>0) currNode.setSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
+                    if(nodeSet.getInt("Fold")>=0) currNode.setFold(nodes.get(nodeSet.getInt("Fold")));
+                    if(nodeSet.getInt("InvSurFold")>=0) currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
+                    if(nodeSet.getInt("SurFold")>=0) currNode.setSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
                 }
                 
                 HashSet<Integer> neighbors = loadNeighbors(id);
@@ -209,7 +209,7 @@ public class HyPeerWebDatabase {
         HashSet<Integer> surNeighbors = new HashSet<Integer>();
        
         while (surNeighborsSet.next())
-                surNeighbors.add(surNeighborsSet.getInt("Neighbor"));
+                surNeighbors.add(surNeighborsSet.getInt("SurNeighbor"));
        
         loadSurNeighbors.close();
         return surNeighbors;
