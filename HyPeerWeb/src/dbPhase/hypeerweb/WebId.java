@@ -22,7 +22,8 @@ package dbPhase.hypeerweb;
  * 
  * @author Scott Woodfield
  */
-public class WebId {
+public class WebId
+{
     //I don't know why the previous line shows as yellow in the coverage report.  It is not even
     //an executable statement much less a boolean expression.
     
@@ -49,7 +50,8 @@ public class WebId {
      * @pre <i>None</i>
      * @post id = -1 AND height = -1
      */
-    private WebId() {
+    private WebId()
+    {
         id = -1;
         height = -1;
         mask = 0;
@@ -65,7 +67,8 @@ public class WebId {
      * @pre id &ge; 0
      * @post this.id = id AND height = locationOfMostSignificantOneBit(id) + 1
      */
-    public WebId(final int id) {
+    public WebId(final int id)
+    {
         assert id >= 0;
         this.id = id;
         height = locationOfMostSignificantOneBit(id) + 1;
@@ -85,7 +88,8 @@ public class WebId {
      * @pre id &ge; 0 AND height >= locationOfMostSignificantOneBit(id) + 1)
      * @post this.id = id AND this.height = height
      */
-    public WebId(final int id, final int height) {
+    public WebId(final int id, final int height)
+    {
         assert id >= 0 && height >= locationOfMostSignificantOneBit(id) + 1 && height <= 31;
         this.id = id;
         this.height = height;
@@ -104,7 +108,8 @@ public class WebId {
      * @pre <i>None</i>
      * @post result = id
      */
-    public int hashCode() {
+    public int hashCode()
+    {
         return id;
     }
     /**
@@ -115,18 +120,20 @@ public class WebId {
      *       this &ne; NULL_WEB_ID AND height = 0 &rArr; result = ""<br>
      *       this &ne; NULL_WEB_ID AND height > 0 &rArr; |result| = height AND result = Integer.valueOf(result, 2)
      */
-    public String toString() {
+    public String toString()
+    {
         String result = null;
-        if(id == -1) {
-            result = "NULL WEB ID";
-        } else if(height == 0) {
-            result = "";
-        } else {
+        if(id == -1) result = "NULL WEB ID";
+        else if(height == 0) result = "";
+        else
+        {
             result = Integer.toString(id, 2);
             final int numberOfLeadingZeros = height - result.length();
-            if(numberOfLeadingZeros > 0) {
+            if(numberOfLeadingZeros > 0)
+            {
                 final StringBuffer resultBuffer = new StringBuffer();
-                for(int i = 0; i < numberOfLeadingZeros; i++) {
+                for(int i = 0; i < numberOfLeadingZeros; i++)
+                {
                     resultBuffer.append('0');
                 }
                 resultBuffer.append(result);
@@ -148,9 +155,11 @@ public class WebId {
      *                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                height = object.height
      */
-    public boolean equals(final Object object) {
+    public boolean equals(final Object object)
+    {
         boolean result = (object != null) && (object instanceof WebId);
-        if (result) {
+        if (result)
+        {
             final WebId otherWebId = (WebId)object;
             result = id == otherWebId.id && height == otherWebId.height;
         }
@@ -163,7 +172,8 @@ public class WebId {
      * @pre <i>None</i>
      * @post result = id
      */
-    public int getValue() {
+    public int getValue()
+    {
         return id;
     }
 
@@ -173,7 +183,8 @@ public class WebId {
      * @pre <i>None</i>
      * @post result = height
      */
-    public int getHeight() {
+    public int getHeight()
+    {
         return height;
     }
 
@@ -189,18 +200,16 @@ public class WebId {
      *                height > webId.height => id > webId.id AND<br>
      *                height < webId.height => id < webId.id
      */
-    public boolean isNeighborOf(final WebId webId) {
+    public boolean isNeighborOf(final WebId webId)
+    {
         assert webId != null && webId != NULL_WEB_ID && id >= 0;
         
         boolean result = distanceTo(webId) == 1;
-        if (result) {
-            if(height + 1 == webId.height) {
-                result = id > webId.id;
-            } else if(height == webId.height + 1) {
-                result = id < webId.id;
-            } else {
-                result = height == webId.height;
-            }
+        if (result)
+        {
+            if(height + 1 == webId.height) result = id > webId.id;
+            else if(height == webId.height + 1) result = id < webId.id;
+            else result = height == webId.height;
         }
         return result;
     }
@@ -231,8 +240,8 @@ public class WebId {
      *                distanceTo(webId) = 2<br>
      *  <br>
      */
-    public boolean isSurrogateNeighborOf(final WebId webId) {
-
+    public boolean isSurrogateNeighborOf(final WebId webId)
+    {
         assert webId != null && webId != NULL_WEB_ID && height >  0;
         
         final boolean result = height + 1 == webId.height &&
@@ -260,20 +269,19 @@ public class WebId {
      *                height &ne; webId.height && height + 1 &ne; webId.height && height &ne webId.id + 1 &rArr; result = false
      *               )
      */
-    public boolean isFoldOf(final WebId webId) {
+    public boolean isFoldOf(final WebId webId)
+    {
         assert webId != null && webId != NULL_WEB_ID && id >= 0;
         
         boolean result = false;
-        if(id != -1 && webId.id != -1) {
-            if (height == webId.height) {
-                result = (mask & id) == (webId.mask & ~webId.id);
-            } else if(height + 1 == webId.height && (webId.id & ~webId.highOrderBitMask) < id) {
+        if(id != -1 && webId.id != -1)
+        {
+            if (height == webId.height) result = (mask & id) == (webId.mask & ~webId.id);
+            else if(height + 1 == webId.height && (webId.id & ~webId.highOrderBitMask) < id)
                 result = (mask & id) == (mask & ~webId.id);
-            } else if(height == webId.height + 1 && (id & ~highOrderBitMask) < webId.id) {
+            else if(height == webId.height + 1 && (id & ~highOrderBitMask) < webId.id)
                 result = (webId.mask & id) == (webId.mask & ~webId.id);
-            }
         }
-
         return result;
     }
     
@@ -291,7 +299,8 @@ public class WebId {
      *                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                (~(-1 << height) &amp; webId.id = ~(~(-1 << height) &amp; id)
      */
-    public boolean isSurrogateFoldOf(final WebId webId) {
+    public boolean isSurrogateFoldOf(final WebId webId)
+    {
         assert webId != null && webId != NULL_WEB_ID && id >= 0;
 
         final boolean result = (height + 1 == webId.height) &&
@@ -315,7 +324,8 @@ public class WebId {
      *                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                (~(-1 << webId.height) &amp; webId.id = ~(~(-1 << webId.height) &amp; id)
      */
-    public boolean isInverseSurrogateFoldOf(final WebId webId) {
+    public boolean isInverseSurrogateFoldOf(final WebId webId)
+    {
         assert webId != null && webId != NULL_WEB_ID && id >= 0;
 
         final boolean result = (height == webId.height + 1) &&
@@ -361,7 +371,8 @@ public class WebId {
      *                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                webId.id &ge; 0 &rArr; webId.height &ge; &lceil;log<sub>2</sub>(webId.id + 1)&rceil;
      */
-    private static boolean invariant(final WebId webId) {
+    private static boolean invariant(final WebId webId)
+    {
         //This is only used to verify that the constructors, especially the default constructor, are
         //implemented correctly.  Thus the webId will never be null.  Thus, the coverage report will
         //show the following line a yellow.
@@ -389,7 +400,8 @@ public class WebId {
      *                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                     &forall; result &lt; i < 32 (Integer.toBinaryString(id).charAt(i) = '0')
      */
-    public static int locationOfMostSignificantOneBit(int id) {   //DataFlow testing line 0.
+    public static int locationOfMostSignificantOneBit(int id)
+    {   //DataFlow testing line 0.
         //At the three locations where this method is invoked, the id is >= 0.  Thus, this pre-condition
         //is always true.  Thus, the coverage report would normally show this as never being false.
         //However, we have made this public for loop testing purposes, so we can force the assertion to be both
@@ -397,7 +409,8 @@ public class WebId {
         assert id >= 0;                                           //DataFlow testing line 1
 
         int result = -1;                                          //DataFlow testing line 2
-        while (id > 0) {                                          //DataFlow testing line 3
+        while (id > 0)
+        {                                          //DataFlow testing line 3
             result++;                                             //DataFlow testing line 4
             id >>>= 1;                                            //DataFlow testing line 5
         }                                                         //DataFlow testing line 6
@@ -418,7 +431,8 @@ public class WebId {
      *                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      *                NumberOf min(height, webId.height) &le; i &lt; webId.height (webId.toString().charAt(i) = '1')
      */
-    private int distanceTo(final WebId webId) {
+    private int distanceTo(final WebId webId)
+    {
         //The pre-conditions of the two methods where this method are invoked guarantee 
         //that this pre-condition is always true.  Thus, the coverage report will always show this as
         //yellow.
@@ -428,10 +442,12 @@ public class WebId {
 
         int thisId = id & mask;
         int otherId = webId.id & webId.mask;
-        while (thisId != 0 || otherId != 0) {
+        while (thisId != 0 || otherId != 0)
+        {
             final int digit1 = thisId & 1;
             final int digit2 = otherId & 1;
-            if (digit1 != digit2) {
+            if (digit1 != digit2)
+            {
                 result++;
             }
             thisId >>>= 1;
@@ -443,7 +459,8 @@ public class WebId {
     //This checks the invariant of the default constructor which is only used to create the NULL_WEB_ID.
     //With this implementation it is impossible to make the assertions false.  Thus, the coverage report
     //will always show this as yellow.
-    static {
+    static
+    {
         assert invariant(NULL_WEB_ID);
         assert NULL_WEB_ID.mask == 0 && NULL_WEB_ID.highOrderBitMask == 1;
     }

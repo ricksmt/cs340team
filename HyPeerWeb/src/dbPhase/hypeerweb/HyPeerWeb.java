@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class HyPeerWeb {
+public class HyPeerWeb
+{
     private HashMap<Integer,Node> nodes;
+    @SuppressWarnings("unused")
     private int size;
     
     private static HyPeerWeb singleton;
@@ -29,65 +31,62 @@ public class HyPeerWeb {
 
 	}
 
-	public void clear() {
+	public void clear()
+	{
 		// TODO Auto-generated method stub
 	    nodes.clear();
 	}
 
-	public int size() {
+	public int size()
+	{
 		// TODO Auto-generated method stub
 	    return nodes.size();
 	}
 
-	public void reload(final String string) throws SQLException {
+	public void reload(final String string) throws SQLException
+	{   
+	    try
+	    {
+            HyPeerWebDatabase.initHyPeerWebDatabase(string);
+            database = HyPeerWebDatabase.getSingleton();
+        }
+	    catch (final ClassNotFoundException e)
+	        { e.printStackTrace(); } 
+	    catch (final SQLException e)
+	        { e.printStackTrace(); }
 	    
-	    
-    	    try 
-    	    {
-                HyPeerWebDatabase.initHyPeerWebDatabase(string);
-                database = HyPeerWebDatabase.getSingleton();
-            }
-    	    catch (ClassNotFoundException e) 
-            {
-    	        e.printStackTrace();
-            } 
-    	    catch (SQLException e) 
-    	    {
-                e.printStackTrace();
-            }
-           
-	    
-       
         nodes.clear(); 
         nodes.putAll(database.loadNodeSet());
-		
 	}
 
-	public Node getNode(final int i) {
+	public Node getNode(final int i)
+	{
 	 // TODO Auto-generated method stub
-	    Node node = nodes.get(i);
+	    final Node node = nodes.get(i);
 	    return node;
 	}
 
-	public void reload() throws ClassNotFoundException, SQLException, IOException {
-		reload(null);
-		
+	public void reload() throws ClassNotFoundException, SQLException, IOException
+	{
+		reload(null);	
 	}
 
-	public void saveToDatabase() throws SQLException {
+	public void saveToDatabase() throws SQLException
+	{
 	    database.save(nodes.values());
 	}
 
-	public void addNode(final Node node0) {
+	public void addNode(final Node node0)
+	{
 		// TODO Auto-generated method stub
 	    nodes.put(node0.getWebId(), node0);
 	    //nodes.put(size, node0);
 		//size++;
 	}
 
-	public boolean contains(final Node node0) {
+	public boolean contains(final Node node0)
+	{
 		// TODO Auto-generated method stub
 	    return nodes.containsValue(node0);
 	}
-
 }

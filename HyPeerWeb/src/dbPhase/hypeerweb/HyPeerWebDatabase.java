@@ -3,7 +3,8 @@ package dbPhase.hypeerweb;
 import java.sql.*;
 import java.util.*;
 
-public class HyPeerWebDatabase {
+public class HyPeerWebDatabase
+{
 
     public static String DATABASE_DIRECTORY;
     public static String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
@@ -12,43 +13,42 @@ public class HyPeerWebDatabase {
 
 
     
-    private HyPeerWebDatabase(String dbName) throws ClassNotFoundException, SQLException{
+    private HyPeerWebDatabase(final String dbName) throws ClassNotFoundException, SQLException
+    {
         initHyPeerWebDatabase(dbName);
     }
 
 
-    public static HyPeerWebDatabase getSingleton() throws ClassNotFoundException, SQLException{
-        if (singleton == null)
-                singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
+    public static HyPeerWebDatabase getSingleton() throws ClassNotFoundException, SQLException
+    {
+        if (singleton == null) singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
         return singleton;
     }
 
     
-    public static void initHyPeerWebDatabase(java.lang.String dbName) throws SQLException, ClassNotFoundException{
-        
+    public static void initHyPeerWebDatabase(java.lang.String dbName) throws SQLException, ClassNotFoundException
+    {
         if (connection != null)
         {    
             try 
             {
                 connection.close();
             } 
-            catch (SQLException e) {
+            catch (final SQLException e)
+            {
                 e.printStackTrace();
             }
         }    
         
-        if (dbName==null)
-            dbName=DEFAULT_DATABASE_NAME;
-        
+        if (dbName==null) dbName=DEFAULT_DATABASE_NAME;
         
         Class.forName("org.sqlite.JDBC");
-        
         
         try 
         {
             connection = DriverManager.getConnection("jdbc:sqlite:"+dbName);
         } 
-        catch (SQLException e) 
+        catch (final SQLException e) 
         {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class HyPeerWebDatabase {
     
     
     
-    public void save(Collection<Node> nodes) throws SQLException
+    public void save(final Collection<Node> nodes) throws SQLException
     {
             
             dropTables();
@@ -76,7 +76,7 @@ public class HyPeerWebDatabase {
     
     private static void createTables() throws SQLException
     {
-            Statement createTables = connection.createStatement();
+            final Statement createTables = connection.createStatement();
             createTables.addBatch(
                             "CREATE TABLE IF NOT EXISTS Nodes (" +
                             "WebId int primary key not null unique," +
@@ -104,9 +104,10 @@ public class HyPeerWebDatabase {
             
     }
     
-    private void dropTables() throws SQLException{
+    private void dropTables() throws SQLException
+    {
         
-        Statement dropTables = connection.createStatement();
+        final Statement dropTables = connection.createStatement();
         dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
         dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
         dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
@@ -117,44 +118,43 @@ public class HyPeerWebDatabase {
     
     public HashMap<Integer,Node> loadNodeSet() throws SQLException
     {
-            HashMap<Integer,Node> nodes = new HashMap<Integer,Node>();
-            Statement stat = connection.createStatement();
+            final HashMap<Integer,Node> nodes = new HashMap<Integer,Node>();
+            final Statement stat = connection.createStatement();
             
             //load the nodes
-            ResultSet rs = stat.executeQuery("select WebId from Nodes;");
-            while (rs.next()){
-                int webId = rs.getInt("WebId");
-                Node newNode = new Node(webId);
+            final ResultSet rs = stat.executeQuery("select WebId from Nodes;");
+            while (rs.next())
+            {
+                final int webId = rs.getInt("WebId");
+                final Node newNode = new Node(webId);
                 nodes.put(webId, newNode);                               
             }
                     
             rs.close();
-            Set<Integer> keySet = nodes.keySet();
+            final Set<Integer> keySet = nodes.keySet();
             Node currNode;
-            for(int id: keySet){
-                
+            for(int id: keySet)
+            {    
                 currNode = nodes.get(id);
-                PreparedStatement nodeStat = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
+                final PreparedStatement nodeStat = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
                 nodeStat.setInt(1, id);
-                ResultSet nodeSet = nodeStat.executeQuery();
+                final ResultSet nodeSet = nodeStat.executeQuery();
                 
-                if(nodeSet.next()){                    
+                if(nodeSet.next())
+                {
                     if(nodeSet.getInt("Fold")>=0) currNode.setFold(nodes.get(nodeSet.getInt("Fold")));
                     if(nodeSet.getInt("InvSurFold")>=0) currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
                     if(nodeSet.getInt("SurFold")>=0) currNode.setSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
                 }
                 
-                HashSet<Integer> neighbors = loadNeighbors(id);
-                for(int neighborId: neighbors)
-                    currNode.addNeighbor(nodes.get(neighborId));
+                final HashSet<Integer> neighbors = loadNeighbors(id);
+                for(int neighborId: neighbors) currNode.addNeighbor(nodes.get(neighborId));
                 
-                HashSet<Integer> surNeighbors = loadSurNeighbors(id);
-                for(int neighborId: surNeighbors)
-                    currNode.addSurrogateNeighbor(nodes.get(neighborId));
+                final HashSet<Integer> surNeighbors = loadSurNeighbors(id);
+                for(int neighborId: surNeighbors) currNode.addSurrogateNeighbor(nodes.get(neighborId));
                 
-                HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(id);
-                for(int neighborId: invSurNeighbors)
-                    currNode.addInverseSurrogateNeighbor(nodes.get(neighborId));           
+                final HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(id);
+                for(int neighborId: invSurNeighbors) currNode.addInverseSurrogateNeighbor(nodes.get(neighborId));           
             
             }       
             
@@ -162,23 +162,24 @@ public class HyPeerWebDatabase {
     }
 
     
-    public SimplifiedNodeDomain getNode(int webId) throws SQLException {
-        
-        PreparedStatement getNode = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
+    public SimplifiedNodeDomain getNode(int webId) throws SQLException
+    {    
+        final PreparedStatement getNode = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
         getNode.setInt(1, webId);
-        ResultSet nodeSet = getNode.executeQuery();
+        final ResultSet nodeSet = getNode.executeQuery();
         SimplifiedNodeDomain nodeToReturn = null;
         
-        if (nodeSet.next()){
+        if (nodeSet.next())
+        {
             webId = nodeSet.getInt("WebId");
-            int height = nodeSet.getInt("Height");           
-            int fold = nodeSet.getInt("Fold");
-            int surFold = nodeSet.getInt("SurFold");
-            int invSurFold = nodeSet.getInt("InvSurFold");
+            final int height = nodeSet.getInt("Height");           
+            final int fold = nodeSet.getInt("Fold");
+            final int surFold = nodeSet.getInt("SurFold");
+            final int invSurFold = nodeSet.getInt("InvSurFold");
 
-            HashSet<Integer> neighbors = loadNeighbors(webId);
-            HashSet<Integer> surNeighbors = loadSurNeighbors(webId);
-            HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(webId);
+            final HashSet<Integer> neighbors = loadNeighbors(webId);
+            final HashSet<Integer> surNeighbors = loadSurNeighbors(webId);
+            final HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(webId);
             
             nodeToReturn = new SimplifiedNodeDomain(webId, height, neighbors, 
                     invSurNeighbors, surNeighbors, fold, surFold, invSurFold);
@@ -189,11 +190,12 @@ public class HyPeerWebDatabase {
 
     }
     
-    private HashSet<Integer> loadNeighbors(int webId) throws SQLException {
-            PreparedStatement loadNeighbors = connection.prepareStatement("SELECT Neighbor FROM Neighbors WHERE Node = ?");
+    private HashSet<Integer> loadNeighbors(final int webId) throws SQLException
+    {
+            final PreparedStatement loadNeighbors = connection.prepareStatement("SELECT Neighbor FROM Neighbors WHERE Node = ?");
             loadNeighbors.setInt(1, webId);
-            ResultSet neighborsSet = loadNeighbors.executeQuery();
-            HashSet<Integer> neighbors = new HashSet<Integer>();
+            final ResultSet neighborsSet = loadNeighbors.executeQuery();
+            final HashSet<Integer> neighbors = new HashSet<Integer>();
            
             while (neighborsSet.next())
                     neighbors.add(neighborsSet.getInt("Neighbor"));
@@ -202,11 +204,12 @@ public class HyPeerWebDatabase {
             return neighbors;
     }
     
-    private HashSet<Integer> loadSurNeighbors(int webId) throws SQLException {
-        PreparedStatement loadSurNeighbors = connection.prepareStatement("SELECT SurNeighbor FROM SurNeighbors WHERE InvSurNeighbor = ?");
+    private HashSet<Integer> loadSurNeighbors(final int webId) throws SQLException
+    {
+        final PreparedStatement loadSurNeighbors = connection.prepareStatement("SELECT SurNeighbor FROM SurNeighbors WHERE InvSurNeighbor = ?");
         loadSurNeighbors.setInt(1, webId);
-        ResultSet surNeighborsSet = loadSurNeighbors.executeQuery();
-        HashSet<Integer> surNeighbors = new HashSet<Integer>();
+        final ResultSet surNeighborsSet = loadSurNeighbors.executeQuery();
+        final HashSet<Integer> surNeighbors = new HashSet<Integer>();
        
         while (surNeighborsSet.next())
                 surNeighbors.add(surNeighborsSet.getInt("SurNeighbor"));
@@ -215,11 +218,12 @@ public class HyPeerWebDatabase {
         return surNeighbors;
     }
     
-    private HashSet<Integer> loadInvSurNeighbors(int webId) throws SQLException {
-        PreparedStatement loadInvSurNeighbors = connection.prepareStatement("SELECT InvSurNeighbor FROM SurNeighbors WHERE SurNeighbor = ?");
+    private HashSet<Integer> loadInvSurNeighbors(final int webId) throws SQLException
+    {
+        final PreparedStatement loadInvSurNeighbors = connection.prepareStatement("SELECT InvSurNeighbor FROM SurNeighbors WHERE SurNeighbor = ?");
         loadInvSurNeighbors.setInt(1, webId);
-        ResultSet invSurNeighborsSet = loadInvSurNeighbors.executeQuery();
-        HashSet<Integer> invSurNeighbors = new HashSet<Integer>();
+        final ResultSet invSurNeighborsSet = loadInvSurNeighbors.executeQuery();
+        final HashSet<Integer> invSurNeighbors = new HashSet<Integer>();
        
         while (invSurNeighborsSet.next())
             invSurNeighbors.add(invSurNeighborsSet.getInt("InvSurNeighbor"));
@@ -229,8 +233,9 @@ public class HyPeerWebDatabase {
     }
 
     
-    private void saveNode(Node node) throws SQLException{
-        PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
+    private void saveNode(final Node node) throws SQLException
+    {
+        final PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
         
         saveNode.setInt(1, node.getWebId()); //change when node class is ready
         saveNode.setInt(2, node.getHeight());
@@ -246,11 +251,11 @@ public class HyPeerWebDatabase {
 
     }
     
-    private void saveNeighbors(Node node) throws SQLException
+    private void saveNeighbors(final Node node) throws SQLException
     {
-            PreparedStatement saveNeighbors = connection.prepareStatement("INSERT INTO Neighbors(Node, Neighbor) VALUES (?, ?)");
+            final PreparedStatement saveNeighbors = connection.prepareStatement("INSERT INTO Neighbors(Node, Neighbor) VALUES (?, ?)");
           //change when node class is ready
-            int webId = node.getWebId();
+            final int webId = node.getWebId();
             
             for (int neighborId : node.getNeighborsIds())
             {
@@ -265,13 +270,13 @@ public class HyPeerWebDatabase {
         
     }
     
-    private void saveSurNeighbors(Node node) throws SQLException
+    private void saveSurNeighbors(final Node node) throws SQLException
     {
         
-            PreparedStatement saveSurNeighbors = connection.prepareStatement(
+            final PreparedStatement saveSurNeighbors = connection.prepareStatement(
                     "INSERT INTO SurNeighbors(InvSurNeighbor, SurNeighbor) VALUES (?, ?)");
           //change when node class is ready
-            int webId = node.getWebId();
+            final int webId = node.getWebId();
             
             for (int surNeighborId : node.getSurNeighborsIds())
             {
@@ -282,11 +287,6 @@ public class HyPeerWebDatabase {
             connection.setAutoCommit(false);
             saveSurNeighbors.executeBatch();
             connection.setAutoCommit(true);
-            saveSurNeighbors.close();
-        
+            saveSurNeighbors.close();   
     }
-    
-    
-
-
 }

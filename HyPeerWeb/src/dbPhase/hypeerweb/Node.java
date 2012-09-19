@@ -14,8 +14,8 @@ package dbPhase.hypeerweb;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Node {
-    
+public class Node
+{    
     private WebId webid;   
     private HashSet<Node> neighbors;
     private HashSet<Node> surrogateNeighbors;
@@ -39,9 +39,9 @@ public class Node {
 
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
 	{
-	    HashSet<Integer> intNeighbors = new HashSet<Integer>();
-	    HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();;
-	    HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();;
+	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
+	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();;
+	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();;
 	    int tempFold = -1;
 	    int tempSurrogateFold = -1;
 	    int tempInverseSurrogateFold = -1;
@@ -51,41 +51,36 @@ public class Node {
 	    Iterator<Node> iter = neighbors.iterator();
 	    while(iter.hasNext())
 	    {
-	        Node temp = iter.next();
+	        final Node temp = iter.next();
 	        intNeighbors.add(temp.webid.getValue());
 	    }
 	    
 	    iter = surrogateNeighbors.iterator();
 	    while(iter.hasNext())
         {
-            Node temp = iter.next();
+            final Node temp = iter.next();
             intSurrogateNeighbors.add(temp.webid.getValue());
         }
 	    
 	    iter = inverseSurrogateNeighbors.iterator();
         while(iter.hasNext())
         {
-            Node temp = iter.next();
+            final Node temp = iter.next();
             intInverseSurrogateNeighbors.add(temp.webid.getValue());
         }
         
-        if(fold != NULL_NODE)
-            tempFold = fold.webid.getValue();
-        
-        if(surrogateFold != NULL_NODE)
-            tempSurrogateFold = surrogateFold.webid.getValue();
-        
-        if(inverseSurrogateFold != NULL_NODE)
-            tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
+        if(fold != NULL_NODE) tempFold = fold.webid.getValue();
+        if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
+        if(inverseSurrogateFold != NULL_NODE) tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
 	    
-	    SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
-                                                    		        webid.getHeight(),
-                                                                    intNeighbors,
-                                                                    intInverseSurrogateNeighbors, 
-                                                                    intSurrogateNeighbors,
-                                                                    tempFold, 
-                                                                    tempSurrogateFold,
-                                                                    tempInverseSurrogateFold);
+	    final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
+                                                        		        webid.getHeight(),
+                                                                        intNeighbors,
+                                                                        intInverseSurrogateNeighbors, 
+                                                                        intSurrogateNeighbors,
+                                                                        tempFold, 
+                                                                        tempSurrogateFold,
+                                                                        tempInverseSurrogateFold);
 		return simpleNode;
 	}
 
@@ -169,44 +164,54 @@ public class Node {
 	    return inverseSurrogateFold == NULL_NODE ? -1 : inverseSurrogateFold.getWebId();
 	}
 
-    public void addUpPointer(Node node0) {
+    public void addUpPointer(final Node node0)
+    {
         addInverseSurrogateNeighbor(node0);
         
     }
     
-    public void removeUpPointer(Node node){
+    public void removeUpPointer(final Node node)
+    {
         removeInverseSurrogateNeighbor(node);
     }
     
-    public void addDownPointer(Node node){
+    public void addDownPointer(final Node node)
+    {
         addSurrogateNeighbor(node);
     }
     
-    public void removeDownPointer(Node node){
+    public void removeDownPointer(final Node node)
+    {
         removeSurrogateNeighbor(node);
     }
     
-    public HashSet<Integer> getNeighborsIds(){
-        HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : neighbors){
+    public HashSet<Integer> getNeighborsIds()
+    {
+        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : neighbors)
+        {
             neighborsIds.add(neighbor.getWebId());
         }
         
         return neighborsIds;
     }
     
-    public HashSet<Integer> getSurNeighborsIds(){
-        HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : surrogateNeighbors){
+    public HashSet<Integer> getSurNeighborsIds()
+    {
+        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : surrogateNeighbors)
+        {
             neighborsIds.add(neighbor.getWebId());
         }
         
         return neighborsIds;
     }
     
-    public HashSet<Integer> getInvSurNeighborsIds(){
-        HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : inverseSurrogateNeighbors){
+    public HashSet<Integer> getInvSurNeighborsIds()
+    {
+        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
+        for (Node neighbor : inverseSurrogateNeighbors)
+        {
             neighborsIds.add(neighbor.getWebId());
         }
         
