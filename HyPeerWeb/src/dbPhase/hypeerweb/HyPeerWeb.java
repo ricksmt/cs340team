@@ -89,4 +89,23 @@ public class HyPeerWeb
 		// TODO Auto-generated method stub
 	    return nodes.containsValue(node0);
 	}
+	
+	/**
+	 * 
+	 * @param newNode
+	 * @param startNode
+	 */
+	public void addToHyPeerWeb(Node newNode, Node startNode)
+	{
+	    assert newNode != null;
+	    if ( nodes.size()> 0)
+	    {
+	        assert startNode != null;
+	        //TODO
+	    }
+	    else
+	    {
+	        //TODO
+	    }
+	}
 }

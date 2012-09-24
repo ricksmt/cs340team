@@ -23,6 +23,7 @@ public class Node
     private Node fold;
     private Node surrogateFold;
     private Node inverseSurrogateFold;
+    private Connections connections;
     
 	public static final Node NULL_NODE = null;
 
@@ -217,5 +218,6 @@ public class Node
         
         return neighborsIds;
     }
+    
     
 }
