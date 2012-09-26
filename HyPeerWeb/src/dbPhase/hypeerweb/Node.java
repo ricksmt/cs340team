@@ -15,7 +15,31 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class Node
-{    
+{
+    protected enum State{
+        CAP {
+            @Override
+            public Node findCapNode(Node n) {
+                return n;
+            }
+        },
+        DOWN {
+            @Override
+            public Node findCapNode(Node n) {
+                throw new UnsupportedOperationException();
+            }
+        },
+        STANDARD {
+            @Override
+            public Node findCapNode(Node n) {
+                throw new UnsupportedOperationException();
+            }
+        };
+        
+        public abstract Node findCapNode(Node n);
+    }
+    
+    protected State state;
     private WebId webid;   
     private HashSet<Node> neighbors;
     private HashSet<Node> surrogateNeighbors;
