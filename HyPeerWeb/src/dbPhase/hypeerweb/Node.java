@@ -16,23 +16,31 @@ import java.util.Iterator;
 
 public class Node
 {
-    protected enum State{
-        CAP {
+    //Uhh, I'm not remembering which states are supposed to do what, so I'll guess
+    protected enum State
+    {
+        CAP
+        {
             @Override
-            public Node findCapNode(Node n) {
+            public Node findCapNode(Node n)
+            {
                 return n;
             }
         },
-        DOWN {
+        DOWN
+        {
             @Override
-            public Node findCapNode(Node n) {
-                throw new UnsupportedOperationException();
+            public Node findCapNode(Node n)
+            {
+                return n.connections.getHighestSurrogateNeighbor();
             }
         },
-        STANDARD {
+        STANDARD
+        {
             @Override
-            public Node findCapNode(Node n) {
-                throw new UnsupportedOperationException();
+            public Node findCapNode(Node n)
+            {
+                return n.connections.getHighestNeighbor();//Or highest fold?
             }
         };
         
@@ -241,6 +249,57 @@ public class Node
         }
         
         return neighborsIds;
+    }
+    
+    /**
+     * insertSelf
+     * This method is called on a new node that hasn't been put into the HyPeerWeb yet.
+     * 
+     * @pre start node is part of a valid HyPeerWeb. This node is not part of the HyPeerWeb.
+     * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
+     * @param startNode
+     */
+    public void insertSelf(Node startNode)
+    {
+        //state = State.STANDARD;
+        Node currentNode;
+        Node nextNode = startNode;
+        do
+        {
+            changeState(nextNode);//this could be placed in the findCapNode methods, but its less code here. Cohesive?
+            currentNode = nextNode;
+            nextNode = state.findCapNode(currentNode);
+            
+        } while (nextNode != currentNode);
+        
+        //Should we change our findCapNode to findInsertionPoint, and put this as a 4th state?
+        while (nextNode.connections.getLowestNeighborWithChild() != null)
+        {
+            nextNode = nextNode.connections.getLowestNeighborWithChild();
+        }
+        
+        setConnectionsWithInsertionPoint(nextNode);
+    }
+    
+    private void changeState(Node nextNode)
+    {
+        if (nextNode.connections.hasHigherNeighbor())//or fold?
+        {
+            state = State.STANDARD;
+        }
+        else if (nextNode.connections.hasHigherSurrogateNeighbor())
+        {
+            state = State.DOWN;
+        }
+        else
+        {
+            state = State.CAP;
+        }
+    }
+    
+    private void setConnectionsWithInsertionPoint(Node insertionPoint)
+    {
+        //TODO
     }
     
     
