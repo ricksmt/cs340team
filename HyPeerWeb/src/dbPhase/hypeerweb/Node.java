@@ -15,38 +15,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class Node
-{
-    protected enum State{
-        CAP {
-            @Override
-            public Node findCapNode(Node n) {
-                return n;
-            }
-        },
-        DOWN {
-            @Override
-            public Node findCapNode(Node n) {
-                throw new UnsupportedOperationException();
-            }
-        },
-        STANDARD {
-            @Override
-            public Node findCapNode(Node n) {
-                throw new UnsupportedOperationException();
-            }
-        };
-        
-        public abstract Node findCapNode(Node n);
-    }
-    
-    protected State state;
+{    
     private WebId webid;   
-    private HashSet<Node> neighbors;
-    private HashSet<Node> surrogateNeighbors;
-    private HashSet<Node> inverseSurrogateNeighbors;
-    private Node fold;
-    private Node surrogateFold;
-    private Node inverseSurrogateFold;
     private Connections connections;
     
 	public static final Node NULL_NODE = null;
@@ -54,12 +24,6 @@ public class Node
 	public Node(final int i) 
 	{
 		webid = new WebId(i);
-		neighbors = new HashSet<Node>();
-		surrogateNeighbors = new HashSet<Node>();
-		inverseSurrogateNeighbors = new HashSet<Node>();
-		fold = NULL_NODE;
-		surrogateFold = NULL_NODE;
-		inverseSurrogateFold = NULL_NODE;
 	}
 
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
@@ -73,26 +37,30 @@ public class Node
 	    
 	    
 	    //convert HashSets to integer hash sets using iteration
-	    Iterator<Node> iter = neighbors.iterator();
+	    Iterator<Node> iter = connections.getNeighbors().iterator();
 	    while(iter.hasNext())
 	    {
 	        final Node temp = iter.next();
 	        intNeighbors.add(temp.webid.getValue());
 	    }
 	    
-	    iter = surrogateNeighbors.iterator();
+	    iter = connections.getSurrogateNeighbors().iterator();
 	    while(iter.hasNext())
         {
             final Node temp = iter.next();
             intSurrogateNeighbors.add(temp.webid.getValue());
         }
 	    
-	    iter = inverseSurrogateNeighbors.iterator();
+	    iter = connections.getInverseSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
             intInverseSurrogateNeighbors.add(temp.webid.getValue());
         }
+        
+        Node fold = connections.getFold();
+        Node surrogateFold = connections.getSurrogateFold();
+        Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
         if(fold != NULL_NODE) tempFold = fold.webid.getValue();
         if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
@@ -117,53 +85,31 @@ public class Node
 	public void setFold(final Node node) 
 	{
 	    // if node WebId is fold of this.WebId
-	    fold = node;
+	    connections.setFold(node);
 	}
 
 	public void setSurrogateFold(final Node node) 
 	{
 	    // if node WebId is surrogate fold of this.WebId
-		surrogateFold = node;
+	    connections.setSurrogateFold(node);
 	}
 
 	public void setInverseSurrogateFold(final Node node) 
 	{
-	    inverseSurrogateFold = node;
+	    connections.setInverseSurrogateFold(node);
 	}
 	
 	public void addNeighbor(final Node node) 
 	{
 	    // if WebIds are neighbors
-	    neighbors.add(node);
+	    connections.addNeighbor(node);
 	}
 
 	public void removeNeighbor(final Node node) 
 	{
-	    neighbors.remove(node);
+	    connections.removeNeighbor(node);
 	}
 
-	public void addSurrogateNeighbor(final Node node) 
-	{
-	    // if node WebId is surrogate neighbor of
-	    surrogateNeighbors.add(node);
-	}
-
-	public void removeSurrogateNeighbor(final Node node) 
-	{
-	    surrogateNeighbors.remove(node);
-	}
-	
-	public void addInverseSurrogateNeighbor(final Node node)
-	{
-	    // if this.WebId is surrogate neighbor of node WebId 
-	    inverseSurrogateNeighbors.add(node);
-	}
-
-	public void removeInverseSurrogateNeighbor(final Node node) 
-	{
-	    inverseSurrogateNeighbors.remove(node);
-	}
-	
 	public int getWebId()
 	{
 	    return webid.getValue();
@@ -174,74 +120,39 @@ public class Node
 	    return webid.getHeight();
 	}
 	
-	public int getFoldId()
-	{
-	    return fold == NULL_NODE ? -1 : fold.getWebId();
-	}
-	
-	public int getSurFoldId()
-	{
-	    return surrogateFold == NULL_NODE ? -1 : surrogateFold.getWebId();
-	}
-	
-	public int getInvSurFoldId()
-	{
-	    return inverseSurrogateFold == NULL_NODE ? -1 : inverseSurrogateFold.getWebId();
-	}
-
     public void addUpPointer(final Node node0)
     {
-        addInverseSurrogateNeighbor(node0);
-        
+        connections.addInverseSurrogateNeighbor(node0);
     }
     
     public void removeUpPointer(final Node node)
     {
-        removeInverseSurrogateNeighbor(node);
+        connections.removeInverseSurrogateNeighbor(node);
     }
     
     public void addDownPointer(final Node node)
     {
-        addSurrogateNeighbor(node);
+        connections.addSurrogateNeighbor(node);
     }
     
     public void removeDownPointer(final Node node)
     {
-        removeSurrogateNeighbor(node);
+        connections.removeSurrogateNeighbor(node);
     }
     
     public HashSet<Integer> getNeighborsIds()
     {
-        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : neighbors)
-        {
-            neighborsIds.add(neighbor.getWebId());
-        }
-        
-        return neighborsIds;
+        return connections.getNeighborsIds();
     }
     
     public HashSet<Integer> getSurNeighborsIds()
     {
-        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : surrogateNeighbors)
-        {
-            neighborsIds.add(neighbor.getWebId());
-        }
-        
-        return neighborsIds;
+        return connections.getSurrogateNeighborsIds();
     }
     
     public HashSet<Integer> getInvSurNeighborsIds()
     {
-        final HashSet<Integer> neighborsIds = new HashSet<Integer>();
-        for (Node neighbor : inverseSurrogateNeighbors)
-        {
-            neighborsIds.add(neighbor.getWebId());
-        }
-        
-        return neighborsIds;
+        return connections.getInverseSurrogateNeighborsIds();
     }
-    
-    
+
 }
