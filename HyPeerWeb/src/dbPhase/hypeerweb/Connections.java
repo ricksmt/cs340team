@@ -158,5 +158,25 @@ public class Connections
     {
         return inverseSurrogateFold;
     }
+
+    public void initWithParentsConnections(Connections connections) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public Node getHighestNeighbor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Node getHighestSurrogateNeighbor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Node getLowestNeighborWithoutChild() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
 
