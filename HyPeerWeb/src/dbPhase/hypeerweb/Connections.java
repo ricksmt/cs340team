@@ -159,24 +159,31 @@ public class Connections
         return inverseSurrogateFold;
     }
 
-    public void initWithParentsConnections(Connections connections) {
-        // TODO Auto-generated method stub
-        
+    /**
+     * set all connections based off of needed connections from parent Node's connections
+     * 
+     * @param connections
+     */
+    public void initWithParentsConnections(Connections connections) 
+    {    
+        // ex: fold = connections.getFold()
     }
 
     public Node getHighestNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getHighestSurrogateNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getLowestNeighborWithoutChild() {
-        // TODO Auto-generated method stub
         return null;
+    }
+    
+    public void notify(WebId webid)
+    {
+        // Notify other nodes of new connection
     }
 }
 
