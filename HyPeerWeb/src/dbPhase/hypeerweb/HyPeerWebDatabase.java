@@ -351,8 +351,12 @@ public class HyPeerWebDatabase
     }
 
     /**
+     * Saves node's information to the Nodes table
      * 
-     * @param node
+     * @param node - node whose information we are going to save to the current database
+     * @pre the node is not in the database yet
+     * @post <i>node's information is saved in the database</i>
+     *      <i>all the node entries that wre in the database before are still there</i>
      * @throws SQLException
      */
     private void saveNode(final Node node) throws SQLException
@@ -374,8 +378,12 @@ public class HyPeerWebDatabase
     }
     
     /**
+     * Saves node's neighbors' ids to the Neighbors table
      * 
-     * @param node
+     * @param node - node whose information we are going to save to the current database
+     * @pre the node's neighbors ids are not stored in the table yet
+     * @post <i>node's neighbors'ids are saved in the database</i>
+     *      <i>all the entries that were in the database before are still there</i>
      * @throws SQLException
      */
     private void saveNeighbors(final Node node) throws SQLException
@@ -397,8 +405,12 @@ public class HyPeerWebDatabase
         
     }
     /**
+     * Saves node's surrogate neighbors' ids to the Neighbors table
      * 
-     * @param node
+     * @param node - node whose information we are going to save to the current database
+     * @pre the node's surrogate neighbors ids are not stored in the table yet
+     * @post <i>node's surrogate neighbors'ids are saved in the database</i>
+     *      <i>all the entries that were in the database before are still there</i>
      * @throws SQLException
      */
     private void saveSurNeighbors(final Node node) throws SQLException

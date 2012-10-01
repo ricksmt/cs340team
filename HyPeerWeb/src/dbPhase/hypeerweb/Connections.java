@@ -1,6 +1,7 @@
 package dbPhase.hypeerweb;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 /*
  * This class is contained in a node,
@@ -165,18 +166,61 @@ public class Connections
     }
 
     public Node getHighestNeighbor() {
-        // TODO Auto-generated method stub
-        return null;
+        Iterator<Node> iter = neighbors.iterator();
+        Node returnNode = null;
+        int curId = -1;
+        
+        while(iter.hasNext())
+        {
+            final Node temp = iter.next();
+            if(temp.getWebId() > curId){
+                returnNode = temp;
+                curId = returnNode.getWebId();
+            }
+            
+        }
+        
+        return returnNode;
     }
 
     public Node getHighestSurrogateNeighbor() {
-        // TODO Auto-generated method stub
-        return null;
+        Iterator<Node> iter = surrogateNeighbors.iterator();
+        Node returnNode = null;
+        int curId = -1;
+        
+        while(iter.hasNext())
+        {
+            final Node temp = iter.next();
+            if(temp.getWebId() > curId){
+                returnNode = temp;
+                curId = returnNode.getWebId();
+            }
+            
+        }
+        
+        return returnNode;
     }
 
     public Node getLowestNeighborWithoutChild() {
-        // TODO Auto-generated method stub
-        return null;
+        
+        Iterator<Node> iter = neighbors.iterator();
+        Node returnNode = null;
+        int curId = -1;
+        
+        while(iter.hasNext())
+        {
+            final Node temp = iter.next();
+            if((temp.getWebId() < curId || curId==-1)
+                    && !temp.hasChild()){
+                returnNode = temp;
+                curId = returnNode.getWebId();
+            }
+            
+        }
+        
+        return returnNode;
     }
+
+    
 }
 

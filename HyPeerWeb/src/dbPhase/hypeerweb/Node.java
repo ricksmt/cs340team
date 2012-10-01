@@ -11,10 +11,11 @@
 
 package dbPhase.hypeerweb;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Node
+public class Node implements Comparable<Object>, Serializable
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
@@ -191,7 +192,7 @@ public class Node
 	
 	public int getHeight()
 	{
-	    return webid.getHeight();
+	    return connections.getNeighbors().size();
 	}
 	
 	
@@ -385,6 +386,16 @@ public class Node
     public int getInverseSurrogateFoldId()
     {
         return connections.getInverseSurrogateFoldId();
+    }
+
+    public boolean hasChild() {
+        return false;
+    }
+
+    @Override
+    public int compareTo(Object arg0) {
+        return this.getWebId() - ((Node) arg0).getWebId();
+
     }
     
 
