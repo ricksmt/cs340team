@@ -376,7 +376,7 @@ public class Node
         connections = insertionPoint.connections.extractChildConnections();
        
         // Notify new connections 
-        connections.notify(webid);
+        connections.notify(this);
     }
     
     public int getFoldId()
