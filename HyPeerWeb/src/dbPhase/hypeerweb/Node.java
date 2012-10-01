@@ -20,17 +20,26 @@ public class Node implements Comparable<Object>, Serializable
     /**
      * This represents the state of the node in the cap node finding algorithm.
      * The findCapNode method is called to produce the correct behavoir at each step.
-     * @author Mathew, Brian
+     * @author Matthew, Brian, Trevor
      *
      */
     protected enum State
-    {
+    {   
         CAP
         {
             @Override
             public Node findCapNode(Node n)
             {
                 return n;
+            }
+            
+            public State getInitialStateofChild()
+            {
+                return CAP;
+            }
+            public State getNextState()
+            {
+                return STANDARD;
             }
         },
         DOWN
@@ -40,6 +49,16 @@ public class Node implements Comparable<Object>, Serializable
             {
                 return n.getHighestSurrogateNeighbor();
             }
+            
+            public State getInitialStateofChild()
+            {
+                return DOWN;
+            }
+            
+            public State getNextState()
+            {
+                return STANDARD;
+            }
         },
         STANDARD
         {
@@ -48,13 +67,36 @@ public class Node implements Comparable<Object>, Serializable
             {
                 return n.getHighestNeighbor();//Or highest fold?
             }
+            
+            public State getInitialStateofChild()
+            {
+                return DOWN;
+            }
+            
+            public State getNextState()
+            {
+                return STANDARD;
+            }
         };
         
         public abstract Node findCapNode(Node n);
+        public abstract State getInitialStateofChild();
+        public abstract State getNextState();
     }
     
+    /**
+     * state represents this node's position (and next action) in the cap node locating algorithm
+     */
     protected State state;
-    private WebId webid;   
+    
+    /**
+     * This node's webId
+     */
+    private WebId webid;
+    
+    /**
+     * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
+     */
     private Connections connections;
     
 	public static final Node NULL_NODE = null;
@@ -68,15 +110,31 @@ public class Node implements Comparable<Object>, Serializable
 	{
 		webid = new WebId(i);
 	}
-
+	
+	/**
+	 * @obvious
+	 * @return
+	 */
 	public Node getHighestNeighbor() {
         return connections.getHighestNeighbor();
     }
-
+	
+	/**
+	 * @obvious
+	 * @return
+	 */
     public Node getHighestSurrogateNeighbor() {
         return connections.getHighestSurrogateNeighbor();
     }
-
+    
+    /**
+     * Returns fully initailized SimplifiedNodeDomain needed for testing
+     * 
+     * @pre this node is initailized
+     * @post no changes to this node
+     * 
+     * @return SimplifiedNodeDomain representing this node
+     */
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
 	{
 	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
@@ -139,6 +197,15 @@ public class Node implements Comparable<Object>, Serializable
 	
 	/**
 	 * @obvious
+	 * @param state
+	 */
+	public void setState(State state)
+	{
+	    this.state = state;
+	}
+	
+	/**
+	 * @obvious
 	 * @param node
 	 */
 	public void setFold(final Node node) 
@@ -184,12 +251,20 @@ public class Node implements Comparable<Object>, Serializable
 	{
 	    connections.removeNeighbor(node);
 	}
-
+	
+	/**
+	 * @obvious
+	 * @return int representation of the node's web id
+	 */
 	public int getWebId()
 	{
 	    return webid.getValue();
 	}
 	
+	/**
+	 * @obvious
+	 * @return
+	 */
 	public int getHeight()
 	{
 	    return connections.getNeighbors().size();
@@ -287,33 +362,15 @@ public class Node implements Comparable<Object>, Serializable
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
         
+        // set connections for inserted Node
         setConnectionsWithInsertionPoint(currentNode);
+        
+        // set new Node's state
+        setState(currentNode.state.getInitialStateofChild());
+        
+        // update parent node's state
+        currentNode.setState(currentNode.state.getNextState());
     }
-    
-    /** DEPRECATED, this will be handled elsewhere
-     * changeState
-     * This method changes the state of the find cap node sequence based on the next node found.
-     * 
-     * @pre nextNode is part of a valid HyPeerWeb
-     * @post state will be change to accurately represent where the node is at looking for the cap node if currentNode is where we currently are.
-     * 
-     * @param nextNode
-     *
-    private void changeState(Node currentNode)
-    {
-        if (currentNode.hasHigherNeighbor())//or fold?
-        {
-            state = State.STANDARD;
-        }
-        else if (currentNode.hasHigherSurrogateNeighbor())
-        {
-            state = State.DOWN;
-        }
-        else
-        {
-            state = State.CAP;
-        }
-    }*/
     
     public Node getLowestNeighborWithoutChild() {
         return connections.getLowestNeighborWithoutChild();
@@ -321,8 +378,10 @@ public class Node implements Comparable<Object>, Serializable
 
     /**
      * setConnectionsWithInsertionPoint
-     * This method uses the information from the insertion point to change all the needed connections,
-     * and add the needed connections to the new node (this one). This essentailly actually adds this node to the HyPeerWeb
+     * This method uses the information from the insertion point to create all the needed connections for the 
+     * new node.
+     * It also adds the needed connections to the new node (this one). 
+     * (This essentially adds this node to the HyPeerWeb)
      * 
      * @pre insertionPoint is the correct insertion point in the HyPeerWeb. That is, it is the lowest node on the cap node's layer without a child.
      * @post This node is inserted as the insertionPoint's child, and connections are adjusted such that all the project constraints are met.
@@ -349,28 +408,12 @@ public class Node implements Comparable<Object>, Serializable
             }
         }
         
-        //somthing like...
-        this.connections.initWithParentsConnections(insertionPoint.connections);
         
-        /*OLD
-        //Neighbors
-        for (Node inverseSurrogateNeighbor : insertionPoint.inverseSurrogateNeighbors)
-        {
-            inverseSurrogateNeighbor.removeSurrogateNeighbor(insertionPoint);
-            insertionPoint.removeInverseSurrogateNeighbor(inverseSurrogateNeighbor);
-            inverseSurrogateNeighbor.addNeighbor(this);
-        }
-        
-        for (Node mySurrogateNeighbor : insertionPoint.neighbors)
-        {
-            this.addSurrogateNeighbor(mySurrogateNeighbor);
-            mySurrogateNeighbor.addInverseSurrogateNeighbor(this);
-        }
-        
-        //Folds
-        //...
-         *
-         */
+        // Set new Node's connections based off of parent's connections
+        connections = insertionPoint.connections.extractChildConnections();
+       
+        // Notify new connections 
+        connections.notify(this);
     }
     
     public int getFoldId()

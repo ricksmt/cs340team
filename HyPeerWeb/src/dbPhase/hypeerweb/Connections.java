@@ -160,12 +160,55 @@ public class Connections
         return inverseSurrogateFold;
     }
 
-    public void initWithParentsConnections(Connections connections) {
-        // TODO Auto-generated method stub
+    
+    /**
+     * Initailizes a nodes connections that is being inserted
+     * based on its parent's connections.
+     * 
+     * @pre parentConnections is not null, and is the connections object from the correct insertion point in a valid HyPeerWeb.
+     * @post This connections object will be initailized with the data meeting the poject constraints. The nodes associated with these connections will be modified to match the project constraint.
+     * 
+     * @param parentConnections of the insertion point
+     */
+    public void initWithParentsConnections(Connections parentConnections)
+    {//PROBLEM: we need some way of refrencing the parent node and the new node
+        //First establish connections here
+        //Neighbors
+        for (Node inverseSurrogateNeighbor : parentConnections.inverseSurrogateNeighbors)
+        {
+            inverseSurrogateNeighbor.addNeighbor(this.owner);
+        }
+        /*OLD copied from Node class
+        //Neighbors
+        for (Node inverseSurrogateNeighbor : insertionPoint.inverseSurrogateNeighbors)
+        {
+            inverseSurrogateNeighbor.removeSurrogateNeighbor(insertionPoint);
+            insertionPoint.removeInverseSurrogateNeighbor(inverseSurrogateNeighbor);
+            inverseSurrogateNeighbor.addNeighbor(this);
+        }
         
+        for (Node mySurrogateNeighbor : insertionPoint.neighbors)
+        {
+            this.addSurrogateNeighbor(mySurrogateNeighbor);
+            mySurrogateNeighbor.addInverseSurrogateNeighbor(this);
+        }
+        
+        //Folds
+        //...
+         */
+        
+        //Second signal all the connected nodes to update their connections
     }
 
+    /**
+     * set all connections based off of needed connections from parent Node's connections
+     * 
+     * @param connections
+     */
+    
+    
     public Node getHighestNeighbor() {
+
         Iterator<Node> iter = neighbors.iterator();
         Node returnNode = null;
         int curId = -1;
@@ -181,9 +224,11 @@ public class Connections
         }
         
         return returnNode;
+
     }
 
     public Node getHighestSurrogateNeighbor() {
+
         Iterator<Node> iter = surrogateNeighbors.iterator();
         Node returnNode = null;
         int curId = -1;
@@ -199,9 +244,11 @@ public class Connections
         }
         
         return returnNode;
+
     }
 
     public Node getLowestNeighborWithoutChild() {
+
         
         Iterator<Node> iter = neighbors.iterator();
         Node returnNode = null;
@@ -219,8 +266,14 @@ public class Connections
         }
         
         return returnNode;
+
     }
 
     
+    public void notify(Node childNode)
+    {
+        // Notify other nodes of new connection
+    }
+
 }
 
