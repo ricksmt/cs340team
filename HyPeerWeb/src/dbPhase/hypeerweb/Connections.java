@@ -20,7 +20,7 @@ public class Connections
     
     public static final Node NULL_NODE = null;
     
-    public Connections(final int i) 
+    public Connections() 
     {
         neighbors = new HashSet<Node>();
         surrogateNeighbors = new HashSet<Node>();
@@ -198,32 +198,71 @@ public class Connections
     }
     
     public Node getHighestNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getHighestSurrogateNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getLowestNeighborWithoutChild() {
-        // TODO Auto-generated method stub
         return null;
     }
     
-    public Connections extractChildConnections() {
+    public Connections getChildConnections() {
         Connections childConnections = new Connections();
       //Neighbors
-       childConnections.set
+       childConnections.neighbors = inverseSurrogateNeighbors;
+       //
+       
+       childConnections.surrogateNeighbors = higherNeighbors();
+       
+       //Fold
+       if (inverseSurrogateFold == null)
+       {
+           childConnections.fold = fold;
+       }
+       else
+       {
+           childConnections.fold = inverseSurrogateFold;
+       }
         
-        for (Node mySurrogateNeighbor : insertionPoint.neighbors)
+       return childConnections;
+	}
+    
+    public void notifyAndRemoveInverseSurrogateNeighbors(Node selfNode)//called on parent
+    {
+        for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
-            this.addSurrogateNeighbor(mySurrogateNeighbor);
-            mySurrogateNeighbor.addInverseSurrogateNeighbor(this);
+            inverseSurrogateNeighbor.setSurrogateNeighbor(null);
+        }
+        inverseSurrogateNeighbors = null;
+        
+        if (inverseSurrogateFold == null)
+        {
+            surrogateFold = fold;
+            fold = null;
+            surrogateFold.addInverseSurrogateFold(selfNode);
+        }
+        else
+        {
+            inverseSurrogateFold.setSurrogateFold(null);
+            inverseSurrogateFold = null;
+        }
+    }
+    
+    public void notify(Node selfNode)//called on new node
+    {
+        // Notify other nodes of new connection
+        for (Node neighbor : neighbors)
+        {
+            neighbor.addNeighbor(selfNode);
         }
         
-        return childConnections;
+        for (Node surrogateNeighbor : surrogateNeighbors)
+        {
+            surrogateNeighbor.addInverseSurrogateNeighbor(selfNode);
+        }
     }
 }
 

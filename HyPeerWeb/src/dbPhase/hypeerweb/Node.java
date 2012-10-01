@@ -19,17 +19,26 @@ public class Node
     /**
      * This represents the state of the node in the cap node finding algorithm.
      * The findCapNode method is called to produce the correct behavoir at each step.
-     * @author Mathew, Brian
+     * @author Matthew, Brian, Trevor
      *
      */
     protected enum State
-    {
+    {   
         CAP
         {
             @Override
             public Node findCapNode(Node n)
             {
                 return n;
+            }
+            
+            public State getInitialStateofChild()
+            {
+                return CAP;
+            }
+            public State getNextState()
+            {
+                return STANDARD;
             }
         },
         DOWN
@@ -39,6 +48,16 @@ public class Node
             {
                 return n.getHighestSurrogateNeighbor();
             }
+            
+            public State getInitialStateofChild()
+            {
+                return DOWN;
+            }
+            
+            public State getNextState()
+            {
+                return STANDARD;
+            }
         },
         STANDARD
         {
@@ -47,9 +66,21 @@ public class Node
             {
                 return n.getHighestNeighbor();//Or highest fold?
             }
+            
+            public State getInitialStateofChild()
+            {
+                return DOWN;
+            }
+            
+            public State getNextState()
+            {
+                return STANDARD;
+            }
         };
         
         public abstract Node findCapNode(Node n);
+        public abstract State getInitialStateofChild();
+        public abstract State getNextState();
     }
     
     /**
@@ -161,6 +192,15 @@ public class Node
 	public void setWebId(final WebId webId) 
 	{
 		webid = webId;
+	}
+	
+	/**
+	 * @obvious
+	 * @param state
+	 */
+	public void setState(State state)
+	{
+	    this.state = state;
 	}
 	
 	/**
@@ -321,42 +361,33 @@ public class Node
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
         
+        // set connections for inserted Node
         setConnectionsWithInsertionPoint(currentNode);
+        
+        // set new Node's state
+        setState(currentNode.state.getInitialStateofChild());
+        
+        // update parent node's state
+        currentNode.setState(currentNode.state.getNextState());
     }
-    
-    /** DEPRECATED, this will be handled elsewhere
-     * changeState
-     * This method changes the state of the find cap node sequence based on the next node found.
-     * 
-     * @pre nextNode is part of a valid HyPeerWeb
-     * @post state will be change to accurately represent where the node is at looking for the cap node if currentNode is where we currently are.
-     * 
-     * @param nextNode
-     *
-    private void changeState(Node currentNode)
-    {
-        if (currentNode.hasHigherNeighbor())//or fold?
-        {
-            state = State.STANDARD;
-        }
-        else if (currentNode.hasHigherSurrogateNeighbor())
-        {
-            state = State.DOWN;
-        }
-        else
-        {
-            state = State.CAP;
-        }
-    }*/
     
     public Node getLowestNeighborWithoutChild() {
         return connections.getLowestNeighborWithoutChild();
     }
+    
+    public int getChildsWebId()
+    {
+        int bit = 1 << (getHeight()-1);
+        return webid.getValue() | bit;
+        
+    }
 
     /**
      * setConnectionsWithInsertionPoint
-     * This method uses the information from the insertion point to change all the needed connections,
-     * and add the needed connections to the new node (this one). This essentailly actually adds this node to the HyPeerWeb
+     * This method uses the information from the insertion point to create all the needed connections for the 
+     * new node.
+     * It also adds the needed connections to the new node (this one). 
+     * (This essentially adds this node to the HyPeerWeb)
      * 
      * @pre insertionPoint is the correct insertion point in the HyPeerWeb. That is, it is the lowest node on the cap node's layer without a child.
      * @post This node is inserted as the insertionPoint's child, and connections are adjusted such that all the project constraints are met.
@@ -365,29 +396,14 @@ public class Node
      */
     private void setConnectionsWithInsertionPoint(Node insertionPoint)
     {
-        int parentWebId = insertionPoint.getWebId();
-        int bitMask = 0x80000000;
-        //scan for highest order bit
-        for (;;)
-        {
-            if ((bitMask & parentWebId) != 0)
-            {
-                //if found, raise bit and add it to the insertions point webId
-                bitMask = bitMask << 1;
-                webid = new WebId(bitMask | parentWebId);
-                break;
-            }
-            else
-            {
-                bitMask = bitMask >>> 1;
-            }
-        }
         
-        //somthing like...
+        webid = new WebId(insertionPoint.getChildsWebId());
+
+        // Set new Node's connections based off of parent's connections
         connections = insertionPoint.connections.extractChildConnections();
+       
+        // Notify new connections 
         connections.notify(this);
-        
-        
     }
     
     public int getFoldId()
