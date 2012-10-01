@@ -52,8 +52,19 @@ public class Node
         public abstract Node findCapNode(Node n);
     }
     
+    /**
+     * state represents this node's position (and next action) in the cap node locating algorithm
+     */
     protected State state;
-    private WebId webid;   
+    
+    /**
+     * This node's webId
+     */
+    private WebId webid;
+    
+    /**
+     * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
+     */
     private Connections connections;
     
 	public static final Node NULL_NODE = null;
@@ -67,15 +78,31 @@ public class Node
 	{
 		webid = new WebId(i);
 	}
-
+	
+	/**
+	 * @obvious
+	 * @return
+	 */
 	public Node getHighestNeighbor() {
         return connections.getHighestNeighbor();
     }
-
+	
+	/**
+	 * @obvious
+	 * @return
+	 */
     public Node getHighestSurrogateNeighbor() {
         return connections.getHighestSurrogateNeighbor();
     }
-
+    
+    /**
+     * Returns fully initailized SimplifiedNodeDomain needed for testing
+     * 
+     * @pre this node is initailized
+     * @post no changes to this node
+     * 
+     * @return SimplifiedNodeDomain representing this node
+     */
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
 	{
 	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
@@ -183,12 +210,20 @@ public class Node
 	{
 	    connections.removeNeighbor(node);
 	}
-
+	
+	/**
+	 * @obvious
+	 * @return int representation of the node's web id
+	 */
 	public int getWebId()
 	{
 	    return webid.getValue();
 	}
 	
+	/**
+	 * @obvious
+	 * @return
+	 */
 	public int getHeight()
 	{
 	    return webid.getHeight();
@@ -351,25 +386,7 @@ public class Node
         //somthing like...
         this.connections.initWithParentsConnections(insertionPoint.connections);
         
-        /*OLD
-        //Neighbors
-        for (Node inverseSurrogateNeighbor : insertionPoint.inverseSurrogateNeighbors)
-        {
-            inverseSurrogateNeighbor.removeSurrogateNeighbor(insertionPoint);
-            insertionPoint.removeInverseSurrogateNeighbor(inverseSurrogateNeighbor);
-            inverseSurrogateNeighbor.addNeighbor(this);
-        }
         
-        for (Node mySurrogateNeighbor : insertionPoint.neighbors)
-        {
-            this.addSurrogateNeighbor(mySurrogateNeighbor);
-            mySurrogateNeighbor.addInverseSurrogateNeighbor(this);
-        }
-        
-        //Folds
-        //...
-         *
-         */
     }
     
 
