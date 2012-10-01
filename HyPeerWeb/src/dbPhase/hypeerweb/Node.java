@@ -384,7 +384,8 @@ public class Node
         }
         
         //somthing like...
-        this.connections.initWithParentsConnections(insertionPoint.connections);
+        connections = insertionPoint.connections.extractChildConnections();
+        connections.notify(this);
         
         
     }

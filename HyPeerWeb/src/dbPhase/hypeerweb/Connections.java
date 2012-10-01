@@ -172,10 +172,9 @@ public class Connections
     {//PROBLEM: we need some way of refrencing the parent node and the new node
         //First establish connections here
         //Neighbors
-        for (Node inverseSurrogateNeighbor : parentConnections.inverseSurrogateNeighbors)
-        {
-            inverseSurrogateNeighbor.addNeighbor(this.owner);
-        }
+        
+        neighbors = parentConnections.removeSurrogateNeighbors();
+        surrogatNeighbors = parentConnectios.removeHigherNeighbors();
         /*OLD copied from Node class
         //Neighbors
         for (Node inverseSurrogateNeighbor : insertionPoint.inverseSurrogateNeighbors)
@@ -211,6 +210,20 @@ public class Connections
     public Node getLowestNeighborWithoutChild() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    public Connections extractChildConnections() {
+        Connections childConnections = new Connections();
+      //Neighbors
+       childConnections.set
+        
+        for (Node mySurrogateNeighbor : insertionPoint.neighbors)
+        {
+            this.addSurrogateNeighbor(mySurrogateNeighbor);
+            mySurrogateNeighbor.addInverseSurrogateNeighbor(this);
+        }
+        
+        return childConnections;
     }
 }
 
