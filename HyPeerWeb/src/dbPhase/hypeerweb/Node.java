@@ -373,7 +373,7 @@ public class Node
         }
         
         // Set new Node's connections based off of parent's connections
-        connections.initWithParentsConnections(insertionPoint.connections);
+        connections = insertionPoint.connections.extractChildConnections();
        
         // Notify new connections 
         connections.notify(webid);

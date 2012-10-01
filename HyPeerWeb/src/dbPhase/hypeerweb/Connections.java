@@ -181,7 +181,7 @@ public class Connections
         return null;
     }
     
-    public void notify(WebId webid)
+    public void notify(Node childNode)
     {
         // Notify other nodes of new connection
     }
