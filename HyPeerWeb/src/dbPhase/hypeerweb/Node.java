@@ -379,5 +379,20 @@ public class Node
         connections.notify(webid);
     }
     
+    public int getFoldId()
+    {
+        return connections.getFoldId() ;
+    }
+    
+    public int getSurrogateFoldId()
+    {
+        return connections.getSurrogateFoldId();
+    }
+    
+    public int getInverseSurrogateFoldId()
+    {
+        return connections.getInverseSurrogateFoldId();
+    }
+    
 
 }

@@ -3,29 +3,85 @@ package dbPhase.hypeerweb;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * The helper class that allows saving and loading the HyPeerWeb from the database<br>
+ * <br>
+ * 
+ * <pre>
+ * <b>Domain:</b>
+ *      DATABASE_DIRECTORY     : String
+ *      DEFAULT_DATABASE_NAME : String
+ *      singleton : HyPeerWebDatabase
+ *      connection : Connection
+ * 
+ * </pre>
+ * 
+ * @author Konrad Rywelski
+ */
+
 public class HyPeerWebDatabase
 {
 
+    /**
+     * The name of the directory that holds databases associated with HyPeerWebs. Currently it is "db". Of course the directory location is relative to where the HyPeerWeb program starts. 
+     */    
     public static String DATABASE_DIRECTORY;
+    
+    /**
+     * The default name of the file that holds the sqlite3 database. Currently it is "HyPeerWeb.db".
+     */
     public static String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
+    
+    /**
+     * the single HyPeerWebDatabase
+     */
     private static HyPeerWebDatabase singleton = null;
+    
+    /**
+     * the connection necessary to interact with the databases 
+     */
     private static Connection connection;
 
 
-    
+    /**
+     * The standard constructor.  It is private and should only be used by getSingleton() method
+     * when the singleton is null;
+     * 
+     * @param dbName  The name of the database.
+     * @pre <i>singleton = null</i>
+     *      <i>dbName = null OR |dbName| = 0 OR There must exist a database with the given dbName.</i>
+     * @post initHyPeerWebDatabase(dbName).postCondition
+     */
     private HyPeerWebDatabase(final String dbName) throws ClassNotFoundException, SQLException
     {
         initHyPeerWebDatabase(dbName);
     }
 
-
+    /**
+     * Gets the single HyPeerWebDatabase
+     * 
+     * @pre singleton=null OR initHyPeerWebDatabase() have been called previously
+     * @post return=singleton
+     * @return the single HyPeerWebDatabase
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public static HyPeerWebDatabase getSingleton() throws ClassNotFoundException, SQLException
     {
         if (singleton == null) singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
         return singleton;
     }
 
-    
+    /**
+     * Creates and loads a HyPeerWebDatabase. Should be one of the first things called when creating a HyPeerWeb. 
+     * 
+     * @param dbName The name of the database
+     * @pre dbName = null OR |dbName| = 0 OR There must exist a database with the given dbName.
+     * @post <i>The connection is set</i>
+     *       <i>there are 3 tables in dbName database</i>
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public static void initHyPeerWebDatabase(java.lang.String dbName) throws SQLException, ClassNotFoundException
     {
         if (connection != null)
@@ -58,7 +114,15 @@ public class HyPeerWebDatabase
     }
     
     
-    
+    /**
+     * Saves the HyPeerWeeb to the current database
+     * 
+     * @param nodes collection of nodes that belong to the HyPeerWeb that is to be saved
+     * @pre the tables of the current database are already prefilled OR they are empty
+     * @post <i>there is an entry in the Nodes table for every Node in the nodes collection</i>
+     *      <i>for every node pairs of neighbors and surrogate neighbors are saved in the database </i> 
+     * @throws SQLException
+     */
     public void save(final Collection<Node> nodes) throws SQLException
     {
             
@@ -73,7 +137,11 @@ public class HyPeerWebDatabase
             }
             
     }
-    
+    /**
+     * @pre tables already exist in the current database OR they don't exist
+     * @post there are 3 tables (Nodes, Neighbors, SurNeighbors) in the current database 
+     * @throws SQLException
+     */
     private static void createTables() throws SQLException
     {
             final Statement createTables = connection.createStatement();
@@ -104,6 +172,13 @@ public class HyPeerWebDatabase
             
     }
     
+    /**
+     * Drops all 3 tables. Used to clear the current database
+     * 
+     * @pre tables already exist in the current database OR they don't exist
+     * @post there are no tables in the current database
+     * @throws SQLException
+     */
     private void dropTables() throws SQLException
     {
         
@@ -116,6 +191,14 @@ public class HyPeerWebDatabase
         
     }
     
+    /**
+     * Loads the HyPeerWeb from the current database
+     * 
+     * @pre singleton != NULL
+     * @post the return HashMap contains all the information of the HyPeerWeb that is to be loaded
+     * @return HashMap<Integer,Node> set of nodes that belong to the loaded database
+     * @throws SQLException
+     */
     public HashMap<Integer,Node> loadNodeSet() throws SQLException
     {
             final HashMap<Integer,Node> nodes = new HashMap<Integer,Node>();
@@ -151,17 +234,25 @@ public class HyPeerWebDatabase
                 for(int neighborId: neighbors) currNode.addNeighbor(nodes.get(neighborId));
                 
                 final HashSet<Integer> surNeighbors = loadSurNeighbors(id);
-                for(int neighborId: surNeighbors) currNode.addSurrogateNeighbor(nodes.get(neighborId));
+                for(int neighborId: surNeighbors) currNode.addDownPointer(nodes.get(neighborId));
                 
                 final HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(id);
-                for(int neighborId: invSurNeighbors) currNode.addInverseSurrogateNeighbor(nodes.get(neighborId));           
+                for(int neighborId: invSurNeighbors) currNode.addUpPointer(nodes.get(neighborId));           
             
             }       
             
             return nodes;
     }
 
-    
+    /**
+     * Creates a SimplifiedNodeDomain representing the node with indicated webId. The information is retrieved from the database. 
+     * 
+     * @param webId - The webId of the node whose information we are going to retrieve.
+     * @pre There exists a node in the database with the given webId.
+     * @post result contains the webId, neighbors, upPointers, downPointers, fold, surrogateFold, and inverse surrogate fold of the indicated node.
+     * @return
+     * @throws SQLException
+     */
     public SimplifiedNodeDomain getNode(int webId) throws SQLException
     {    
         final PreparedStatement getNode = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
@@ -190,6 +281,15 @@ public class HyPeerWebDatabase
 
     }
     
+    /**
+     * Loads neighbors of the given node
+     * 
+     * @param webId - The webId of the node whose information we are going to retrieve.
+     * @pre NONE
+     * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's neighbors
+     * @return HashSet of neighbors
+     * @throws SQLException
+     */
     private HashSet<Integer> loadNeighbors(final int webId) throws SQLException
     {
             final PreparedStatement loadNeighbors = connection.prepareStatement("SELECT Neighbor FROM Neighbors WHERE Node = ?");
@@ -204,6 +304,15 @@ public class HyPeerWebDatabase
             return neighbors;
     }
     
+    /**
+     * Loads surrogate neighbors of the given node
+     * 
+     * @param webId - The webId of the node whose information we are going to retrieve.
+     * @pre NONE
+     * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's surrogate neighbors
+     * @return HashSet of surrogate neighbors
+     * @throws SQLException
+     */
     private HashSet<Integer> loadSurNeighbors(final int webId) throws SQLException
     {
         final PreparedStatement loadSurNeighbors = connection.prepareStatement("SELECT SurNeighbor FROM SurNeighbors WHERE InvSurNeighbor = ?");
@@ -218,6 +327,15 @@ public class HyPeerWebDatabase
         return surNeighbors;
     }
     
+    /**
+     * Loads inverse surrogate neighbors of the given node
+     * 
+     * @param webId - The webId of the node whose information we are going to retrieve.
+     * @pre NONE
+     * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's inverse surrogate neighbors
+     * @return HashSet of inverse surrogate neighbors
+     * @throws SQLException
+     */
     private HashSet<Integer> loadInvSurNeighbors(final int webId) throws SQLException
     {
         final PreparedStatement loadInvSurNeighbors = connection.prepareStatement("SELECT InvSurNeighbor FROM SurNeighbors WHERE SurNeighbor = ?");
@@ -232,7 +350,11 @@ public class HyPeerWebDatabase
         return invSurNeighbors;
     }
 
-    
+    /**
+     * 
+     * @param node
+     * @throws SQLException
+     */
     private void saveNode(final Node node) throws SQLException
     {
         final PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
@@ -240,8 +362,8 @@ public class HyPeerWebDatabase
         saveNode.setInt(1, node.getWebId()); //change when node class is ready
         saveNode.setInt(2, node.getHeight());
         saveNode.setInt(3, node.getFoldId());
-        saveNode.setInt(4, node.getSurFoldId());
-        saveNode.setInt(5, node.getInvSurFoldId());
+        saveNode.setInt(4, node.getSurrogateFoldId());
+        saveNode.setInt(5, node.getInverseSurrogateFoldId());
         saveNode.addBatch();
         
         connection.setAutoCommit(false);
@@ -251,6 +373,11 @@ public class HyPeerWebDatabase
 
     }
     
+    /**
+     * 
+     * @param node
+     * @throws SQLException
+     */
     private void saveNeighbors(final Node node) throws SQLException
     {
             final PreparedStatement saveNeighbors = connection.prepareStatement("INSERT INTO Neighbors(Node, Neighbor) VALUES (?, ?)");
@@ -269,7 +396,11 @@ public class HyPeerWebDatabase
             saveNeighbors.close();
         
     }
-    
+    /**
+     * 
+     * @param node
+     * @throws SQLException
+     */
     private void saveSurNeighbors(final Node node) throws SQLException
     {
         
