@@ -143,7 +143,7 @@ public class Node
 	public void setFold(final Node node) 
 	{
 	    // if node WebId is fold of this.WebId
-	    fold = node;
+	    connections.setFold(node);
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public class Node
 	public void setSurrogateFold(final Node node) 
 	{
 	    // if node WebId is surrogate fold of this.WebId
-		surrogateFold = node;
+		connections.setSurrogateFold(node);
 	}
 	
 	/**
@@ -370,6 +370,21 @@ public class Node
         //...
          *
          */
+    }
+    
+    public int getFoldId()
+    {
+        return connections.getFoldId() ;
+    }
+    
+    public int getSurrogateFoldId()
+    {
+        return connections.getSurrogateFoldId();
+    }
+    
+    public int getInverseSurrogateFoldId()
+    {
+        return connections.getInverseSurrogateFoldId();
     }
     
 
