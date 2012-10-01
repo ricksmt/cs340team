@@ -158,6 +158,7 @@ public class Connections
     {
         return inverseSurrogateFold;
     }
+<<<<<<< HEAD
     
     /**
      * Initailizes a nodes connections that is being inserted
@@ -196,21 +197,34 @@ public class Connections
          */
         
         //Second signal all the connected nodes to update their connections
+=======
+
+    /**
+     * set all connections based off of needed connections from parent Node's connections
+     * 
+     * @param connections
+     */
+    public void initWithParentsConnections(Connections connections) 
+    {    
+        // ex: fold = connections.getFold()
+>>>>>>> branch 'master' of https://github.com/ricksmt/cs340team.git
     }
     
     public Node getHighestNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getHighestSurrogateNeighbor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public Node getLowestNeighborWithoutChild() {
-        // TODO Auto-generated method stub
         return null;
+    }
+    
+    public void notify(Node childNode)
+    {
+        // Notify other nodes of new connection
     }
 }
 
