@@ -22,7 +22,7 @@ public class Node
      * @author Matthew, Brian, Trevor
      *
      */
-    protected enum State
+    public enum State
     {   
         CAP
         {
@@ -91,12 +91,12 @@ public class Node
     /**
      * This node's webId
      */
-    private WebId webid;
+    protected WebId webid;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
-    private Connections connections;
+    protected Connections connections;
     
 	public static final Node NULL_NODE = null;
 	
@@ -344,75 +344,39 @@ public class Node
      */
     public void insertSelf(Node startNode)
     {
-        Node currentNode;
-        Node nextNode = startNode;
-        //This loop controls the stepping of the algorithm finding the cap node
-        do
-        {
-            currentNode = nextNode;
-            nextNode = state.findCapNode(currentNode);
-            
-        } while (nextNode != currentNode);
-        //The cap node is now found (currentNode).
+        Node parent = findInsertionPoint(startNode);
+        webid = new WebId((int) (parent.webid.getValue() + 
+                Math.pow(2, parent.getNeighborsIds().size())));
         
-        //Should we change our findCapNode to findInsertionPoint, and put this as a 4th state?
-        while (currentNode.getLowestNeighborWithoutChild() != null)
+        // Give child its' connections.
+        connections = Connections.extractChildConnections(parent);
+        connections.addNeighbor(parent);
+        
+        // Update states
+        setState(parent.state.getInitialStateofChild());
+        parent.setState(parent.state.getNextState());
+        
+        // Notify
+        Connections.notify(this);
+    }
+
+    private Node findInsertionPoint(Node startNode) {
+        Node currentNode = startNode.state.findCapNode(startNode);
+        //This loop controls the stepping of the algorithm finding the cap node
+        while(currentNode != startNode){
+            startNode = currentNode;
+            currentNode = currentNode.state.findCapNode(currentNode);
+        }//The cap node is now found (currentNode).
+        
+        while (currentNode.getLowestNeighborWithoutChild() != Node.NULL_NODE)
         {
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
-        
-        // set connections for inserted Node
-        setConnectionsWithInsertionPoint(currentNode);
-        
-        // set new Node's state
-        setState(currentNode.state.getInitialStateofChild());
-        
-        // update parent node's state
-        currentNode.setState(currentNode.state.getNextState());
+        return currentNode;
     }
     
     public Node getLowestNeighborWithoutChild() {
         return connections.getLowestNeighborWithoutChild();
-    }
-
-    /**
-     * setConnectionsWithInsertionPoint
-     * This method uses the information from the insertion point to create all the needed connections for the 
-     * new node.
-     * It also adds the needed connections to the new node (this one). 
-     * (This essentially adds this node to the HyPeerWeb)
-     * 
-     * @pre insertionPoint is the correct insertion point in the HyPeerWeb. That is, it is the lowest node on the cap node's layer without a child.
-     * @post This node is inserted as the insertionPoint's child, and connections are adjusted such that all the project constraints are met.
-     * 
-     * @param insertionPoint
-     */
-    private void setConnectionsWithInsertionPoint(Node insertionPoint)
-    {
-        int parentWebId = insertionPoint.getWebId();
-        int bitMask = 0x80000000;
-        //scan for highest order bit
-        for (;;)
-        {
-            if ((bitMask & parentWebId) != 0)
-            {
-                //if found, raise bit and add it to the insertions point webId
-                bitMask = bitMask << 1;
-                webid = new WebId(bitMask | parentWebId);
-                break;
-            }
-            else
-            {
-                bitMask = bitMask >>> 1;
-            }
-        }
-        
-        
-        // Set new Node's connections based off of parent's connections
-        connections = insertionPoint.connections.extractChildConnections();
-       
-        // Notify new connections 
-        connections.notify(this);
     }
     
     public int getFoldId()
