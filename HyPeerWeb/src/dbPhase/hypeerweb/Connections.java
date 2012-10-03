@@ -196,13 +196,13 @@ public class Connections
         throw new UnsupportedOperationException();
     }
     
-    public Connections getChildConnections() {
+    public Connections getChildConnections(Node parent) {
        Connections childConnections = new Connections();
        //Neighbors
-       childConnections.neighbors = inverseSurrogateNeighbors;
+       childConnections.neighbors = (SortedSet<Node>) inverseSurrogateNeighbors;
        //
        
-       childConnections.surrogateNeighbors = higherNeighbors();
+       childConnections.surrogateNeighbors = getLargerNeighbors(parent);
        
        // Fold
        if (inverseSurrogateFold == null)

@@ -19,8 +19,8 @@ public class Node
     /**
      * This represents the state of the node in the cap node finding algorithm.
      * The findCapNode method is called to produce the correct behavior at each step.
+     * 
      * @author Matthew, Brian, Trevor
-     *
      */
     public enum State
     {   
@@ -349,7 +349,7 @@ public class Node
                 Math.pow(2, parent.getNeighborsIds().size())));
         
         // Give child its' connections.
-        connections = Connections.extractChildConnections(parent);
+        connections = parent.connections.getChildConnections(parent);
         connections.addNeighbor(parent);
         
         // Update states
