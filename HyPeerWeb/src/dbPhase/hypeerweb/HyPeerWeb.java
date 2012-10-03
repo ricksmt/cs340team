@@ -81,14 +81,14 @@ public class HyPeerWeb
 	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    assert newNode != null && newNode != Node.NULL_NODE;
-	    if ( nodes.size()> 0)
+	    if ( nodes.size() > 0)
 	    {
 	        assert startNode != null;
-	        //TODO
+	        newNode.insertSelf(startNode);
 	    }
 	    else
 	    {
-	        //TODO
+	        addNode(newNode);
 	    }
 	}
 }

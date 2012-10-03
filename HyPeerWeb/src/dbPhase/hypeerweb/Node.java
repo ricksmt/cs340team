@@ -1,10 +1,14 @@
 
 /** 
- * Surrogate neighbors are called DownPointers.
- * Inverse surrogate neighbors are called UpPointers.
- * Refer to: http://students.cs.byu.edu/~cs340ta/spring2012/projects/hypeerwebdesc/ 
+ * A node in the HyPeerWeb<br>
+ * <br>
  * 
- * Node.java
+ * <pre>
+ * <b>Domain</b>
+ *      webid : WedId
+ *      connections : Connections
+ * </pre>
+ * 
  * @author Trevor Bentley, Brian Davis, Matthew
  * 
  * */
@@ -104,6 +108,8 @@ public class Node implements Comparable<Node>
 	 * Constructor for a new node.
 	 * It's webId is given by the parameter.
 	 * @param i
+	 * @pre none
+	 * @post This node has the given webId, and is it's own fold.
 	 */
 	public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
 	{
@@ -114,7 +120,6 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
 	public Node getHighestNeighbor()
 	{
@@ -123,7 +128,6 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
     public Node getHighestSurrogateNeighbor()
     {
@@ -135,7 +139,6 @@ public class Node implements Comparable<Node>
      * 
      * @pre this node is initialized
      * @post no changes to this node
-     * 
      * @return SimplifiedNodeDomain representing this node
      */
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
@@ -266,7 +269,6 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
 	public int getHeight()
 	{
@@ -329,7 +331,7 @@ public class Node implements Comparable<Node>
     }
     
     /**
-     * @obvious
+     * @obviousNR
      * @return copy of inverse surrogate neighbor set
      */
     public HashSet<Integer> getInvSurNeighborsIds()
@@ -365,7 +367,12 @@ public class Node implements Comparable<Node>
         // Parent Notify
         parent.connections.parentNotify(parent);
     }
-
+    
+    /**
+     * findInsertionPoint
+     * @param startNode
+     * @return The node which is the insertion point/
+     */
     private Node findInsertionPoint(Node startNode)
     {
         Node currentNode = startNode.state.findCapNode(startNode);
@@ -383,29 +390,34 @@ public class Node implements Comparable<Node>
         return currentNode;
     }
     
+    /**
+     * @obviousNR
+     * @return The lowest neighbor that does not have a child.
+     */
     public Node getLowestNeighborWithoutChild()
     {
         return connections.getLowestNeighborWithoutChild();
     }
     
-    //Do we still want this?
-    public int getChildsWebId()
-    {
-        final int bit = 1 << (getHeight()-1);
-        return webid.getValue() | bit;
-        
-    }
-    
+    /**
+     * @obvious
+     */
     public int getFoldId()
     {
         return connections.getFoldId() ;
     }
     
+    /**
+     * @obvious
+     */
     public int getSurrogateFoldId()
     {
         return connections.getSurrogateFoldId();
     }
     
+    /**
+     * @obvious
+     */
     public int getInverseSurrogateFoldId()
     {
         return connections.getInverseSurrogateFoldId();

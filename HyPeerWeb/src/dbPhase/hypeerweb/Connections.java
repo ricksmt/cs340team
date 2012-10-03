@@ -408,14 +408,22 @@ public class Connections
     /** 
      * Child node notifies all of it's new connections how it is now
      * connected to them:
+<<<<<<< OURS
      *      - Fold
      *      - Neighbors
      *      - Surrogate Neighbors 
      *      
      * @pre: childNode has all of its Connections.
      * @post: all Connections of childNode are notified of new Connection between childNode
+=======
+     * - Fold
+     * - Neighbors
+     * - Surrogate Neighbors 
+     * @pre childNode has all of its Connections.
+     * @post all Connections of childNode are notified of new Connection between childNode
+>>>>>>> THEIRS
      * and Node.
-     * @param: childNode
+     * @param childNode
      */
     public void childNotify(final Node childNode)
 	{
