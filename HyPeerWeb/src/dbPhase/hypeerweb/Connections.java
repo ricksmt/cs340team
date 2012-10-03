@@ -8,6 +8,7 @@
 package dbPhase.hypeerweb;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -296,9 +297,9 @@ public class Connections
      * @param owner
      * @return sorted set of neighbors
      */
-    private SortedSet<Node> getLargerNeighbors(final Node owner)
+    private static SortedSet<Node> getLargerNeighbors(final Node owner)
     {
-        return neighbors.tailSet(owner);
+        return new TreeSet<Node>(owner.connections.neighbors.tailSet(owner));
     }
 
     /**
@@ -334,9 +335,16 @@ public class Connections
      */
     public Node getLowestNeighborWithoutChild()
     {
-        final int size = neighbors.first().getNeighborsIds().size();
-        for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
-        return neighbors.first();
+        try
+        {
+            final int size = neighbors.first().getHeight();
+            for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
+            return neighbors.first();
+        }
+        catch(NoSuchElementException e)
+        {
+            return Node.NULL_NODE;
+        }
     }
     
     /**
@@ -353,13 +361,13 @@ public class Connections
     {
        final Connections childConnections = new Connections();
        //Neighbors
-       childConnections.neighbors = (SortedSet<Node>) inverseSurrogateNeighbors;
+       childConnections.neighbors = new TreeSet<Node>(inverseSurrogateNeighbors);
        childConnections.addNeighbor(parent);
        
        childConnections.surrogateNeighbors = getLargerNeighbors(parent);
        
        // Fold
-       if (inverseSurrogateFold == null)
+       if (inverseSurrogateFold == Node.NULL_NODE)
        {
            childConnections.fold = fold;
        }
@@ -408,24 +416,15 @@ public class Connections
     /** 
      * Child node notifies all of it's new connections how it is now
      * connected to them:
-<<<<<<< OURS
      *      - Fold
      *      - Neighbors
      *      - Surrogate Neighbors 
-     *      
-     * @pre: childNode has all of its Connections.
-     * @post: all Connections of childNode are notified of new Connection between childNode
-=======
-     * - Fold
-     * - Neighbors
-     * - Surrogate Neighbors 
      * @pre childNode has all of its Connections.
      * @post all Connections of childNode are notified of new Connection between childNode
->>>>>>> THEIRS
      * and Node.
      * @param childNode
      */
-    public void childNotify(final Node childNode)
+    public void childNotify(final Node childNode, final Node parentNode)
 	{
         // Notify fold
         if(fold.connections.fold != Node.NULL_NODE)
@@ -446,6 +445,7 @@ public class Connections
         for (Node neighbor : neighbors)
         {
             neighbor.addNeighbor(childNode);
+            neighbor.removeDownPointer(parentNode);
         }
         
         for (Node surrogateNeighbor : surrogateNeighbors)

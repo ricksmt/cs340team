@@ -50,7 +50,8 @@ public class Node implements Comparable<Node>
             @Override
             public Node findCapNode(final Node n)
             {
-                return n.getHighestSurrogateNeighbor();
+                if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
+                else return n.getHighestNeighbor();
             }
             
             public State getInitialStateofChild()
@@ -116,6 +117,7 @@ public class Node implements Comparable<Node>
 		webid = new WebId(i);
 		connections = new Connections();
 		connections.setFold(this);
+		state = State.CAP;
 	}
 	
 	/**
@@ -182,7 +184,7 @@ public class Node implements Comparable<Node>
         if(inverseSurrogateFold != NULL_NODE) tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
 	    
 	    final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
-                                                        		        webid.getHeight(),
+                                                        		        getHeight(),
                                                                         intNeighbors,
                                                                         intInverseSurrogateNeighbors, 
                                                                         intSurrogateNeighbors,
@@ -272,7 +274,7 @@ public class Node implements Comparable<Node>
 	 */
 	public int getHeight()
 	{
-	    return webid.getHeight();
+	    return connections.getNeighbors().size() + connections.getSurrogateNeighbors().size();
 	}
 	
 	
@@ -352,17 +354,18 @@ public class Node implements Comparable<Node>
     {
         final Node parent = findInsertionPoint(startNode);
         webid = new WebId((int) (parent.webid.getValue() + 
-                Math.pow(2, parent.getNeighborsIds().size())));
+                Math.pow(2, parent.getHeight())));
         
         // Give child its' connections.
         connections = parent.connections.getChildConnections(parent);
+        connections.addNeighbor(parent);
         
         // Update states
         setState(parent.state.getInitialStateofChild());
         parent.setState(parent.state.getNextState());
         
         // Child Notify
-        connections.childNotify(this);
+        connections.childNotify(this, parent);
         
         // Parent Notify
         parent.connections.parentNotify(parent);
@@ -383,10 +386,12 @@ public class Node implements Comparable<Node>
             currentNode = currentNode.state.findCapNode(currentNode);
         }//The cap node is now found (currentNode).
         
-        while (currentNode.getLowestNeighborWithoutChild() != Node.NULL_NODE)
+        do
         {
+            startNode = currentNode;
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
+        while(currentNode != startNode);
         return currentNode;
     }
     
@@ -396,7 +401,10 @@ public class Node implements Comparable<Node>
      */
     public Node getLowestNeighborWithoutChild()
     {
-        return connections.getLowestNeighborWithoutChild();
+        Node temp = connections.getLowestNeighborWithoutChild();
+        if(temp == NULL_NODE) return this;
+        else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight()) return temp;
+        else return this;
     }
     
     /**
