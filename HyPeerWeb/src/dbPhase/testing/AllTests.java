@@ -1,4 +1,4 @@
-package dbPhase.hypeerweb;
+package dbPhase.testing;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

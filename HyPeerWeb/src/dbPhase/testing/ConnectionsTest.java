@@ -1,5 +1,7 @@
-package dbPhase.hypeerweb;
+package dbPhase.testing;
 
+import dbPhase.hypeerweb.Connections;
+import dbPhase.hypeerweb.Node;
 import junit.framework.TestCase;
 
 /* Created by: Trevor Bentley */
