@@ -211,7 +211,7 @@ public class Connections
        final Connections childConnections = new Connections();
        //Neighbors
        childConnections.neighbors = (SortedSet<Node>) inverseSurrogateNeighbors;
-       //
+       childConnections.addNeighbor(parent);
        
        childConnections.surrogateNeighbors = getLargerNeighbors(parent);
        

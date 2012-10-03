@@ -354,7 +354,6 @@ public class Node implements Comparable<Node>
         
         // Give child its' connections.
         connections = parent.connections.getChildConnections(parent);
-        connections.addNeighbor(parent);
         
         // Update states
         setState(parent.state.getInitialStateofChild());
