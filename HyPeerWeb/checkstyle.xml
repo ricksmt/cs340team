@@ -30,7 +30,6 @@
       <property name="option" value="alone"/>
       <property name="shouldStartLine" value="false"/>
     </module>
-    <module name="DoubleCheckedLocking"/>
     <module name="FinalLocalVariable">
       <property name="tokens" value="PARAMETER_DEF,VARIABLE_DEF"/>
     </module>
@@ -52,6 +51,7 @@
       <property name="tokens" value="METHOD_DEF"/>
     </module>
     <module name="JavadocStyle">
+      <property name="checkFirstSentence" value="false"/>
       <property name="checkHtml" value="false"/>
       <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,METHOD_DEF"/>
     </module>

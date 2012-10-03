@@ -4,9 +4,9 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * The helper class that allows saving and loading the HyPeerWeb from the database<br>
+ * The helper class that allows saving and loading the HyPeerWeb from the database.
  * <br>
- * 
+ * <br>
  * <pre>
  * <b>Domain:</b>
  *      DATABASE_DIRECTORY     : String
@@ -52,21 +52,19 @@ public class HyPeerWebDatabase
      *      <i>dbName = null OR |dbName| = 0 OR There must exist a database with the given dbName.</i>
      * @post initHyPeerWebDatabase(dbName).postCondition
      */
-    private HyPeerWebDatabase(final String dbName) throws ClassNotFoundException, SQLException
+    private HyPeerWebDatabase(final String dbName)
     {
         initHyPeerWebDatabase(dbName);
     }
 
     /**
-     * Gets the single HyPeerWebDatabase
+     * Gets the single HyPeerWebDatabase.
      * 
      * @pre singleton=null OR initHyPeerWebDatabase() have been called previously
      * @post return=singleton
      * @return the single HyPeerWebDatabase
-     * @throws ClassNotFoundException
-     * @throws SQLException
      */
-    public static HyPeerWebDatabase getSingleton() throws ClassNotFoundException, SQLException
+    public static HyPeerWebDatabase getSingleton()
     {
         if (singleton == null) singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
         return singleton;
@@ -75,14 +73,24 @@ public class HyPeerWebDatabase
     /**
      * Creates and loads a HyPeerWebDatabase. Should be one of the first things called when creating a HyPeerWeb. 
      * 
+     * @pre There must exist a database with the name given by DEFAULT_DATABASE_NAME.
+     * @post <i>The connection is set</i>
+     *       <i>there are 3 tables in DEFAULT_DATABASE_NAME database</i>
+     */
+    public static void initHyPeerWebDatabase()
+    {
+        initHyPeerWebDatabase(DEFAULT_DATABASE_NAME);
+    }
+    
+    /**
+     * Creates and loads a HyPeerWebDatabase. Should be one of the first things called when creating a HyPeerWeb. 
+     * 
      * @param dbName The name of the database
      * @pre dbName = null OR |dbName| = 0 OR There must exist a database with the given dbName.
      * @post <i>The connection is set</i>
      *       <i>there are 3 tables in dbName database</i>
-     * @throws SQLException
-     * @throws ClassNotFoundException
      */
-    public static void initHyPeerWebDatabase(java.lang.String dbName) throws SQLException, ClassNotFoundException
+    public static void initHyPeerWebDatabase(java.lang.String dbName)
     {
         if (connection != null)
         {    
@@ -98,14 +106,18 @@ public class HyPeerWebDatabase
         
         if (dbName==null) dbName=DEFAULT_DATABASE_NAME;
         
-        Class.forName("org.sqlite.JDBC");
-        
         try 
         {
+            Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:"+dbName);
         } 
         catch (final SQLException e) 
         {
+            e.printStackTrace();
+        }
+        catch (final ClassNotFoundException e)
+        {
+            System.out.println("JDBC cannot be located.");
             e.printStackTrace();
         }
         
@@ -120,10 +132,9 @@ public class HyPeerWebDatabase
      * @param nodes collection of nodes that belong to the HyPeerWeb that is to be saved
      * @pre the tables of the current database are already prefilled OR they are empty
      * @post <i>there is an entry in the Nodes table for every Node in the nodes collection</i>
-     *      <i>for every node pairs of neighbors and surrogate neighbors are saved in the database </i> 
-     * @throws SQLException
+     *      <i>for every node pairs of neighbors and surrogate neighbors are saved in the database </i>
      */
-    public void save(final Collection<Node> nodes) throws SQLException
+    public void save(final Collection<Node> nodes)
     {
             
             dropTables();
@@ -139,11 +150,12 @@ public class HyPeerWebDatabase
     }
     /**
      * @pre tables already exist in the current database OR they don't exist
-     * @post there are 3 tables (Nodes, Neighbors, SurNeighbors) in the current database 
-     * @throws SQLException
+     * @post there are 3 tables (Nodes, Neighbors, SurNeighbors) in the current database
      */
-    private static void createTables() throws SQLException
+    private static void createTables()
     {
+        try
+        {
             final Statement createTables = connection.createStatement();
             createTables.addBatch(
                             "CREATE TABLE IF NOT EXISTS Nodes (" +
@@ -168,8 +180,23 @@ public class HyPeerWebDatabase
             
             createTables.executeBatch();
             createTables.close();
-           
-            
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error creating the database.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Clears the current database.
+     * 
+     * @pre tables already exist in the current database OR they don't exist
+     * @post there are no tables in the current database
+     */
+    public void clear()
+    {
+        dropTables();
     }
     
     /**
@@ -177,30 +204,36 @@ public class HyPeerWebDatabase
      * 
      * @pre tables already exist in the current database OR they don't exist
      * @post there are no tables in the current database
-     * @throws SQLException
      */
-    private void dropTables() throws SQLException
+    private void dropTables()
     {
-        
-        final Statement dropTables = connection.createStatement();
-        dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
-        dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
-        dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
-        dropTables.executeBatch();
-        dropTables.close();
-        
+        try
+        {
+            final Statement dropTables = connection.createStatement();
+            dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
+            dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
+            dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
+            dropTables.executeBatch();
+            dropTables.close();
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error clearing the database.");
+            e.printStackTrace();
+        }
     }
     
     /**
-     * Loads the HyPeerWeb from the current database
+     * Loads the HyPeerWeb from the current database.
      * 
      * @pre singleton != NULL
      * @post the return HashMap contains all the information of the HyPeerWeb that is to be loaded
      * @return HashMap<Integer,Node> set of nodes that belong to the loaded database
-     * @throws SQLException
      */
-    public HashMap<Integer,Node> loadNodeSet() throws SQLException
+    public HashMap<Integer,Node> loadNodeSet()
     {
+        try
+        {
             final HashMap<Integer,Node> nodes = new HashMap<Integer,Node>();
             final Statement stat = connection.createStatement();
             
@@ -237,11 +270,16 @@ public class HyPeerWebDatabase
                 for(int neighborId: surNeighbors) currNode.addDownPointer(nodes.get(neighborId));
                 
                 final HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(id);
-                for(int neighborId: invSurNeighbors) currNode.addUpPointer(nodes.get(neighborId));           
-            
-            }       
-            
+                for(int neighborId: invSurNeighbors) currNode.addUpPointer(nodes.get(neighborId));
+            }
             return nodes;
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error loading the nodes from the database.");
+            e.printStackTrace();
+        }
+        return new HashMap<Integer,Node>();
     }
 
     /**
@@ -251,7 +289,6 @@ public class HyPeerWebDatabase
      * @pre There exists a node in the database with the given webId.
      * @post result contains the webId, neighbors, upPointers, downPointers, fold, surrogateFold, and inverse surrogate fold of the indicated node.
      * @return
-     * @throws SQLException
      */
     public SimplifiedNodeDomain getNode(int webId) throws SQLException
     {    
@@ -282,16 +319,17 @@ public class HyPeerWebDatabase
     }
     
     /**
-     * Loads neighbors of the given node
+     * Loads neighbors of the given node.
      * 
      * @param webId - The webId of the node whose information we are going to retrieve.
      * @pre NONE
      * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's neighbors
      * @return HashSet of neighbors
-     * @throws SQLException
      */
-    private HashSet<Integer> loadNeighbors(final int webId) throws SQLException
+    private HashSet<Integer> loadNeighbors(final int webId)
     {
+        try
+        {
             final PreparedStatement loadNeighbors = connection.prepareStatement("SELECT Neighbor FROM Neighbors WHERE Node = ?");
             loadNeighbors.setInt(1, webId);
             final ResultSet neighborsSet = loadNeighbors.executeQuery();
@@ -302,52 +340,77 @@ public class HyPeerWebDatabase
            
             loadNeighbors.close();
             return neighbors;
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error loading the surrogate neighbors of node "
+                                            + webId + " to the database.");
+            e.printStackTrace();
+        }
+        return new HashSet<Integer>();
     }
     
     /**
-     * Loads surrogate neighbors of the given node
+     * Loads surrogate neighbors of the given node.
      * 
      * @param webId - The webId of the node whose information we are going to retrieve.
      * @pre NONE
      * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's surrogate neighbors
      * @return HashSet of surrogate neighbors
-     * @throws SQLException
      */
-    private HashSet<Integer> loadSurNeighbors(final int webId) throws SQLException
+    private HashSet<Integer> loadSurNeighbors(final int webId)
     {
-        final PreparedStatement loadSurNeighbors = connection.prepareStatement("SELECT SurNeighbor FROM SurNeighbors WHERE InvSurNeighbor = ?");
-        loadSurNeighbors.setInt(1, webId);
-        final ResultSet surNeighborsSet = loadSurNeighbors.executeQuery();
-        final HashSet<Integer> surNeighbors = new HashSet<Integer>();
-       
-        while (surNeighborsSet.next())
-                surNeighbors.add(surNeighborsSet.getInt("SurNeighbor"));
-       
-        loadSurNeighbors.close();
-        return surNeighbors;
+        try
+        {
+            final PreparedStatement loadSurNeighbors = connection.prepareStatement("SELECT SurNeighbor FROM SurNeighbors WHERE InvSurNeighbor = ?");
+            loadSurNeighbors.setInt(1, webId);
+            final ResultSet surNeighborsSet = loadSurNeighbors.executeQuery();
+            final HashSet<Integer> surNeighbors = new HashSet<Integer>();
+           
+            while (surNeighborsSet.next())
+                    surNeighbors.add(surNeighborsSet.getInt("SurNeighbor"));
+           
+            loadSurNeighbors.close();
+            return surNeighbors;
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error loading the surrogate neighbors of node "
+                                            + webId + " to the database.");
+        e.printStackTrace();
+        }
+        return new HashSet<Integer>();
     }
     
     /**
-     * Loads inverse surrogate neighbors of the given node
+     * Loads inverse surrogate neighbors of the given node.
      * 
      * @param webId - The webId of the node whose information we are going to retrieve.
      * @pre NONE
      * @post HashSet of neighbors contains the webIds (loaded from the database) of the given node's inverse surrogate neighbors
      * @return HashSet of inverse surrogate neighbors
-     * @throws SQLException
      */
-    private HashSet<Integer> loadInvSurNeighbors(final int webId) throws SQLException
+    private HashSet<Integer> loadInvSurNeighbors(final int webId)
     {
-        final PreparedStatement loadInvSurNeighbors = connection.prepareStatement("SELECT InvSurNeighbor FROM SurNeighbors WHERE SurNeighbor = ?");
-        loadInvSurNeighbors.setInt(1, webId);
-        final ResultSet invSurNeighborsSet = loadInvSurNeighbors.executeQuery();
-        final HashSet<Integer> invSurNeighbors = new HashSet<Integer>();
-       
-        while (invSurNeighborsSet.next())
-            invSurNeighbors.add(invSurNeighborsSet.getInt("InvSurNeighbor"));
-       
-        loadInvSurNeighbors.close();
-        return invSurNeighbors;
+        try
+        {
+            final PreparedStatement loadInvSurNeighbors = connection.prepareStatement("SELECT InvSurNeighbor FROM SurNeighbors WHERE SurNeighbor = ?");
+            loadInvSurNeighbors.setInt(1, webId);
+            final ResultSet invSurNeighborsSet = loadInvSurNeighbors.executeQuery();
+            final HashSet<Integer> invSurNeighbors = new HashSet<Integer>();
+           
+            while(invSurNeighborsSet.next()) invSurNeighbors.add(invSurNeighborsSet.getInt("InvSurNeighbor"));
+           
+            loadInvSurNeighbors.close();
+            return invSurNeighbors;
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error loading the inverse surrogate neighbors of node "
+                                        + webId + " to the database.");
+            e.printStackTrace();
+        }
+        return new HashSet<Integer>();
     }
 
     /**
@@ -358,23 +421,32 @@ public class HyPeerWebDatabase
      * @post <i>node's information is saved in the database</i>
      *      <i>all the node entries that wre in the database before are still there</i>
      * @throws SQLException
+     * @param node
      */
-    private void saveNode(final Node node) throws SQLException
+    private void saveNode(final Node node)
     {
-        final PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
-        
-        saveNode.setInt(1, node.getWebId()); //change when node class is ready
-        saveNode.setInt(2, node.getHeight());
-        saveNode.setInt(3, node.getFoldId());
-        saveNode.setInt(4, node.getSurrogateFoldId());
-        saveNode.setInt(5, node.getInverseSurrogateFoldId());
-        saveNode.addBatch();
-        
-        connection.setAutoCommit(false);
-        saveNode.executeBatch();
-        connection.setAutoCommit(true);
-        saveNode.close();
-
+        try
+        {
+            final PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
+            
+            saveNode.setInt(1, node.getWebId()); //change when node class is ready
+            saveNode.setInt(2, node.getHeight());
+            saveNode.setInt(3, node.getFoldId());
+            saveNode.setInt(4, node.getSurrogateFoldId());
+            saveNode.setInt(5, node.getInverseSurrogateFoldId());
+            saveNode.addBatch();
+            
+            connection.setAutoCommit(false);
+            saveNode.executeBatch();
+            connection.setAutoCommit(true);
+            saveNode.close();
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error saving the node "
+                                + node.getWebId() + " to the database.");
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -385,11 +457,13 @@ public class HyPeerWebDatabase
      * @post <i>node's neighbors'ids are saved in the database</i>
      *      <i>all the entries that were in the database before are still there</i>
      * @throws SQLException
+     * @param node
      */
-    private void saveNeighbors(final Node node) throws SQLException
+    private void saveNeighbors(final Node node)
     {
+        try
+        {
             final PreparedStatement saveNeighbors = connection.prepareStatement("INSERT INTO Neighbors(Node, Neighbor) VALUES (?, ?)");
-          //change when node class is ready
             final int webId = node.getWebId();
             
             for (int neighborId : node.getNeighborsIds())
@@ -402,7 +476,13 @@ public class HyPeerWebDatabase
             saveNeighbors.executeBatch();
             connection.setAutoCommit(true);
             saveNeighbors.close();
-        
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error saving a neighbor relationship of node "
+                                        + node.getWebId() + " to the database.");
+            e.printStackTrace();
+        }
     }
     /**
      * Saves node's surrogate neighbors' ids to the Neighbors table
@@ -412,10 +492,12 @@ public class HyPeerWebDatabase
      * @post <i>node's surrogate neighbors'ids are saved in the database</i>
      *      <i>all the entries that were in the database before are still there</i>
      * @throws SQLException
+     * @param node
      */
-    private void saveSurNeighbors(final Node node) throws SQLException
+    private void saveSurNeighbors(final Node node)
     {
-        
+        try
+        {
             final PreparedStatement saveSurNeighbors = connection.prepareStatement(
                     "INSERT INTO SurNeighbors(InvSurNeighbor, SurNeighbor) VALUES (?, ?)");
           //change when node class is ready
@@ -430,6 +512,13 @@ public class HyPeerWebDatabase
             connection.setAutoCommit(false);
             saveSurNeighbors.executeBatch();
             connection.setAutoCommit(true);
-            saveSurNeighbors.close();   
+            saveSurNeighbors.close(); 
+        }
+        catch(final SQLException e)
+        {
+            System.out.println("There was an error saving a surrogate neighbor relationship of node " 
+                                                + node.getWebId() + " to the database.");
+            e.printStackTrace();
+        }  
     }
 }

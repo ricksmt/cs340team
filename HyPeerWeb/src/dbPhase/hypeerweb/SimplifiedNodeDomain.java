@@ -37,8 +37,38 @@ public class SimplifiedNodeDomain
     protected int fold;
     protected int surrogateFold;
     protected int inverseSurrogateFold;
+    protected Node.State state;
 
     // Constructors
+    /**
+     * Default SimplifiedNodeDomain constructor. Implemented to make the
+     * compiler happy.
+     * 
+     * @pre <i>None</i>
+     * @post <pre>
+     * webId = -1 AND
+     *       neighbors = null AND<br>
+     *       upPointers = null AND<br>
+     *       downPointers = null AND<br>
+     *       fold = -1 AND<br>
+     *       surrogateFold = -1
+     *       inverseSurrogateFold = -1
+     *       state = StandardNode.STATE_ID;
+     * </pre>
+     */
+    protected SimplifiedNodeDomain()
+    {
+        webId = -1;
+        height = -1;
+        this.neighbors = null;
+        this.upPointers = null;
+        this.downPointers = null;
+        fold = -1;
+        surrogateFold = -1;
+        inverseSurrogateFold = -1;
+        state = Node.State.STANDARD;
+    }
+    
     /**
      * Initializes the domain from the connections of the node.
      * 
@@ -51,9 +81,9 @@ public class SimplifiedNodeDomain
      * @param surrogateFold the simplifiedNodeDomain's new surrogateFold.
      * @param inverseSurrogateFold the simplifiedNodeDomain's new inverseSurrogateFold.
      * 
-     * @pre neighbors &ne; null AND<br>
-     *      upPointers &ne; null AND<br>
-     *      downPointers &ne; null AND<br>
+     * @pre neighbors != null AND<br>
+     *      upPointers != null AND<br>
+     *      downPointers != null AND<br>
      *  
      * @post this.webId = webId AND<br>
      *       this.height = height AND<br>
@@ -117,7 +147,7 @@ public class SimplifiedNodeDomain
      *            a string containing a sequence of one or more characters to be
      *            used as padding in front of the lines.
      * 
-     * @pre leadingCharacers &ne; null
+     * @pre leadingCharacers != null
      * @post result = A string with the appropriate information in the
      *       appropriate location of the format.
      * 
@@ -185,7 +215,7 @@ public class SimplifiedNodeDomain
      * 
      * @param otherSimplifiedNodeDomain the other object we are comparing against
      * @pre <i>None</i>
-     * @post result = otherSimplifiedNodeDomain &ne; null AND<br>
+     * @post result = otherSimplifiedNodeDomain != null AND<br>
      *         otherSimplifiedNodeDomain is a simplifedNodeNodeDomain AND<br>
      *        the webIds, neighbors, downPointers, fold, surrogateFold, and inverseSurrogateFold of this and the otherSimplifiedNodeDomain are equal.
      */
@@ -354,7 +384,7 @@ public class SimplifiedNodeDomain
      * @param otherId  the second id used in the computation
      * 
      * @pre <i>None</i>
-     * @post result = NumberOf 0 &le; i &le; 31 (thisId.binaryRepresentation[i] &ne; otherId.binaryRepresentation[i])
+     * @post result = NumberOf 0 &le; i &le; 31 (thisId.binaryRepresentation[i] != otherId.binaryRepresentation[i])
      */
     public static int distanceTo(int thisId, int otherId)
     {
@@ -396,7 +426,7 @@ public class SimplifiedNodeDomain
      * @param set1 the first set in the comparison.
      * @param set2 the second set in the comparison.
      * 
-     * @pre set1 &ne; null AND set2 &ne; null
+     * @pre set1 != null AND set2 != null
      * @post |set1| = |set2| AND &forall; i (i &isin; set1 &rArr; i &isin; set2)
      */
     private boolean setEquals(final HashSet<Integer> set1, final HashSet<Integer> set2)
@@ -421,7 +451,7 @@ public class SimplifiedNodeDomain
      * @param stringBuffer the buffer we are going to append the list of integer to.
      * @param set the set we are going to create a sorted list from.
      * 
-     * @pre stringBuffer &ne; null AND set &ne; null;
+     * @pre stringBuffer != null AND set != null;
      * @post result = stringBuffer + the string representation of the integers in the set such that all integers
      *         are separated by a " ".  The integers are also sorted from lowest to highest.
      */

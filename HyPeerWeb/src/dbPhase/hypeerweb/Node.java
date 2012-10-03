@@ -1,34 +1,37 @@
 
 /** 
- * Surrogate neighbors are called DownPointers.
- * Inverse surrogate neighbors are called UpPointers.
- * Refer to: http://students.cs.byu.edu/~cs340ta/spring2012/projects/hypeerwebdesc/ 
+ * A node in the HyPeerWeb<br>
+ * <br>
  * 
- * Node.java
+ * <pre>
+ * <b>Domain</b>
+ *      webid : WedId
+ *      connections : Connections
+ * </pre>
+ * 
  * @author Trevor Bentley, Brian Davis, Matthew
  * 
  * */
 
 package dbPhase.hypeerweb;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Node implements Comparable<Object>, Serializable
+public class Node implements Comparable<Node>
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
-     * The findCapNode method is called to produce the correct behavoir at each step.
+     * The findCapNode method is called to produce the correct behavior at each step.
+     * 
      * @author Matthew, Brian, Trevor
-     *
      */
-    protected enum State
+    public enum State
     {   
         CAP
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
                 return n;
             }
@@ -45,9 +48,10 @@ public class Node implements Comparable<Object>, Serializable
         DOWN
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
-                return n.getHighestSurrogateNeighbor();
+                if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
+                else return n.getHighestNeighbor();
             }
             
             public State getInitialStateofChild()
@@ -63,7 +67,7 @@ public class Node implements Comparable<Object>, Serializable
         STANDARD
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
                 return n.getHighestNeighbor();//Or highest fold?
             }
@@ -85,19 +89,19 @@ public class Node implements Comparable<Object>, Serializable
     }
     
     /**
-     * state represents this node's position (and next action) in the cap node locating algorithm
+     * State represents this node's position (and next action) in the cap node locating algorithm
      */
     protected State state;
     
     /**
      * This node's webId
      */
-    private WebId webid;
+    protected WebId webid;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
-    private Connections connections;
+    protected Connections connections;
     
 	public static final Node NULL_NODE = null;
 	
@@ -105,41 +109,45 @@ public class Node implements Comparable<Object>, Serializable
 	 * Constructor for a new node.
 	 * It's webId is given by the parameter.
 	 * @param i
+	 * @pre none
+	 * @post This node has the given webId, and is it's own fold.
 	 */
 	public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
 	{
 		webid = new WebId(i);
+		connections = new Connections();
+		connections.setFold(this);
+		state = State.CAP;
 	}
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
-	public Node getHighestNeighbor() {
+	public Node getHighestNeighbor()
+	{
         return connections.getHighestNeighbor();
     }
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
-    public Node getHighestSurrogateNeighbor() {
+    public Node getHighestSurrogateNeighbor()
+    {
         return connections.getHighestSurrogateNeighbor();
     }
     
     /**
-     * Returns fully initailized SimplifiedNodeDomain needed for testing
+     * Returns fully initialized SimplifiedNodeDomain needed for testing
      * 
-     * @pre this node is initailized
+     * @pre this node is initialized
      * @post no changes to this node
-     * 
      * @return SimplifiedNodeDomain representing this node
      */
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
 	{
 	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
-	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();;
-	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();;
+	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();
+	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();
 	    int tempFold = -1;
 	    int tempSurrogateFold = -1;
 	    int tempInverseSurrogateFold = -1;
@@ -167,16 +175,16 @@ public class Node implements Comparable<Object>, Serializable
             intInverseSurrogateNeighbors.add(temp.webid.getValue());
         }
         
-        Node fold = connections.getFold();
-        Node surrogateFold = connections.getSurrogateFold();
-        Node inverseSurrogateFold = connections.getInverseSurrogateFold();
+        final Node fold = connections.getFold();
+        final Node surrogateFold = connections.getSurrogateFold();
+        final Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
         if(fold != NULL_NODE) tempFold = fold.webid.getValue();
         if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
         if(inverseSurrogateFold != NULL_NODE) tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
 	    
 	    final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
-                                                        		        webid.getHeight(),
+                                                        		        getHeight(),
                                                                         intNeighbors,
                                                                         intInverseSurrogateNeighbors, 
                                                                         intSurrogateNeighbors,
@@ -199,7 +207,7 @@ public class Node implements Comparable<Object>, Serializable
 	 * @obvious
 	 * @param state
 	 */
-	public void setState(State state)
+	public void setState(final State state)
 	{
 	    this.state = state;
 	}
@@ -263,11 +271,10 @@ public class Node implements Comparable<Object>, Serializable
 	
 	/**
 	 * @obvious
-	 * @return
 	 */
 	public int getHeight()
 	{
-	    return connections.getNeighbors().size();
+	    return connections.getNeighbors().size() + connections.getSurrogateNeighbors().size();
 	}
 	
 	
@@ -326,7 +333,7 @@ public class Node implements Comparable<Object>, Serializable
     }
     
     /**
-     * @obvious
+     * @obviousNR
      * @return copy of inverse surrogate neighbor set
      */
     public HashSet<Integer> getInvSurNeighborsIds()
@@ -343,102 +350,92 @@ public class Node implements Comparable<Object>, Serializable
      * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
      * @param startNode
      */
-    public void insertSelf(Node startNode)
+    public void insertSelf(final Node startNode)
     {
-        Node currentNode;
-        Node nextNode = startNode;
+        final Node parent = findInsertionPoint(startNode);
+        webid = new WebId((int) (parent.webid.getValue() + 
+                Math.pow(2, parent.getHeight())));
+        
+        // Give child its' connections.
+        connections = parent.connections.getChildConnections(parent);
+        connections.addNeighbor(parent);
+        
+        // Update states
+        setState(parent.state.getInitialStateofChild());
+        parent.setState(parent.state.getNextState());
+        
+        // Child Notify
+        connections.childNotify(this, parent);
+        
+        // Parent Notify
+        parent.connections.parentNotify(parent);
+    }
+    
+    /**
+     * findInsertionPoint
+     * @param startNode
+     * @return The node which is the insertion point/
+     */
+    private Node findInsertionPoint(Node startNode)
+    {
+        Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
+        while(currentNode != startNode)
+        {
+            startNode = currentNode;
+            currentNode = currentNode.state.findCapNode(currentNode);
+        }//The cap node is now found (currentNode).
+        
         do
         {
-            currentNode = nextNode;
-            nextNode = state.findCapNode(currentNode);
-            
-        } while (nextNode != currentNode);
-        //The cap node is now found (currentNode).
-        
-        //Should we change our findCapNode to findInsertionPoint, and put this as a 4th state?
-        while (currentNode.getLowestNeighborWithoutChild() != null)
-        {
+            startNode = currentNode;
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
-        
-        // set connections for inserted Node
-        setConnectionsWithInsertionPoint(currentNode);
-        
-        // set new Node's state
-        setState(currentNode.state.getInitialStateofChild());
-        
-        // update parent node's state
-        currentNode.setState(currentNode.state.getNextState());
+        while(currentNode != startNode);
+        return currentNode;
     }
     
-    public Node getLowestNeighborWithoutChild() {
-        return connections.getLowestNeighborWithoutChild();
-    }
-
     /**
-     * setConnectionsWithInsertionPoint
-     * This method uses the information from the insertion point to create all the needed connections for the 
-     * new node.
-     * It also adds the needed connections to the new node (this one). 
-     * (This essentially adds this node to the HyPeerWeb)
-     * 
-     * @pre insertionPoint is the correct insertion point in the HyPeerWeb. That is, it is the lowest node on the cap node's layer without a child.
-     * @post This node is inserted as the insertionPoint's child, and connections are adjusted such that all the project constraints are met.
-     * 
-     * @param insertionPoint
+     * @obviousNR
+     * @return The lowest neighbor that does not have a child.
      */
-    private void setConnectionsWithInsertionPoint(Node insertionPoint)
+    public Node getLowestNeighborWithoutChild()
     {
-        int parentWebId = insertionPoint.getWebId();
-        int bitMask = 0x80000000;
-        //scan for highest order bit
-        for (;;)
-        {
-            if ((bitMask & parentWebId) != 0)
-            {
-                //if found, raise bit and add it to the insertions point webId
-                bitMask = bitMask << 1;
-                webid = new WebId(bitMask | parentWebId);
-                break;
-            }
-            else
-            {
-                bitMask = bitMask >>> 1;
-            }
-        }
-        
-        
-        // Set new Node's connections based off of parent's connections
-        connections = insertionPoint.connections.extractChildConnections();
-       
-        // Notify new connections 
-        connections.notify(this);
+        final Node temp = connections.getLowestNeighborWithoutChild();
+        if(temp == NULL_NODE) return this;
+        else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight()) return temp;
+        else return this;
     }
     
+    /**
+     * @obvious
+     */
     public int getFoldId()
     {
         return connections.getFoldId() ;
     }
     
+    /**
+     * @obvious
+     */
     public int getSurrogateFoldId()
     {
         return connections.getSurrogateFoldId();
     }
     
+    /**
+     * @obvious
+     */
     public int getInverseSurrogateFoldId()
     {
         return connections.getInverseSurrogateFoldId();
     }
 
-    public boolean hasChild() {
-        return false;
-    }
 
     @Override
-    public int compareTo(Object arg0) {
-        return this.getWebId() - ((Node) arg0).getWebId();
-
+    public int compareTo(final Node o)
+    {
+        return webid.compareTo(o.webid);
     }
     
 

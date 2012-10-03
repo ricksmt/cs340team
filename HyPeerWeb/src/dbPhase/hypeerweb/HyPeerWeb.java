@@ -1,111 +1,147 @@
 package dbPhase.hypeerweb;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 
+/**
+ * The Class HyPeerWeb.
+ */
 public class HyPeerWeb
 {
-    private HashMap<Integer,Node> nodes;
-    @SuppressWarnings("unused")
-    private int size;
     
+    /** The nodes. */
+    private HashMap<Integer,Node> nodes;
+    
+    /** The singleton. */
     private static HyPeerWeb singleton;
+    
+    /** The database. */
     private HyPeerWebDatabase database;
 
     
-    HyPeerWeb() throws ClassNotFoundException, SQLException
+    /**
+     * Instantiates a new HyPeerWeb.
+     */
+    HyPeerWeb()
     {
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
-
-        size = 0;
     }
 	
-    public static HyPeerWeb getSingleton() throws ClassNotFoundException, SQLException 
+    /**
+     * Gets the singleton HyPeerWeb.
+     *
+     * @obvious
+     * @return the singleton
+     */
+    public static HyPeerWeb getSingleton()
     {
-        if(singleton == null)
-            singleton = new HyPeerWeb();
+        if(singleton == null) singleton = new HyPeerWeb();
         return singleton;
 
 	}
 
+	/**
+	 * Clear.
+	 * 
+     * @obvious
+	 */
 	public void clear()
 	{
-		// TODO Auto-generated method stub
 	    nodes.clear();
 	}
 
+	/**
+	 * Size.
+	 *
+     * @obvious
+	 * @return the size of the HyPeerWeb
+	 */
 	public int size()
 	{
-		// TODO Auto-generated method stub
 	    return nodes.size();
 	}
 
-	public void reload(final String string) throws SQLException
+	/**
+	 * Reloads the HyPeerWeb from database who's name is given.
+	 *
+	 * @param string the database name
+	 */
+	public void reload(final String string)
 	{   
-	    try
-	    {
-            HyPeerWebDatabase.initHyPeerWebDatabase(string);
-            database = HyPeerWebDatabase.getSingleton();
-        }
-	    catch (final ClassNotFoundException e)
-	        { e.printStackTrace(); } 
-	    catch (final SQLException e)
-	        { e.printStackTrace(); }
+	    HyPeerWebDatabase.initHyPeerWebDatabase(string);
+        database = HyPeerWebDatabase.getSingleton();
 	    
         nodes.clear(); 
         nodes.putAll(database.loadNodeSet());
 	}
 
+	/**
+	 * Gets the node.
+	 *
+     * @obvious
+	 * @param i a whole number
+	 * @return the node
+	 */
 	public Node getNode(final int i)
 	{
-	 // TODO Auto-generated method stub
-	    final Node node = nodes.get(i);
-	    return node;
+	    final Node temp = nodes.get(i);
+	    if(temp == null) return Node.NULL_NODE;
+	    else return temp;
 	}
 
-	public void reload() throws ClassNotFoundException, SQLException, IOException
+	/**
+	 * Reload.
+	 */
+	public void reload()
 	{
 		reload(null);	
 	}
 
-	public void saveToDatabase() throws SQLException
+	/**
+	 * Save to database.
+	 */
+	public void saveToDatabase()
 	{
 	    database.save(nodes.values());
 	}
 
+	/**
+	 * Adds the node.
+	 *
+	 * @param node0 the node to add to the HyPeerWeb
+	 */
 	public void addNode(final Node node0)
 	{
-		// TODO Auto-generated method stub
 	    nodes.put(node0.getWebId(), node0);
-	    //nodes.put(size, node0);
-		//size++;
 	}
 
+	/**
+	 * Contains.
+	 *
+     * @obvious
+	 * @param node0 a Node
+	 * @return true, if successful
+	 */
 	public boolean contains(final Node node0)
 	{
-		// TODO Auto-generated method stub
 	    return nodes.containsValue(node0);
 	}
 	
 	/**
-	 * 
-	 * @param newNode
-	 * @param startNode
+	 * Adds the to HyPeerWeb.
+	 *
+	 * @param newNode the new node
+	 * @param startNode the start node
 	 */
-	public void addToHyPeerWeb(Node newNode, Node startNode)
+	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
-	    assert newNode != null;
-	    if ( nodes.size()> 0)
+	    assert newNode != null && newNode != Node.NULL_NODE;
+	    if ( nodes.size() > 0)
 	    {
 	        assert startNode != null;
-	        //TODO
+	        newNode.insertSelf(startNode);
 	    }
-	    else
-	    {
-	        //TODO
-	    }
+        addNode(newNode);
 	}
 }
