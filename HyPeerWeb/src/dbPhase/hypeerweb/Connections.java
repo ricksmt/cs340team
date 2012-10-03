@@ -197,14 +197,14 @@ public class Connections
     }
     
     public Connections getChildConnections() {
-        Connections childConnections = new Connections();
-      //Neighbors
+       Connections childConnections = new Connections();
+       //Neighbors
        childConnections.neighbors = inverseSurrogateNeighbors;
        //
        
        childConnections.surrogateNeighbors = higherNeighbors();
        
-       //Fold
+       // Fold
        if (inverseSurrogateFold == null)
        {
            childConnections.fold = fold;
@@ -217,38 +217,64 @@ public class Connections
        return childConnections;
 	}
     
-    public void notifyAndRemoveInverseSurrogateNeighbors(Node selfNode)//called on parent.
+    /** Parent Notify */
+    public void parentNotify(Node selfNode)//called on parent.
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
-            inverseSurrogateNeighbor.setSurrogateNeighbor(null);
+            inverseSurrogateNeighbor.removeDownPointer(selfNode);
         }
-        inverseSurrogateNeighbors = null;
+        inverseSurrogateNeighbors.clear();
         
-        if (inverseSurrogateFold == null)
+        // Change parent Fold
+        if(inverseSurrogateFold == NULL_NODE)
         {
             surrogateFold = fold;
-            fold = null;
-            surrogateFold.addInverseSurrogateFold(selfNode);
+            fold = NULL_NODE;
         }
         else
         {
-            inverseSurrogateFold.setSurrogateFold(null);
-            inverseSurrogateFold = null;
+            inverseSurrogateFold = NULL_NODE;
         }
     }
     
-    public void notify(Node selfNode)//called on new node
+    /** 
+     * Child node notifies all of it's new connections how it is now
+     * connected to them:
+     * - Fold
+     * - Neighbors
+     * - Surrogate Neighbors 
+     * @pre: childNode has all of its Connections.
+     * @post: all Connections of childNode are notified of new Connection between childNode
+     * and Node.
+     * @param: childNode
+     */
+    public void childNotify(Node childNode)
 	{
+        // Notify fold
+        if(fold.connections.fold != NULL_NODE)
+        {
+            fold.setInverseSurrogateFold(fold.connections.fold);
+            fold.setFold(childNode);
+        }
+        else
+        {
+            fold.setFold(childNode);
+            fold.setSurrogateFold(NULL_NODE);
+        }
+        
+        fold.setFold(childNode);
+        
+        
         // Notify other nodes of new connection
         for (Node neighbor : neighbors)
         {
-            neighbor.addNeighbor(selfNode);
+            neighbor.addNeighbor(childNode);
         }
         
         for (Node surrogateNeighbor : surrogateNeighbors)
         {
-            surrogateNeighbor.addInverseSurrogateNeighbor(selfNode);
+            surrogateNeighbor.addUpPointer(childNode);
         }
 	}
 }
