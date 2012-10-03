@@ -356,8 +356,11 @@ public class Node
         setState(parent.state.getInitialStateofChild());
         parent.setState(parent.state.getNextState());
         
-        // Notify
-        Connections.notify(this);
+        // Child Notify
+        connections.childNotify(this);
+        
+        // Parent Notify
+        parent.connections.parentNotify(parent);
     }
 
     private Node findInsertionPoint(Node startNode) {
@@ -385,30 +388,6 @@ public class Node
         int bit = 1 << (getHeight()-1);
         return webid.getValue() | bit;
         
-    }
-
-    /**DO WE STILL WANT THIS?
-     * setConnectionsWithInsertionPoint
-     * This method uses the information from the insertion point to create all the needed connections for the 
-     * new node.
-     * It also adds the needed connections to the new node (this one). 
-     * (This essentially adds this node to the HyPeerWeb)
-     * 
-     * @pre insertionPoint is the correct insertion point in the HyPeerWeb. That is, it is the lowest node on the cap node's layer without a child.
-     * @post This node is inserted as the insertionPoint's child, and connections are adjusted such that all the project constraints are met.
-     * 
-     * @param insertionPoint
-     */
-    private void setConnectionsWithInsertionPoint(Node insertionPoint)
-    {
-        
-        webid = new WebId(insertionPoint.getChildsWebId());
-
-        // Set new Node's connections based off of parent's connections
-        connections = insertionPoint.connections.extractChildConnections();
-       
-        // Notify new connections 
-        connections.notify(this);
     }
     
     public int getFoldId()

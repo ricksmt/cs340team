@@ -197,14 +197,14 @@ public class Connections
     }
     
     public Connections getChildConnections() {
-        Connections childConnections = new Connections();
-      //Neighbors
+       Connections childConnections = new Connections();
+       //Neighbors
        childConnections.neighbors = inverseSurrogateNeighbors;
        //
        
        childConnections.surrogateNeighbors = higherNeighbors();
        
-       //Fold
+       // Fold
        if (inverseSurrogateFold == null)
        {
            childConnections.fold = fold;
@@ -217,29 +217,45 @@ public class Connections
        return childConnections;
 	}
     
-    public void notifyAndRemoveInverseSurrogateNeighbors(Node selfNode)//called on parent.
+    /** Parent Notify */
+    public void parentNotify(Node selfNode)//called on parent.
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
-            inverseSurrogateNeighbor.setSurrogateNeighbor(null);
+            inverseSurrogateNeighbor.removeDownPointer(selfNode);
         }
-        inverseSurrogateNeighbors = null;
+        inverseSurrogateNeighbors.clear();
         
-        if (inverseSurrogateFold == null)
+        // Change parent Fold
+        if(inverseSurrogateFold == NULL_NODE)
         {
             surrogateFold = fold;
-            fold = null;
-            surrogateFold.addInverseSurrogateFold(selfNode);
+            fold = NULL_NODE;
         }
         else
         {
-            inverseSurrogateFold.setSurrogateFold(null);
-            inverseSurrogateFold = null;
+            inverseSurrogateFold = NULL_NODE;
         }
     }
     
-    public void notify(Node selfNode)//called on new node
+    /** Child notify */
+    public void childNotify(Node selfNode)
 	{
+        // Notify fold
+        if(fold.connections.fold != NULL_NODE)
+        {
+            fold.setInverseSurrogateFold(fold.connections.fold);
+            fold.setFold(selfNode);
+        }
+        else
+        {
+            fold.setFold(selfNode);
+            fold.setSurrogateFold(NULL_NODE);
+        }
+        
+        fold.setFold(selfNode);
+        
+        
         // Notify other nodes of new connection
         for (Node neighbor : neighbors)
         {
@@ -248,7 +264,7 @@ public class Connections
         
         for (Node surrogateNeighbor : surrogateNeighbors)
         {
-            surrogateNeighbor.addInverseSurrogateNeighbor(selfNode);
+            surrogateNeighbor.addUpPointer(selfNode);
         }
 	}
 }
