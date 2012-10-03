@@ -18,7 +18,7 @@ public class Node
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
-     * The findCapNode method is called to produce the correct behavoir at each step.
+     * The findCapNode method is called to produce the correct behavior at each step.
      * @author Matthew, Brian, Trevor
      *
      */
@@ -84,7 +84,7 @@ public class Node
     }
     
     /**
-     * state represents this node's position (and next action) in the cap node locating algorithm
+     * State represents this node's position (and next action) in the cap node locating algorithm
      */
     protected State state;
     
@@ -127,9 +127,9 @@ public class Node
     }
     
     /**
-     * Returns fully initailized SimplifiedNodeDomain needed for testing
+     * Returns fully initialized SimplifiedNodeDomain needed for testing
      * 
-     * @pre this node is initailized
+     * @pre this node is initialized
      * @post no changes to this node
      * 
      * @return SimplifiedNodeDomain representing this node
