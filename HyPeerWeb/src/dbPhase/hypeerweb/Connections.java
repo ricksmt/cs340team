@@ -230,7 +230,7 @@ public class Connections
        return childConnections;
 	}
     
-    public void notifyAndRemoveInverseSurrogateNeighbors(Node selfNode)//called on parent
+    public void notifyAndRemoveInverseSurrogateNeighbors(Node selfNode)//called on parent.
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
