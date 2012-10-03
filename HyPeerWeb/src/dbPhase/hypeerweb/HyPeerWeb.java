@@ -19,27 +19,23 @@ public class HyPeerWeb
     {
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
-
         size = 0;
     }
 	
     public static HyPeerWeb getSingleton() throws ClassNotFoundException, SQLException 
     {
-        if(singleton == null)
-            singleton = new HyPeerWeb();
+        if(singleton == null) singleton = new HyPeerWeb();
         return singleton;
 
 	}
 
 	public void clear()
 	{
-		// TODO Auto-generated method stub
 	    nodes.clear();
 	}
 
 	public int size()
 	{
-		// TODO Auto-generated method stub
 	    return nodes.size();
 	}
 
@@ -50,10 +46,8 @@ public class HyPeerWeb
             HyPeerWebDatabase.initHyPeerWebDatabase(string);
             database = HyPeerWebDatabase.getSingleton();
         }
-	    catch (final ClassNotFoundException e)
-	        { e.printStackTrace(); } 
-	    catch (final SQLException e)
-	        { e.printStackTrace(); }
+	    catch (final ClassNotFoundException e) { e.printStackTrace(); } 
+	    catch (final SQLException e) { e.printStackTrace(); }
 	    
         nodes.clear(); 
         nodes.putAll(database.loadNodeSet());
@@ -61,9 +55,7 @@ public class HyPeerWeb
 
 	public Node getNode(final int i)
 	{
-	 // TODO Auto-generated method stub
-	    final Node node = nodes.get(i);
-	    return node;
+	    return nodes.get(i);
 	}
 
 	public void reload() throws ClassNotFoundException, SQLException, IOException
@@ -78,15 +70,11 @@ public class HyPeerWeb
 
 	public void addNode(final Node node0)
 	{
-		// TODO Auto-generated method stub
 	    nodes.put(node0.getWebId(), node0);
-	    //nodes.put(size, node0);
-		//size++;
 	}
 
 	public boolean contains(final Node node0)
 	{
-		// TODO Auto-generated method stub
 	    return nodes.containsValue(node0);
 	}
 	
@@ -97,7 +85,7 @@ public class HyPeerWeb
 	 */
 	public void addToHyPeerWeb(Node newNode, Node startNode)
 	{
-	    assert newNode != null;
+	    assert newNode != null && newNode != Node.NULL_NODE;
 	    if ( nodes.size()> 0)
 	    {
 	        assert startNode != null;
