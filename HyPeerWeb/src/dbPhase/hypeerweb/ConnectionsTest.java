@@ -33,8 +33,8 @@ public class ConnectionsTest extends TestCase {
 
     public void testRemoveNeighbor() {
         testconnections.addNeighbor(a);
-       // testconnections.removeNeighbor(a);
-      //  assert(testconnections.getNeighbors().size() == 0);
+        testconnections.removeNeighbor(a);
+        assert(testconnections.getNeighbors().size() == 0);
     }
 
     public void testAddSurrogateNeighbor() {
@@ -44,8 +44,8 @@ public class ConnectionsTest extends TestCase {
 
     public void testRemoveSurrogateNeighbor() {
         testconnections.addSurrogateNeighbor(a);
-       // testconnections.removeSurrogateNeighbor(a);
-      //  assert(testconnections.getSurrogateNeighbors().size()==0);
+        testconnections.removeSurrogateNeighbor(a);
+        assert(testconnections.getSurrogateNeighbors().size()==0);
     }
 
     public void testAddInverseSurrogateNeighbor() {
@@ -54,7 +54,9 @@ public class ConnectionsTest extends TestCase {
     }
 
     public void testRemoveInverseSurrogateNeighbor() {
-      //  fail("Not yet implemented");
+        testconnections.addInverseSurrogateNeighbor(a);
+        testconnections.removeInverseSurrogateNeighbor(a);
+        assert(testconnections.getInverseSurrogateNeighbors().size() == 10);
     }
 
     public void testGetNeighbors() {
