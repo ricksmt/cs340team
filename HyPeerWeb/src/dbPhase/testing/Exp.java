@@ -929,7 +929,7 @@ public class Exp {
 
         for (int i = 1; i < numberOfNodes; i++) {
             Node node = new Node(0);
-            node0.addToHyPeerWeb(node);
+            node.insertSelf(node0);
         }
     }
     

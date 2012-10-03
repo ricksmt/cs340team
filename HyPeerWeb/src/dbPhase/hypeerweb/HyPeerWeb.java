@@ -1,7 +1,5 @@
 package dbPhase.hypeerweb;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 
@@ -15,14 +13,14 @@ public class HyPeerWeb
     private HyPeerWebDatabase database;
 
     
-    HyPeerWeb() throws ClassNotFoundException, SQLException
+    HyPeerWeb()
     {
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
         size = 0;
     }
 	
-    public static HyPeerWeb getSingleton() throws ClassNotFoundException, SQLException 
+    public static HyPeerWeb getSingleton()
     {
         if(singleton == null) singleton = new HyPeerWeb();
         return singleton;
@@ -39,15 +37,10 @@ public class HyPeerWeb
 	    return nodes.size();
 	}
 
-	public void reload(final String string) throws SQLException
+	public void reload(final String string)
 	{   
-	    try
-	    {
-            HyPeerWebDatabase.initHyPeerWebDatabase(string);
-            database = HyPeerWebDatabase.getSingleton();
-        }
-	    catch (final ClassNotFoundException e) { e.printStackTrace(); } 
-	    catch (final SQLException e) { e.printStackTrace(); }
+	    HyPeerWebDatabase.initHyPeerWebDatabase(string);
+        database = HyPeerWebDatabase.getSingleton();
 	    
         nodes.clear(); 
         nodes.putAll(database.loadNodeSet());
@@ -58,12 +51,12 @@ public class HyPeerWeb
 	    return nodes.get(i);
 	}
 
-	public void reload() throws ClassNotFoundException, SQLException, IOException
+	public void reload()
 	{
 		reload(null);	
 	}
 
-	public void saveToDatabase() throws SQLException
+	public void saveToDatabase()
 	{
 	    database.save(nodes.values());
 	}
