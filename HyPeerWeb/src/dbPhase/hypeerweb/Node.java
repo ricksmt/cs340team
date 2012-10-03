@@ -14,7 +14,7 @@ package dbPhase.hypeerweb;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Node
+public class Node implements Comparable<Node>
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
@@ -108,6 +108,8 @@ public class Node
 	public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
 	{
 		webid = new WebId(i);
+		connections = new Connections();
+		connections.setFold(this);
 	}
 	
 	/**
@@ -137,8 +139,8 @@ public class Node
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
 	{
 	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
-	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();;
-	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();;
+	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();
+	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();
 	    int tempFold = -1;
 	    int tempSurrogateFold = -1;
 	    int tempInverseSurrogateFold = -1;
@@ -403,6 +405,11 @@ public class Node
     public int getInverseSurrogateFoldId()
     {
         return connections.getInverseSurrogateFoldId();
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return webid.compareTo(o.webid);
     }
     
 

@@ -48,7 +48,9 @@ public class HyPeerWeb
 
 	public Node getNode(final int i)
 	{
-	    return nodes.get(i);
+	    Node temp = nodes.get(i);
+	    if(temp == null) return Node.NULL_NODE;
+	    else return temp;
 	}
 
 	public void reload()

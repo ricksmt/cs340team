@@ -4,9 +4,9 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * The helper class that allows saving and loading the HyPeerWeb from the database<br>
+ * The helper class that allows saving and loading the HyPeerWeb from the database
  * <br>
- * 
+ * <br>
  * <pre>
  * <b>Domain:</b>
  *      DATABASE_DIRECTORY     : String

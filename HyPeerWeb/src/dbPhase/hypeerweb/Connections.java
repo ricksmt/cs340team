@@ -1,3 +1,10 @@
+
+/**
+ * Connections.java
+ * 
+ * @author Huy, Matthew
+ */
+
 package dbPhase.hypeerweb;
 
 import java.util.HashSet;
@@ -5,13 +12,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-/*
+/**
  * This class is contained in a node,
  * it makes easier access to information
  * about it's owners connections, such as
  * it's highest neighbor or surrogate neighbor.
  */
-
 public class Connections
 {
     private SortedSet<Node> neighbors;

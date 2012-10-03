@@ -22,7 +22,7 @@ package dbPhase.hypeerweb;
  * 
  * @author Scott Woodfield
  */
-public class WebId
+public class WebId implements Comparable<WebId>
 {
     //I don't know why the previous line shows as yellow in the coverage report.  It is not even
     //an executable statement much less a boolean expression.
@@ -463,6 +463,11 @@ public class WebId
     {
         assert invariant(NULL_WEB_ID);
         assert NULL_WEB_ID.mask == 0 && NULL_WEB_ID.highOrderBitMask == 1;
+    }
+
+    @Override
+    public int compareTo(WebId o) {
+        return Integer.compare(id, o.id);
     }
 
 }
