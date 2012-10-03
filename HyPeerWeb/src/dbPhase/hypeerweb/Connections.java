@@ -341,7 +341,7 @@ public class Connections
             for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
             return neighbors.first();
         }
-        catch(NoSuchElementException e)
+        catch(final NoSuchElementException e)
         {
             return Node.NULL_NODE;
         }

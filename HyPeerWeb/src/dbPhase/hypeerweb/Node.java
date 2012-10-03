@@ -401,7 +401,7 @@ public class Node implements Comparable<Node>
      */
     public Node getLowestNeighborWithoutChild()
     {
-        Node temp = connections.getLowestNeighborWithoutChild();
+        final Node temp = connections.getLowestNeighborWithoutChild();
         if(temp == NULL_NODE) return this;
         else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight()) return temp;
         else return this;
