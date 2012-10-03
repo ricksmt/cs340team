@@ -48,7 +48,7 @@ public class HyPeerWeb
 
 	public Node getNode(final int i)
 	{
-	    Node temp = nodes.get(i);
+	    final Node temp = nodes.get(i);
 	    if(temp == null) return Node.NULL_NODE;
 	    else return temp;
 	}
@@ -78,7 +78,7 @@ public class HyPeerWeb
 	 * @param newNode
 	 * @param startNode
 	 */
-	public void addToHyPeerWeb(Node newNode, Node startNode)
+	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    assert newNode != null && newNode != Node.NULL_NODE;
 	    if ( nodes.size()> 0)

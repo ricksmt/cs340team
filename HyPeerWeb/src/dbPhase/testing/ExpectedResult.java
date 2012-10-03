@@ -22,7 +22,8 @@ import dbPhase.hypeerweb.Node;
  * 
  * @author Scott
  */
-public class ExpectedResult extends SimplifiedNodeDomain {
+public class ExpectedResult extends SimplifiedNodeDomain
+{
     // Domain Implementation
     // Inherited from SimplifiedNodeDomain
 
@@ -45,12 +46,12 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * inverseSurrogateFold = expected integer value of the webId of the surrogateFold AND <br>
      * state = expected state's STATE_ID
      */
-    public ExpectedResult(int hyPeerWebSize, int webId) {
+    public ExpectedResult(final int hyPeerWebSize, int webId) {
         super();
         assert hyPeerWebSize >= 1;
         assert webId >= 0 && webId < hyPeerWebSize;
 
-        cubeHeight = (int) Math.ceil((Math.log(hyPeerWebSize) / log2));
+        cubeHeight = (int) Math.ceil(Math.log(hyPeerWebSize) / log2);
         ExpectedResult.hyPeerWebSize = hyPeerWebSize;
         
         this.webId = webId;
@@ -101,7 +102,8 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      *       else if the webId has a child webId less than the hyPeerWebSize then result = cubeHeight
      *       else result = cubeHeight - 1
      */
-    private int computeExpectedHeight(){
+    private int computeExpectedHeight()
+    {
         int result = cubeHeight;
         if((hyPeerWebSize - 1) > lastIdOfEmbeddedHyperCube && webId <= lastIdOfEmbeddedHyperCube && childOf(webId) == -1){
             result--;
@@ -115,12 +117,15 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post &forall; 0 <= i < hyPeerWebSize (i &isin;  result &hArr; i is a neighboring webId of webId)
      */
-    private HashSet<Integer> expectedNeighbors() {
-        HashSet<Integer> result = new HashSet<Integer>();
+    private HashSet<Integer> expectedNeighbors()
+    {
+        final HashSet<Integer> result = new HashSet<Integer>();
 
-        for (int digit = 0; digit < cubeHeight; digit++) {
-            int neighbor = flipBit(digit);
-            if (exists(neighbor)) {
+        for (int digit = 0; digit < cubeHeight; digit++)
+        {
+            final int neighbor = flipBit(digit);
+            if (exists(neighbor))
+            {
                 result.add(neighbor);
             }
         }
@@ -133,11 +138,13 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post &forall; 0 <= i < cubeSize (i &isin;  result &hArr; i is a neighboring webId of webId)
      */
-    private HashSet<Integer> allPossibleNeighbors() {
-        HashSet<Integer> result = new HashSet<Integer>();
+    private HashSet<Integer> allPossibleNeighbors()
+    {
+        final HashSet<Integer> result = new HashSet<Integer>();
 
-        for (int digit = 0; digit < cubeHeight; digit++) {
-            int neighbor = flipBit(digit);
+        for (int digit = 0; digit < cubeHeight; digit++)
+        {
+            final int neighbor = flipBit(digit);
             result.add(neighbor);
         }
         return result;
@@ -150,13 +157,17 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post &forall; largestEmbeddedHypercube.capNode.webId  < i < hyPeerWebSize (i &isin;  result &hArr; parent(i) is a neighboring webId of webId)
      */
-    private HashSet<Integer> expectedUpPointers() {
-        HashSet<Integer> result = new HashSet<Integer>();
-        if (webId <= lastIdOfEmbeddedHyperCube && childOf(webId) == -1) {
-            HashSet<Integer> neighbors = expectedNeighbors();
-            for (int neighbor : neighbors) {
-                int child = childOf(neighbor);
-                if (child > -1 && child != webId) {
+    private HashSet<Integer> expectedUpPointers()
+    {
+        final HashSet<Integer> result = new HashSet<Integer>();
+        if (webId <= lastIdOfEmbeddedHyperCube && childOf(webId) == -1)
+        {
+            final HashSet<Integer> neighbors = expectedNeighbors();
+            for (int neighbor : neighbors)
+            {
+                final int child = childOf(neighbor);
+                if (child > -1 && child != webId)
+                {
                     result.add(child);
                 }
             }
@@ -170,12 +181,16 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre <i>None</i>
      * @post &forall; hyPeerWebSize <= i < cubeSize (parent(i) &isin;  result &hArr; i is a neighboring webId of webId)
      */
-    private HashSet<Integer> expectedDownPointers() {
-        HashSet<Integer> result = new HashSet<Integer>();
-        if (webId > lastIdOfEmbeddedHyperCube) {
-            HashSet<Integer> neighbors = allPossibleNeighbors();
-            for (int neighbor : neighbors) {
-                if (!exists(neighbor)) {
+    private HashSet<Integer> expectedDownPointers()
+    {
+        final HashSet<Integer> result = new HashSet<Integer>();
+        if (webId > lastIdOfEmbeddedHyperCube)
+        {
+            final HashSet<Integer> neighbors = allPossibleNeighbors();
+            for (int neighbor : neighbors)
+            {
+                if (!exists(neighbor))
+                {
                     result.add(parentOf(neighbor));
                 }
             }
@@ -190,18 +205,27 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @post ~webId & idMask < hyPeerWebSize &rArr; result = ~webId & idMask AND
      *  ~webId & idMask >= hyPeerWebSize &rArr; result = -1
      */
-    private int expectedFold() {
+    private int expectedFold()
+    {
         int result =  ~webId & idMask;
-        if(height == 0) {
+        if(height == 0)
+        {
             result = 0;
-        } else {
+        }
+        else
+        {
             result =  ~webId & idMask;
-            if(height == cubeHeight) {
-                if(!exists(result)) {
+            if(height == cubeHeight)
+            {
+                if(!exists(result))
+                {
                     result = -1;
                 }
-            } else { //height < cubeHeight
-                if(!exists(result)) {
+            }
+            else
+            { //height < cubeHeight
+                if(!exists(result))
+                {
                     result = ~webId & (idMask >> 1);
                 }
             }
@@ -217,8 +241,9 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre 0 < webId < hyPeerWebSize
      * @post result = &exists 0 <= i < hyPeerWebSize (i = webId | 1 << cubeHeight -1)
      */
-    private boolean hasParent(int webId) {
-        boolean result = exists(webId | (1 << cubeHeight-1));
+    private boolean hasParent(final int webId)
+    {
+        final boolean result = exists(webId | (1 << cubeHeight-1));
         return result;
     }
 
@@ -305,13 +330,17 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @pre 0 <= digit < 32
      * @post result.binaryRepresentation = ~webId.binaryRepresentation[digit]
      */
-    private int flipBit(int digit) {
-        int bitMask = 1 << digit;
-        int bit = webId & bitMask;
+    private int flipBit(final int digit)
+    {
+        final int bitMask = 1 << digit;
+        final int bit = webId & bitMask;
         int result = 0;
-        if (bit == 0) {
+        if (bit == 0)
+        {
             result = webId | bitMask;
-        } else {
+        }
+        else
+        {
             result = webId & ~bitMask;
         }
         return result;
@@ -325,7 +354,7 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * @post id <= 0 &rArr; result = -1 AND<br>
      *  id &gt; 0 &rArr; result = id & (1 << locationOfHighestOneBit(id))
      */
-    private int parentOf(int id) {
+    private int parentOf(final int id){
         int result = -1;
         if (id > 0) {
             int mask = 1 << locationOfHighestOneBit(id);

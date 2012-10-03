@@ -56,7 +56,8 @@ public class SimplifiedNodeDomain
      *       state = StandardNode.STATE_ID;
      * </pre>
      */
-    protected SimplifiedNodeDomain() {
+    protected SimplifiedNodeDomain()
+    {
         webId = -1;
         height = -1;
         this.neighbors = null;

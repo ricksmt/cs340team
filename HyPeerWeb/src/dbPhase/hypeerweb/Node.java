@@ -27,7 +27,7 @@ public class Node implements Comparable<Node>
         CAP
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
                 return n;
             }
@@ -44,7 +44,7 @@ public class Node implements Comparable<Node>
         DOWN
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
                 return n.getHighestSurrogateNeighbor();
             }
@@ -62,7 +62,7 @@ public class Node implements Comparable<Node>
         STANDARD
         {
             @Override
-            public Node findCapNode(Node n)
+            public Node findCapNode(final Node n)
             {
                 return n.getHighestNeighbor();//Or highest fold?
             }
@@ -116,7 +116,8 @@ public class Node implements Comparable<Node>
 	 * @obvious
 	 * @return
 	 */
-	public Node getHighestNeighbor() {
+	public Node getHighestNeighbor()
+	{
         return connections.getHighestNeighbor();
     }
 	
@@ -124,7 +125,8 @@ public class Node implements Comparable<Node>
 	 * @obvious
 	 * @return
 	 */
-    public Node getHighestSurrogateNeighbor() {
+    public Node getHighestSurrogateNeighbor()
+    {
         return connections.getHighestSurrogateNeighbor();
     }
     
@@ -168,9 +170,9 @@ public class Node implements Comparable<Node>
             intInverseSurrogateNeighbors.add(temp.webid.getValue());
         }
         
-        Node fold = connections.getFold();
-        Node surrogateFold = connections.getSurrogateFold();
-        Node inverseSurrogateFold = connections.getInverseSurrogateFold();
+        final Node fold = connections.getFold();
+        final Node surrogateFold = connections.getSurrogateFold();
+        final Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
         if(fold != NULL_NODE) tempFold = fold.webid.getValue();
         if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
@@ -200,7 +202,7 @@ public class Node implements Comparable<Node>
 	 * @obvious
 	 * @param state
 	 */
-	public void setState(State state)
+	public void setState(final State state)
 	{
 	    this.state = state;
 	}
@@ -344,9 +346,9 @@ public class Node implements Comparable<Node>
      * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
      * @param startNode
      */
-    public void insertSelf(Node startNode)
+    public void insertSelf(final Node startNode)
     {
-        Node parent = findInsertionPoint(startNode);
+        final Node parent = findInsertionPoint(startNode);
         webid = new WebId((int) (parent.webid.getValue() + 
                 Math.pow(2, parent.getNeighborsIds().size())));
         
@@ -365,10 +367,12 @@ public class Node implements Comparable<Node>
         parent.connections.parentNotify(parent);
     }
 
-    private Node findInsertionPoint(Node startNode) {
+    private Node findInsertionPoint(Node startNode)
+    {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
-        while(currentNode != startNode){
+        while(currentNode != startNode)
+        {
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
         }//The cap node is now found (currentNode).
@@ -380,14 +384,15 @@ public class Node implements Comparable<Node>
         return currentNode;
     }
     
-    public Node getLowestNeighborWithoutChild() {
+    public Node getLowestNeighborWithoutChild()
+    {
         return connections.getLowestNeighborWithoutChild();
     }
     
     //Do we still want this?
     public int getChildsWebId()
     {
-        int bit = 1 << (getHeight()-1);
+        final int bit = 1 << (getHeight()-1);
         return webid.getValue() | bit;
         
     }
@@ -408,7 +413,8 @@ public class Node implements Comparable<Node>
     }
 
     @Override
-    public int compareTo(Node o) {
+    public int compareTo(final Node o)
+    {
         return webid.compareTo(o.webid);
     }
     

@@ -5,4 +5,8 @@
 <suppressions>
     <suppress checks='[a-zA-Z0-9]*'
               files="Exp.java"/>
+    <suppress checks='[a-zA-Z0-9]*'
+              files="ExpectedResult.java"/>
+    <suppress checks='[a-zA-Z0-9]*'
+              files="NodeTest.java"/>
 </suppressions>

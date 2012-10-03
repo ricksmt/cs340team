@@ -13,10 +13,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * This class is contained in a node,
- * it makes easier access to information
- * about it's owners connections, such as
- * it's highest neighbor or surrogate neighbor.
+ * This class simplifies the work of managing a Node's
+ * connections: neighbors, surrogate neighbors, etc.
  */
 public class Connections
 {
@@ -27,16 +25,14 @@ public class Connections
     private Node surrogateFold;
     private Node inverseSurrogateFold;
     
-    public static final Node NULL_NODE = null;
-    
     public Connections() 
     {
         neighbors = new TreeSet<Node>();
         surrogateNeighbors = new HashSet<Node>();
         inverseSurrogateNeighbors = new HashSet<Node>();
-        fold = NULL_NODE;
-        surrogateFold = NULL_NODE;
-        inverseSurrogateFold = NULL_NODE;
+        fold = Node.NULL_NODE;
+        surrogateFold = Node.NULL_NODE;
+        inverseSurrogateFold = Node.NULL_NODE;
     }
     
     public void setFold(final Node node) 
@@ -92,17 +88,17 @@ public class Connections
     
     public int getFoldId()
     {
-        return fold == NULL_NODE ? -1 : fold.getWebId();
+        return fold == Node.NULL_NODE ? -1 : fold.getWebId();
     }
     
     public int getSurrogateFoldId()
     {
-        return surrogateFold == NULL_NODE ? -1 : surrogateFold.getWebId();
+        return surrogateFold == Node.NULL_NODE ? -1 : surrogateFold.getWebId();
     }
     
     public int getInverseSurrogateFoldId()
     {
-        return inverseSurrogateFold == NULL_NODE ? -1 : inverseSurrogateFold.getWebId();
+        return inverseSurrogateFold == Node.NULL_NODE ? -1 : inverseSurrogateFold.getWebId();
     }
     
     public HashSet<Integer> getNeighborsIds()
@@ -168,14 +164,16 @@ public class Connections
     }
     
     
-    public static Connections extractChildConnections(Node parent)
+    public static Connections extractChildConnections(final Node parent)
     {
-        Connections conn = new Connections();
-        if(conn.getInverseSurrogateFold() != Node.NULL_NODE){
+        final Connections conn = new Connections();
+        if(conn.getInverseSurrogateFold() != Node.NULL_NODE)
+        {
             conn.setFold(conn.getInverseSurrogateFold());
             parent.setFold(Node.NULL_NODE);
         }
-        else{
+        else
+        {
             conn.setFold(conn.getFold());
             parent.setSurrogateFold(parent.connections.getFold());
             parent.setFold(Node.NULL_NODE);
@@ -186,24 +184,31 @@ public class Connections
         return conn;
     }
     
-    private SortedSet<Node> getLargerNeighbors(Node owner) {
+    private SortedSet<Node> getLargerNeighbors(final Node owner)
+    {
         return neighbors.tailSet(owner);
     }
 
-    public Node getHighestNeighbor() {
+    public Node getHighestNeighbor()
+    {
         return neighbors.last();
     }
 
-    public Node getHighestSurrogateNeighbor() {
+    public Node getHighestSurrogateNeighbor()
+    {
         return ((SortedSet<Node>)surrogateNeighbors).last();
     }
 
-    public Node getLowestNeighborWithoutChild() {
-        throw new UnsupportedOperationException();
+    public Node getLowestNeighborWithoutChild()
+    {
+        final int size = neighbors.first().getNeighborsIds().size();
+        for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
+        return neighbors.first();
     }
     
-    public Connections getChildConnections(Node parent) {
-       Connections childConnections = new Connections();
+    public Connections getChildConnections(final Node parent)
+    {
+       final Connections childConnections = new Connections();
        //Neighbors
        childConnections.neighbors = (SortedSet<Node>) inverseSurrogateNeighbors;
        //
@@ -224,7 +229,7 @@ public class Connections
 	}
     
     /** Parent Notify */
-    public void parentNotify(Node selfNode)//called on parent.
+    public void parentNotify(final Node selfNode)//called on parent.
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
@@ -233,14 +238,14 @@ public class Connections
         inverseSurrogateNeighbors.clear();
         
         // Change parent Fold
-        if(inverseSurrogateFold == NULL_NODE)
+        if(inverseSurrogateFold == Node.NULL_NODE)
         {
             surrogateFold = fold;
-            fold = NULL_NODE;
+            fold = Node.NULL_NODE;
         }
         else
         {
-            inverseSurrogateFold = NULL_NODE;
+            inverseSurrogateFold = Node.NULL_NODE;
         }
     }
     
@@ -255,10 +260,10 @@ public class Connections
      * and Node.
      * @param: childNode
      */
-    public void childNotify(Node childNode)
+    public void childNotify(final Node childNode)
 	{
         // Notify fold
-        if(fold.connections.fold != NULL_NODE)
+        if(fold.connections.fold != Node.NULL_NODE)
         {
             fold.setInverseSurrogateFold(fold.connections.fold);
             fold.setFold(childNode);
@@ -266,7 +271,7 @@ public class Connections
         else
         {
             fold.setFold(childNode);
-            fold.setSurrogateFold(NULL_NODE);
+            fold.setSurrogateFold(Node.NULL_NODE);
         }
         
         fold.setFold(childNode);
