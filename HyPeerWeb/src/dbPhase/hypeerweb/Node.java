@@ -31,6 +31,10 @@ public class Node implements Comparable<Node>
         CAP
         {
             @Override
+            public Node findNode0(final Node n)
+            {
+               return null; 
+            }
             public Node findCapNode(final Node n)
             {
                 return n;
@@ -48,6 +52,10 @@ public class Node implements Comparable<Node>
         DOWN
         {
             @Override
+            public Node findNode0(final Node n)
+            {
+               return null; 
+            }
             public Node findCapNode(final Node n)
             {
                 if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
@@ -67,6 +75,10 @@ public class Node implements Comparable<Node>
         STANDARD
         {
             @Override
+            public Node findNode0(final Node n)
+            {
+               return n.getLowestNeighbor(); 
+            }
             public Node findCapNode(final Node n)
             {
                 return n.getHighestNeighbor();//Or highest fold?
@@ -84,6 +96,7 @@ public class Node implements Comparable<Node>
         };
         
         public abstract Node findCapNode(Node n);
+        public abstract Node findNode0(Node n);
         public abstract State getInitialStateofChild();
         public abstract State getNextState();
     }
@@ -126,6 +139,14 @@ public class Node implements Comparable<Node>
 	public Node getHighestNeighbor()
 	{
         return connections.getHighestNeighbor();
+    }
+	
+	/**
+     * @obvious
+     */
+    public Node getLowestNeighbor()
+    {
+        return connections.getLowestNeighbor();
     }
 	
 	/**

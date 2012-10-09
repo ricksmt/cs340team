@@ -313,6 +313,18 @@ public class Connections
     {
         return neighbors.last();
     }
+    
+    /**
+     * Returns the smallest neighbor 
+     * 
+     * @pre neighbors set exists
+     * @post smallest neighbor is found and returned
+     * @return smallest neighbor
+     */
+    public Node getLowestNeighbor()
+    {
+        return neighbors.first();
+    }
 
     /**
      * Returns the largest surrogate neighbor
