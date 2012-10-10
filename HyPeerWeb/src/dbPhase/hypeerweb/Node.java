@@ -408,7 +408,7 @@ public class Node implements Comparable<Node>
      * @param startNode, deleteNode
      * @return The node which is the insertion point/
      */
-    private Node findDeletetionPoint(Node startNode, WebId  deleteNodeID)
+    private Node findDeletionPoint(Node startNode, WebId  deleteNodeID)
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
