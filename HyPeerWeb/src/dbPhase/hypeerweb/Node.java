@@ -24,17 +24,13 @@ public class Node implements Comparable<Node>
      * This represents the state of the node in the cap node finding algorithm.
      * The findCapNode method is called to produce the correct behavior at each step.
      * 
-     * @author Matthew, Brian, Trevor
+     *   @author Matthew, Brian, Trevor
      */
     public enum State
     {   
         CAP
         {
             @Override
-            public Node findNode0(final Node n)
-            {
-               return null; 
-            }
             public Node findCapNode(final Node n)
             {
                 return n;
@@ -52,10 +48,6 @@ public class Node implements Comparable<Node>
         DOWN
         {
             @Override
-            public Node findNode0(final Node n)
-            {
-               return null; 
-            }
             public Node findCapNode(final Node n)
             {
                 if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
@@ -75,10 +67,6 @@ public class Node implements Comparable<Node>
         STANDARD
         {
             @Override
-            public Node findNode0(final Node n)
-            {
-               return n.getLowestNeighbor(); 
-            }
             public Node findCapNode(final Node n)
             {
                 return n.getHighestNeighbor();//Or highest fold?
@@ -96,7 +84,6 @@ public class Node implements Comparable<Node>
         };
         
         public abstract Node findCapNode(Node n);
-        public abstract Node findNode0(Node n);
         public abstract State getInitialStateofChild();
         public abstract State getNextState();
     }
@@ -413,6 +400,31 @@ public class Node implements Comparable<Node>
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
         while(currentNode != startNode);
+        return currentNode;
+    }
+    
+    /**
+     * findInsertionPoint
+     * @param startNode, deleteNode
+     * @return The node which is the insertion point/
+     */
+    private Node findDeletetionPoint(Node startNode, WebId  deleteNodeID)
+    {
+        Node currentNode = startNode.state.findCapNode(startNode);
+        //This loop controls the stepping of the algorithm finding the cap node
+        while(currentNode != startNode)
+        {
+            startNode = currentNode;
+            currentNode = currentNode.state.findCapNode(currentNode);
+        }//The cap node is now found (currentNode).
+        
+        currentNode = currentNode.connections.getFold();
+        
+        do
+        {
+            currentNode = currentNode.getHighestNeighbor();
+        }
+        while(currentNode.getWebId() != deleteNodeID.getValue());
         return currentNode;
     }
     
