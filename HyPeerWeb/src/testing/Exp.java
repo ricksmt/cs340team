@@ -1,11 +1,11 @@
-package dbPhase.testing;
+package testing;
 
-import dbPhase.hypeerweb.HyPeerWebDatabase;
-import dbPhase.hypeerweb.HyPeerWeb;
-import dbPhase.hypeerweb.Node;
-import dbPhase.hypeerweb.SimplifiedNodeDomain;
-import dbPhase.hypeerweb.WebId;
-import dbPhase.testing.ExpectedResult;
+import testing.ExpectedResult;
+import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebDatabase;
+import hypeerweb.Node;
+import hypeerweb.SimplifiedNodeDomain;
+import hypeerweb.WebId;
 
 public class Exp {
     public static HyPeerWeb hypeerweb = null;

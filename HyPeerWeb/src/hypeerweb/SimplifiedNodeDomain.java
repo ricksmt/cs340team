@@ -1,4 +1,4 @@
-package dbPhase.hypeerweb;
+package hypeerweb;
 
 import java.util.Arrays;
 import java.util.HashSet;
