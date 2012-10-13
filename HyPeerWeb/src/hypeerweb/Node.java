@@ -255,8 +255,9 @@ public class Node implements Comparable<Node>
 	 */
 	public void addNeighbor(final Node node) 
 	{
-	    // if WebIds are neighbors
-	    connections.addNeighbor(node);
+	    // if WebIds are neighbors - can't add itself as a neighbor
+	    if(node != this)
+	        connections.addNeighbor(node);
 	}
 	
 	/**
@@ -292,7 +293,9 @@ public class Node implements Comparable<Node>
      */
     public void addUpPointer(final Node node0)
     {
-        connections.addInverseSurrogateNeighbor(node0);
+        // Cannot add itself as an Up Pointer
+        if(node0 != this)
+            connections.addInverseSurrogateNeighbor(node0);
     }
     
     /**
@@ -310,7 +313,9 @@ public class Node implements Comparable<Node>
      */
     public void addDownPointer(final Node node)
     {
-        connections.addSurrogateNeighbor(node);
+        // Cannot add itself as a Down Pointer
+        if(node != this)
+            connections.addSurrogateNeighbor(node);
     }
     
     /**
@@ -404,11 +409,26 @@ public class Node implements Comparable<Node>
     }
     
     /**
-     * findInsertionPoint
-     * @param startNode, deleteNode
-     * @return The node which is the insertion point/
+     * Remove this node from the HypeerWeb
      */
-    private Node findDeletionPoint(Node startNode, WebId  deleteNodeID)
+    public void removeFromHyPeerWeb()
+    {
+        // find deletionPoint from this point
+        Node deletionPoint = findDeletionPoint(this);
+        // Disconnect deletionPont
+        deletionPoint.disconnectDeletionPoint();
+        // Replace deleted node with deletionPoint node 
+        connections.replace(this,deletionPoint);
+        
+        // Delete node from HyPeerWeb - Garbage collection should take care of it
+    }
+    
+    /**
+     * Find the deletion point from startNode
+     * @param startNode 
+     * @return The node which is the deletion point
+     */
+    private Node findDeletionPoint(Node startNode)
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
@@ -418,14 +438,28 @@ public class Node implements Comparable<Node>
             currentNode = currentNode.state.findCapNode(currentNode);
         }//The cap node is now found (currentNode).
         
+        // Node 0 
         currentNode = currentNode.connections.getFold();
         
+        // Loop till you get to the deletionPoint - currentNode will then be set to its highest
+        // neighbor which will have a WebID less than the deletion point's WebID.
         do
         {
+            startNode = currentNode;
             currentNode = currentNode.getHighestNeighbor();
         }
-        while(currentNode.getWebId() != deleteNodeID.getValue());
-        return currentNode;
+        while(currentNode.getWebId() > startNode.getWebId()); 
+        return startNode;
+    }
+    
+    /**
+     * Disconnect the deletion point from the HypeerWeb
+     * 
+     * Called from the deletionPoint node
+     */
+    private void disconnectDeletionPoint()
+    {
+        connections.disconnect(this);
     }
     
     /**
@@ -470,6 +504,4 @@ public class Node implements Comparable<Node>
     {
         return webid.compareTo(o.webid);
     }
-    
-
 }
