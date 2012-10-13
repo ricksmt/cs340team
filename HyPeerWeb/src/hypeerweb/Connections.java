@@ -641,7 +641,7 @@ public class Connections
     }
     
     /**
-     * Iterate through all neighbors and perform desired action
+     * Iterate through all neighbors and perform the desired action
      * 
      * @param node1 - Node to be inserted or removed
      * @param node2 - NULL_NODE or node that will replace node1 
@@ -660,6 +660,13 @@ public class Connections
         return returnNode;
     }
     
+    /** 
+     * Iterate through all the surrogate neighbors and perform the desired action
+     * 
+     * @param node1 - Node to be inserted or removed
+     * @param node2 - NULL_NODE or node that will replace node1 
+     * @param action - what action to perform
+     */
     public void iterateSurrogateNeighbors(final Node node1, final Node node2, Action action)
     {
         for (Node surrogateNeighbor : surrogateNeighbors)
@@ -668,6 +675,13 @@ public class Connections
         }
     }
     
+    /** 
+     * Iterate through all the inverse surrogate neighbors and perform the desired action
+     * 
+     * @param node1 - Node to be inserted or removed
+     * @param node2 - NULL_NODE or node that will replace node1 
+     * @param action - what action to perform
+     */
     public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, Action action)
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
