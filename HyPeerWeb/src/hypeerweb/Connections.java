@@ -568,6 +568,20 @@ public class Connections
         // Remove me as an inverse surrogate neighbor
         iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
+        if (fold.connections.surrogateFold != null)
+        {
+            fold.setSurrogateFold(parent);
+            fold.setFold(Node.NULL_NODE);
+            parent.setInverseSurrogateFold(fold);
+        }
+        else
+        {
+            fold.setFold(parent);
+            fold.setInverseSurrogateFold(Node.NULL_NODE);
+            parent.setFold(parent.getSurrogateFold());
+            parent.setSurrogateFold(Node.NULL_NODE);
+        }
+        
         // Remove me as your fold, set parent as surrogate fold and you as inverse surrogate fold to parent node
         fold.setSurrogateFold(parent);
         parent.setInverseSurrogateFold(fold);
@@ -591,11 +605,12 @@ public class Connections
     //called on a node to be deleted
     public void replace(final Node selfNode, final Node deletionPoint)
     {
-        // Give deletion Point all the selfNode's connections
-        deletionPoint.connections = this;
-        
         System.out.println("Deleting: "+ selfNode.webid.getValue());
         System.out.println("Deletion point: " + deletionPoint.webid.getValue());
+        
+        // Give deletion Point all the selfNode's connections
+        deletionPoint.connections = this;
+        deletionPoint.setWebId(new WebId(selfNode.getWebId()));
         
         // Replace selfNode with deletionPoint node in all connections
         iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
