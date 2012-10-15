@@ -5,12 +5,15 @@ import dbPhase.hypeerweb.Node;
 
 /**
  * 
- * @author Brian Daviss
+ * @author Brian Davis
  *
  */
 
 public class NodeTest extends TestCase
 {
+    
+    
+    
    //specifically tests that it is being inserted at the right spot. The connections class is assumed to be working.
     public void testInsertSelf()
     {
