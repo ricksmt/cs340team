@@ -635,7 +635,7 @@ public class Connections
      * @return parent node
      */
     private Node getParent(final Node node) {
-        int parentWebIdValue = (int) (node.getWebId() + Math.pow(2, node.getWebId())); //not sure about this
+        int parentWebIdValue = (int) (node.getWebId() - Math.pow(2, node.getHeight())); //not sure about this
         Node tempNode = new Node(parentWebIdValue);
         
         return iterateNeighbors(tempNode, Node.NULL_NODE, Action.FIND_PARENT);
