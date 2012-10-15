@@ -468,7 +468,7 @@ public class WebId implements Comparable<WebId>
     @Override
     public int compareTo(final WebId o)
     {
-        return Integer.compare(id, o.id);
+        return ((Integer)id).compareTo((Integer)o.id);
     }
 
 }
