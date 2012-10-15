@@ -1119,11 +1119,11 @@ public class Exp {
                 if (size > 32)
                     sizeMax = 32;
                    
-                createHyPeerWebWith(sizeMax - 1);
+                createHyPeerWebWith(sizeMax--);
                 // Remove random node
                 hypeerweb.removeFromHyPeerWeb();
 
-                for (int i = 0; i < sizeMax-1; i++) {
+                for (int i = 0; i < sizeMax; i++) {
                     Node nodei = hypeerweb.getNode(i);
                     simplifiedNodeDomain = nodei
                             .constructSimplifiedNodeDomain();
