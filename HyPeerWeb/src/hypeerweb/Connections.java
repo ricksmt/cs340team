@@ -593,8 +593,13 @@ public class Connections
         parent.setInverseSurrogateFold(fold);
         fold.setFold(Node.NULL_NODE);
         
-        // What to do if deletion node is Cap Node? - set other node as Cap node? Take care
-        // of with states in Node class?
+        // if deletion node is Cap Node set parent node to be the Cap Node
+        if(deletionPoint.state == Node.State.CAP)
+        {
+            parent.setState(Node.State.CAP);
+        }
+        
+        
     }
     
     /**
@@ -606,27 +611,29 @@ public class Connections
     //called on a node to be deleted
     public void replace(final Node selfNode, final Node deletionPoint)
     {
-        // Give deletion Point all the selfNode's connections
-        deletionPoint.connections = this;
-        deletionPoint.setWebId(new WebId(selfNode.getWebId()));
-        
-        // Replace selfNode with deletionPoint node in all connections
-        iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
-        iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
-        iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
-        
-        if(fold != Node.NULL_NODE)
-        {
-            fold.setFold(deletionPoint);
-        }
-        if(surrogateFold != Node.NULL_NODE)
-        {
-            surrogateFold.setInverseSurrogateFold(deletionPoint);
-        }
-        if(inverseSurrogateFold != Node.NULL_NODE)
-        {
-            inverseSurrogateFold.setSurrogateFold(deletionPoint);
-        }
+       if(selfNode != deletionPoint){
+            // Give deletion Point all the selfNode's connections
+            deletionPoint.connections = this;
+            deletionPoint.setWebId(new WebId(selfNode.getWebId()));
+            
+            // Replace selfNode with deletionPoint node in all connections
+            iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
+            iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
+            iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
+            
+            if(fold != Node.NULL_NODE)
+            {
+                fold.setFold(deletionPoint);
+            }
+            if(surrogateFold != Node.NULL_NODE)
+            {
+                surrogateFold.setInverseSurrogateFold(deletionPoint);
+            }
+            if(inverseSurrogateFold != Node.NULL_NODE)
+            {
+                inverseSurrogateFold.setSurrogateFold(deletionPoint);
+            }
+       }
     }
 
     /**
