@@ -589,16 +589,12 @@ public class Connections
         }
         else
         {
-            fold.setFold(parent);
-            fold.setInverseSurrogateFold(Node.NULL_NODE);
+            
             parent.setFold(parent.connections.getSurrogateFold());
             parent.setSurrogateFold(Node.NULL_NODE);
+            fold.setFold(parent);
+            fold.setInverseSurrogateFold(Node.NULL_NODE);
         }
-        
-        // Remove me as your fold, set parent as surrogate fold and you as inverse surrogate fold to parent node
-        fold.setSurrogateFold(parent);
-        parent.setInverseSurrogateFold(fold);
-        fold.setFold(Node.NULL_NODE);
         
         // if deletion node is Cap Node set parent node to be the Cap Node
         if(deletionPoint.state == Node.State.CAP)
