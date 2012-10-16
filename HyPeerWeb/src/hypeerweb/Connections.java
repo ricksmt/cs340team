@@ -580,18 +580,10 @@ public class Connections
         }
         else
         {
-<<<<<<< HEAD
             deletionPoint.connections.getFold().setFold(parent);
             deletionPoint.connections.getFold().setInverseSurrogateFold(Node.NULL_NODE);
             if(parent.getWebId() != deletionPoint.getFoldId()) parent.setFold(parent.connections.getSurrogateFold());
             parent.setSurrogateFold(Node.NULL_NODE);// Zero case ^^^
-=======
-            
-            parent.setFold(parent.connections.getSurrogateFold());
-            parent.setSurrogateFold(Node.NULL_NODE);
-            fold.setFold(parent);
-            fold.setInverseSurrogateFold(Node.NULL_NODE);
->>>>>>> branch 'master' of https://github.com/ricksmt/cs340team.git
         }
         
         // if deletion node is Cap Node set parent node to be the Cap Node
@@ -633,17 +625,10 @@ public class Connections
      * @param node - child node
      * @return parent node
      */
-<<<<<<< HEAD
     private static Node getParent(final Node node)
     {
         final Node parent = node.getLowestNeighbor();
         return parent == Node.NULL_NODE ? node : parent;
-=======
-    private Node getParent(final Node node)
-    {
-        return node.getLowestNeighbor();
-
->>>>>>> branch 'master' of https://github.com/ricksmt/cs340team.git
     }
     
     /**
