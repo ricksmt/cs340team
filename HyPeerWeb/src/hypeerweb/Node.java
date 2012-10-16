@@ -417,7 +417,7 @@ public class Node implements Comparable<Node>
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        connections.replace(this,deletionPoint);
+        Connections.replace(this, deletionPoint);
         
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
@@ -458,7 +458,7 @@ public class Node implements Comparable<Node>
      */
     private void disconnectDeletionPoint()
     {
-        connections.disconnect(this);
+        Connections.disconnect(this);
     }
     
     /**
