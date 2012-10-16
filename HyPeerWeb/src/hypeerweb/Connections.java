@@ -578,7 +578,7 @@ public class Connections
         {
             fold.setFold(parent);
             fold.setInverseSurrogateFold(Node.NULL_NODE);
-            parent.setFold(parent.getSurrogateFold());
+            parent.setFold(parent.connections.getSurrogateFold());
             parent.setSurrogateFold(Node.NULL_NODE);
         }
         
