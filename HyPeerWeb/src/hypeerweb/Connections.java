@@ -47,7 +47,7 @@ public class Connections
                 
                 // used for adding surrogate neighbors and inverse surrogate neighbors
                 // node2 will be the parent node
-                if(node2 != Node.NULL_NODE)
+                if(node2 != Node.NULL_NODE && actionNode != node2)
                 {
                     //if(neighbor != parent) - if it's the parent it will say it's itself 
                     // and won't let it all the neighbors
