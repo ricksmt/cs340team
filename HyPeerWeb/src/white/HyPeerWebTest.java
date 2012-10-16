@@ -1,11 +1,14 @@
-package dbPhase.hypeerweb;
+package white;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
+import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebDatabase;
+import hypeerweb.Node;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class HyPeerWebTest {
+public class HyPeerWebTest extends TestCase{
     
     HyPeerWeb hypeerweb;
 

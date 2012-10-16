@@ -1,11 +1,12 @@
-package dbPhase.testing;
+package white;
+
+import hypeerweb.HyPeerWebDatabase;
+import hypeerweb.Node;
+import hypeerweb.SimplifiedNodeDomain;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import dbPhase.hypeerweb.HyPeerWebDatabase;
-import dbPhase.hypeerweb.Node;
-import dbPhase.hypeerweb.SimplifiedNodeDomain;
 
 import junit.framework.TestCase;
 

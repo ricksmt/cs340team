@@ -5,7 +5,9 @@
  * @author Huy, Matthew
  */
 
-package dbPhase.hypeerweb;
+package hypeerweb;
+
+import hypeerweb.Node.State;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -30,6 +32,115 @@ import java.util.TreeSet;
  */
 public class Connections
 {
+    public enum Action
+    {   
+        ADD_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.addNeighbor(node1);
+                return Node.NULL_NODE;
+            }
+        },
+        REMOVE_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeNeighbor(node1);
+                
+                // used for adding surrogate neighbors and inverse surrogate neighbors
+                // node2 will be the parent node
+                if(node2 != Node.NULL_NODE)
+                {
+                    //if(neighbor != parent) - if it's the parent it will say it's itself 
+                    // and won't let it all the neighbors
+                    actionNode.addDownPointer(node2);
+                    node2.addUpPointer(actionNode);
+                    
+                }
+                return Node.NULL_NODE;    
+            }
+        },
+        REPLACE_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeNeighbor(node1);
+                actionNode.addNeighbor(node2);
+                return Node.NULL_NODE;
+            }
+        },
+        FIND_PARENT
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                // If actionNode has same WebID as node1 (tempNode with parent node's WebID)
+                // return the actionNode (it is the parent)
+                if(actionNode.getWebId() == node1.getWebId())
+                    return actionNode;
+                return Node.NULL_NODE;
+            }
+        },
+        ADD_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.addDownPointer(node1);
+                return Node.NULL_NODE;
+            }
+        },
+        REMOVE_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeDownPointer(node1);
+                return Node.NULL_NODE;
+            }
+        },
+        REPLACE_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeDownPointer(node1);
+                actionNode.addDownPointer(node2);
+                return Node.NULL_NODE;
+            }
+        },
+        ADD_INV_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.addUpPointer(node1);
+                return Node.NULL_NODE;
+            }
+        },
+        REMOVE_INV_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeUpPointer(node1);
+                return Node.NULL_NODE;
+            }
+        },
+        REPLACE_INV_SURR_NEIGHBOR
+        {
+            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            {
+                actionNode.removeUpPointer(node1);
+                actionNode.addUpPointer(node2);
+                return Node.NULL_NODE;
+            }
+        };
+        
+        /**
+         * 
+         * @param actionNode - node that does the action
+         * @param node1 - node to be added or removed (removed in replace methods)
+         * @param node2 - node that should be added (Only used in replace methods)
+         */
+        public abstract Node notify(final Node actionNode, final Node node1, final Node node2);
+    }
+    
     /**
      * Node's neighbors
      */
@@ -313,6 +424,18 @@ public class Connections
     {
         return neighbors.last();
     }
+    
+    /**
+     * Returns the smallest neighbor 
+     * 
+     * @pre neighbors set exists
+     * @post smallest neighbor is found and returned
+     * @return smallest neighbor
+     */
+    public Node getLowestNeighbor()
+    {
+        return neighbors.first();
+    }
 
     /**
      * Returns the largest surrogate neighbor
@@ -393,12 +516,10 @@ public class Connections
      * surrogate neighbor
      * 
      */
-    public void parentNotify(final Node selfNode)//called on parent.
+    public void parentNotify(final Node selfNode)
     {
-        for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
-        {
-            inverseSurrogateNeighbor.removeDownPointer(selfNode);
-        }
+        // Remove all inverse surrogate neighbors / surrogate neighbors connections of parent
+        iterateInverseSurrogateNeighbors(selfNode,Node.NULL_NODE,Action.REMOVE_SURR_NEIGHBOR);
         inverseSurrogateNeighbors.clear();
         
         // Change parent Fold
@@ -440,18 +561,133 @@ public class Connections
         
         fold.setFold(childNode);
         
-        
         // Notify other nodes of new connection
+        // Add childNode as a new neighbor
+        iterateNeighbors(childNode, Node.NULL_NODE, Action.ADD_NEIGHBOR);
+        
+        // Remove parentNode as a surrogate neighbor
+        iterateNeighbors(parentNode, Node.NULL_NODE, Action.REMOVE_SURR_NEIGHBOR);
+        
+        // Add child as an inverse surrogate neighbor to all surrogate neighbors
+        iterateSurrogateNeighbors(childNode, Node.NULL_NODE, Action.ADD_INV_SURR_NEIGHBOR);
+	}
+    
+    /**
+     * Disconnect Deletion Point from HypeerWeb - Called from the deletionPoint node
+     * 
+     * @param deletionPoint - node to disconnect
+     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
+     * @post deletionPoint will be disconnected from the HyPeer web
+     */
+    public void disconnect(final Node deletionPoint)
+    { 
+        final Node parent = getParent(deletionPoint);
+                       
+        // Remove me as a neighbor, set my parent as a surrogate neighbor and you as an inverse surrogate neighbor to parent
+        iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
+        // Remove me as an inverse surrogate neighbor
+        iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
+        
+        // Remove me as your fold, set parent as surrogate fold and you as inverse surrogate fold to parent node
+        fold.setSurrogateFold(parent);
+        parent.setInverseSurrogateFold(fold);
+        fold.setFold(Node.NULL_NODE);
+        
+        // What to do if deletion node is Cap Node? - set other node as Cap node? Take care
+        // of with states in Node class?
+    }
+    
+    /**
+     * Replace selfNode with deletionPoint in the HypeerWeb
+     * 
+     * @param selfNode - node to be replaced
+     * @param deletionPoint - node to be replaced with
+     */
+    //called on a node to be deleted
+    public void replace(final Node selfNode, final Node deletionPoint)
+    {
+        // Give deletion Point all the selfNode's connections
+        deletionPoint.connections = this;
+        
+        // Replace selfNode with deletionPoint node in all connections
+        iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
+        iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
+        iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
+        
+        if(fold != Node.NULL_NODE)
+        {
+            fold.setFold(deletionPoint);
+        }
+        if(surrogateFold != Node.NULL_NODE)
+        {
+            surrogateFold.setInverseSurrogateFold(deletionPoint);
+        }
+        if(inverseSurrogateFold != Node.NULL_NODE)
+        {
+            inverseSurrogateFold.setSurrogateFold(deletionPoint);
+        }
+    }
+
+    /**
+     *  Find parent node
+     * @param node - child node
+     * @return parent node
+     */
+    private Node getParent(final Node node) {
+        int parentWebIdValue = (int) (node.getWebId() + Math.pow(2, node.getWebId())); //not sure about this
+        Node tempNode = new Node(parentWebIdValue);
+        
+        return iterateNeighbors(tempNode, Node.NULL_NODE, Action.FIND_PARENT);
+    }
+    
+    /**
+     * Iterate through all neighbors and perform the desired action
+     * 
+     * @param node1 - Node to be inserted or removed
+     * @param node2 - NULL_NODE or node that will replace node1 
+     * @param action - what action to perform
+     */
+    public Node iterateNeighbors(final Node node1, final Node node2, Action action)
+    {
+        Node returnNode = Node.NULL_NODE;
         for (Node neighbor : neighbors)
         {
-            neighbor.addNeighbor(childNode);
-            neighbor.removeDownPointer(parentNode);
+            // If returnNode is a non NULL node, don't override it (for FIND_PARENT)
+            if(returnNode == Node.NULL_NODE)
+                returnNode = action.notify(neighbor,node1,node2);
+            action.notify(neighbor,node1,node2);
         }
-        
+        return returnNode;
+    }
+    
+    /** 
+     * Iterate through all the surrogate neighbors and perform the desired action
+     * 
+     * @param node1 - Node to be inserted or removed
+     * @param node2 - NULL_NODE or node that will replace node1 
+     * @param action - what action to perform
+     */
+    public void iterateSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    {
         for (Node surrogateNeighbor : surrogateNeighbors)
         {
-            surrogateNeighbor.addUpPointer(childNode);
+            action.notify(surrogateNeighbor,node1,node2);
         }
-	}
+    }
+    
+    /** 
+     * Iterate through all the inverse surrogate neighbors and perform the desired action
+     * 
+     * @param node1 - Node to be inserted or removed
+     * @param node2 - NULL_NODE or node that will replace node1 
+     * @param action - what action to perform
+     */
+    public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    {
+        for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
+        {
+            action.notify(inverseSurrogateNeighbor, node1, node2);
+        }
+    }
 }
 

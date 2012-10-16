@@ -1,4 +1,4 @@
-package dbPhase.hypeerweb;
+package hypeerweb;
 
 import java.sql.*;
 import java.util.*;

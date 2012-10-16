@@ -1,4 +1,4 @@
-package dbPhase.hypeerweb;
+package hypeerweb;
 
 /**
  * The id of a node in the HyPeerWeb.<br>

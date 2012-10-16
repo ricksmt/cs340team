@@ -1,7 +1,7 @@
-package dbPhase.testing;
+package white;
 
+import hypeerweb.Node;
 import junit.framework.TestCase;
-import dbPhase.hypeerweb.Node;
 
 /**
  * 
@@ -11,9 +11,6 @@ import dbPhase.hypeerweb.Node;
 
 public class NodeTest extends TestCase
 {
-    
-    
-    
    //specifically tests that it is being inserted at the right spot. The connections class is assumed to be working.
     public void testInsertSelf()
     {

@@ -1,4 +1,4 @@
-package dbPhase.hypeerweb;
+package hypeerweb;
 
 import java.util.*;
 
@@ -162,5 +162,16 @@ public class HyPeerWeb
 	        newNode.insertSelf(startNode);
 	    }
         addNode(newNode);
+	}
+	
+	/** 
+	 * Remove a random node from the HypeerWeb
+	 * @pre HypeerWeb has at least 2 nodes
+	 * @post one node is removed from the HypeerWeb
+	 */
+	public void removeFromHyPeerWeb()
+	{
+	    // pick a random node in the HyPeerWeb
+	    // node.removeFromHyPeerWeb();
 	}
 }
