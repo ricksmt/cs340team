@@ -7,8 +7,6 @@
 
 package hypeerweb;
 
-import hypeerweb.Node.State;
-
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -36,15 +34,14 @@ public class Connections
     {   
         ADD_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.addNeighbor(node1);
-                return Node.NULL_NODE;
             }
         },
         REMOVE_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeNeighbor(node1);
                 
@@ -56,79 +53,60 @@ public class Connections
                     // and won't let it all the neighbors
                     actionNode.addDownPointer(node2);
                     node2.addUpPointer(actionNode);
-                    
                 }
-                return Node.NULL_NODE;    
+                   
             }
         },
         REPLACE_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeNeighbor(node1);
                 actionNode.addNeighbor(node2);
-                return Node.NULL_NODE;
-            }
-        },
-        FIND_PARENT
-        {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
-            {
-                // If actionNode has same WebID as node1 (tempNode with parent node's WebID)
-                // return the actionNode (it is the parent)
-                if(actionNode.getWebId() == node1.getWebId())
-                    return actionNode;
-                return Node.NULL_NODE;
             }
         },
         ADD_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.addDownPointer(node1);
-                return Node.NULL_NODE;
             }
         },
         REMOVE_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeDownPointer(node1);
-                return Node.NULL_NODE;
             }
         },
         REPLACE_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeDownPointer(node1);
                 actionNode.addDownPointer(node2);
-                return Node.NULL_NODE;
             }
         },
         ADD_INV_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.addUpPointer(node1);
-                return Node.NULL_NODE;
             }
         },
         REMOVE_INV_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeUpPointer(node1);
-                return Node.NULL_NODE;
             }
         },
         REPLACE_INV_SURR_NEIGHBOR
         {
-            public Node notify(final Node actionNode, final Node node1, final Node node2)
+            public void notify(final Node actionNode, final Node node1, final Node node2)
             {
                 actionNode.removeUpPointer(node1);
                 actionNode.addUpPointer(node2);
-                return Node.NULL_NODE;
             }
         };
         
@@ -138,7 +116,7 @@ public class Connections
          * @param node1 - node to be added or removed (removed in replace methods)
          * @param node2 - node that should be added (Only used in replace methods)
          */
-        public abstract Node notify(final Node actionNode, final Node node1, final Node node2);
+        public abstract void notify(final Node actionNode, final Node node1, final Node node2);
     }
     
     /**
@@ -190,7 +168,8 @@ public class Connections
     
     /**
      * Set Fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setFold(final Node node) 
     {
@@ -200,7 +179,8 @@ public class Connections
 
     /**
      * Set surrogate fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setSurrogateFold(final Node node) 
     {
@@ -210,7 +190,8 @@ public class Connections
 
     /**
      * Set inverse surrogate fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setInverseSurrogateFold(final Node node) 
     {
@@ -219,7 +200,8 @@ public class Connections
     
     /**
      * Add node to set of neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addNeighbor(final Node node) 
     {
@@ -230,7 +212,8 @@ public class Connections
 
     /**
      * Remove node from set of neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeNeighbor(final Node node) 
     {
@@ -239,7 +222,8 @@ public class Connections
 
     /**
      * Add node to set of surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addSurrogateNeighbor(final Node node) 
     {
@@ -249,7 +233,8 @@ public class Connections
 
     /** 
      * Remove node from set of surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeSurrogateNeighbor(final Node node) 
     {
@@ -258,7 +243,8 @@ public class Connections
     
     /**
      * Add node to set of inverse surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addInverseSurrogateNeighbor(final Node node)
     {
@@ -268,7 +254,8 @@ public class Connections
 
     /**
      * Remove node from set of inverse surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeInverseSurrogateNeighbor(final Node node) 
     {
@@ -405,8 +392,8 @@ public class Connections
      * 
      * @pre neighbors set exists
      * @post owner is added to end of neighbors set
-     * @param owner
-     * @return sorted set of neighbors
+     * @param owner 
+     * @return sorted set of neighbors to the owner
      */
     private static SortedSet<Node> getLargerNeighbors(final Node owner)
     {
@@ -473,6 +460,7 @@ public class Connections
     /**
      * Returns a Connections object will all new connections of child Node
      * 
+     * @param parent 
      * @pre method is called by Parent Node
      * @post childConnections = 
      *      - neighbors = parent's inverse surrogate neighbors
@@ -511,6 +499,8 @@ public class Connections
      * 
      * Sets parent's fold
      * 
+     * @param selfNode 
+     * 
      * @pre parent Node calls parentNotify
      * @post all inverse surrogate neighbors are notified that parentNode is no longer their 
      * surrogate neighbor
@@ -540,10 +530,13 @@ public class Connections
      *      - Fold
      *      - Neighbors
      *      - Surrogate Neighbors 
+     *      
+     * @param childNode 
+     * @param parentNode 
+     * 
      * @pre childNode has all of its Connections.
      * @post all Connections of childNode are notified of new Connection between childNode
      * and Node.
-     * @param childNode
      */
     public void childNotify(final Node childNode, final Node parentNode)
 	{
@@ -588,13 +581,32 @@ public class Connections
         // Remove me as an inverse surrogate neighbor
         iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
+        if (fold.connections.surrogateFold != null)
+        {
+            fold.setSurrogateFold(parent);
+            fold.setFold(Node.NULL_NODE);
+            parent.setInverseSurrogateFold(fold);
+        }
+        else
+        {
+            fold.setFold(parent);
+            fold.setInverseSurrogateFold(Node.NULL_NODE);
+            parent.setFold(parent.connections.getSurrogateFold());
+            parent.setSurrogateFold(Node.NULL_NODE);
+        }
+        
         // Remove me as your fold, set parent as surrogate fold and you as inverse surrogate fold to parent node
         fold.setSurrogateFold(parent);
         parent.setInverseSurrogateFold(fold);
         fold.setFold(Node.NULL_NODE);
         
-        // What to do if deletion node is Cap Node? - set other node as Cap node? Take care
-        // of with states in Node class?
+        // if deletion node is Cap Node set parent node to be the Cap Node
+        if(deletionPoint.state == Node.State.CAP)
+        {
+            parent.setState(Node.State.CAP);
+        }
+        
+        
     }
     
     /**
@@ -606,8 +618,12 @@ public class Connections
     //called on a node to be deleted
     public void replace(final Node selfNode, final Node deletionPoint)
     {
+        System.out.println("Deleting: "+ selfNode.webid.getValue());
+        System.out.println("Deletion point: " + deletionPoint.webid.getValue());
+        
         // Give deletion Point all the selfNode's connections
         deletionPoint.connections = this;
+        deletionPoint.setWebId(new WebId(selfNode.getWebId()));
         
         // Replace selfNode with deletionPoint node in all connections
         iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
@@ -633,11 +649,10 @@ public class Connections
      * @param node - child node
      * @return parent node
      */
-    private Node getParent(final Node node) {
-        int parentWebIdValue = (int) (node.getWebId() + Math.pow(2, node.getWebId())); //not sure about this
-        Node tempNode = new Node(parentWebIdValue);
-        
-        return iterateNeighbors(tempNode, Node.NULL_NODE, Action.FIND_PARENT);
+    private Node getParent(final Node node)
+    {
+        return node.getLowestNeighbor();
+
     }
     
     /**
@@ -647,17 +662,12 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public Node iterateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateNeighbors(final Node node1, final Node node2, final Action action)
     {
-        Node returnNode = Node.NULL_NODE;
         for (Node neighbor : neighbors)
         {
-            // If returnNode is a non NULL node, don't override it (for FIND_PARENT)
-            if(returnNode == Node.NULL_NODE)
-                returnNode = action.notify(neighbor,node1,node2);
             action.notify(neighbor,node1,node2);
         }
-        return returnNode;
     }
     
     /** 
@@ -667,7 +677,7 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public void iterateSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
         for (Node surrogateNeighbor : surrogateNeighbors)
         {
@@ -682,7 +692,7 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {

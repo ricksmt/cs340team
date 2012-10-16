@@ -4,9 +4,9 @@
 
 <suppressions>
     <suppress checks='[a-zA-Z0-9]*'
-              files="Exp.java"/>
+              files="testing/*"/>
     <suppress checks='[a-zA-Z0-9]*'
-              files="ExpectedResult.java"/>
+              files="black/*"/>
     <suppress checks='[a-zA-Z0-9]*'
-              files="NodeTest.java"/>
+              files="white/*"/>
 </suppressions>

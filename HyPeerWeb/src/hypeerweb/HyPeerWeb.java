@@ -171,7 +171,21 @@ public class HyPeerWeb
 	 */
 	public void removeFromHyPeerWeb()
 	{
-	    // pick a random node in the HyPeerWeb
-	    // node.removeFromHyPeerWeb();
+	    final int id = (new Random()).nextInt(nodes.size());
+	    final Node node = nodes.get(id);
+	    node.removeFromHyPeerWeb();
+	    nodes.remove(node);
 	}
+	
+	/** 
+     * Remove a node from the HypeerWeb
+     * @pre HypeerWeb has at least 2 nodes
+     * @post one node is removed from the HypeerWeb
+     * @param id the webId of the node you want to remove
+     */
+    public void removeFromHyPeerWeb(final int id)
+    {
+        final Node node = nodes.get(id);
+        node.removeFromHyPeerWeb();
+    }
 }
