@@ -478,14 +478,8 @@ public class Connections
        childConnections.surrogateNeighbors = getLargerNeighbors(parent);
        
        // Fold
-       if (inverseSurrogateFold == Node.NULL_NODE)
-       {
-           childConnections.fold = fold;
-       }
-       else
-       {
-           childConnections.fold = inverseSurrogateFold;
-       }
+       if (inverseSurrogateFold == Node.NULL_NODE) childConnections.fold = fold;
+       else childConnections.fold = inverseSurrogateFold;
         
        return childConnections;
 	}
@@ -518,10 +512,7 @@ public class Connections
             surrogateFold = fold;
             fold = Node.NULL_NODE;
         }
-        else
-        {
-            inverseSurrogateFold = Node.NULL_NODE;
-        }
+        else inverseSurrogateFold = Node.NULL_NODE;
     }
     
     /** 
@@ -572,37 +563,31 @@ public class Connections
      * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
      * @post deletionPoint will be disconnected from the HyPeer web
      */
-    public void disconnect(final Node deletionPoint)
+    public static void disconnect(final Node deletionPoint)
     { 
         final Node parent = getParent(deletionPoint);
                        
         // Remove me as a neighbor, set my parent as a surrogate neighbor and you as an inverse surrogate neighbor to parent
-        iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
+        deletionPoint.connections.iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
         // Remove me as an inverse surrogate neighbor
-        iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
+        deletionPoint.connections.iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
-        if (fold.connections.surrogateFold != null)
+        if (deletionPoint.connections.getFold().connections.getSurrogateFold() != Node.NULL_NODE)
         {
-            fold.setSurrogateFold(parent);
-            fold.setFold(Node.NULL_NODE);
-            parent.setInverseSurrogateFold(fold);
+            deletionPoint.connections.getFold().setSurrogateFold(parent);
+            deletionPoint.connections.getFold().setFold(Node.NULL_NODE);
+            parent.setInverseSurrogateFold(deletionPoint.connections.getFold());
         }
         else
         {
-            
-            parent.setFold(parent.connections.getSurrogateFold());
-            parent.setSurrogateFold(Node.NULL_NODE);
-            fold.setFold(parent);
-            fold.setInverseSurrogateFold(Node.NULL_NODE);
+            deletionPoint.connections.getFold().setFold(parent);
+            deletionPoint.connections.getFold().setInverseSurrogateFold(Node.NULL_NODE);
+            if(parent.getWebId() != deletionPoint.getFoldId()) parent.setFold(parent.connections.getSurrogateFold());
+            parent.setSurrogateFold(Node.NULL_NODE);// Zero case ^^^
         }
         
         // if deletion node is Cap Node set parent node to be the Cap Node
-        if(deletionPoint.state == Node.State.CAP)
-        {
-            parent.setState(Node.State.CAP);
-        }
-        
-        
+        if(deletionPoint.state == Node.State.CAP) parent.setState(Node.State.CAP);
     }
     
     /**
@@ -612,32 +597,27 @@ public class Connections
      * @param deletionPoint - node to be replaced with
      */
     //called on a node to be deleted
-    public void replace(final Node selfNode, final Node deletionPoint)
+    public static void replace(final Node selfNode, final Node deletionPoint)
     {
-        System.out.println("Deleting: "+ selfNode.webid.getValue());
+        System.out.println(System.getProperty("line.separator") + "Deleting: "+ selfNode.webid.getValue());
         System.out.println("Deletion point: " + deletionPoint.webid.getValue());
+        if(selfNode.getWebId() == deletionPoint.getWebId()) return;// Don't want to replace self.
         
         // Give deletion Point all the selfNode's connections
-        deletionPoint.connections = this;
+        deletionPoint.connections = selfNode.connections;
         deletionPoint.setWebId(new WebId(selfNode.getWebId()));
         
         // Replace selfNode with deletionPoint node in all connections
-        iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
-        iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
-        iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
+        selfNode.connections.iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
+        selfNode.connections.iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
+        selfNode.connections.iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
         
-        if(fold != Node.NULL_NODE)
-        {
-            fold.setFold(deletionPoint);
-        }
-        if(surrogateFold != Node.NULL_NODE)
-        {
-            surrogateFold.setInverseSurrogateFold(deletionPoint);
-        }
-        if(inverseSurrogateFold != Node.NULL_NODE)
-        {
-            inverseSurrogateFold.setSurrogateFold(deletionPoint);
-        }
+//        if(selfNode.connections.fold != Node.NULL_NODE) selfNode.connections.fold.setFold(deletionPoint);
+//        if(selfNode.connections.surrogateFold != Node.NULL_NODE) selfNode.connections.surrogateFold.setInverseSurrogateFold(deletionPoint);
+//        if(selfNode.connections.inverseSurrogateFold != Node.NULL_NODE)
+//        {
+//            selfNode.connections.inverseSurrogateFold.setSurrogateFold(deletionPoint);
+//        }
     }
 
     /**
@@ -645,10 +625,10 @@ public class Connections
      * @param node - child node
      * @return parent node
      */
-    private Node getParent(final Node node)
+    private static Node getParent(final Node node)
     {
-        return node.getLowestNeighbor();
-
+        final Node parent = node.getLowestNeighbor();
+        return parent == Node.NULL_NODE ? node : parent;
     }
     
     /**
@@ -660,10 +640,7 @@ public class Connections
      */
     public void iterateNeighbors(final Node node1, final Node node2, final Action action)
     {
-        for (Node neighbor : neighbors)
-        {
-            action.notify(neighbor,node1,node2);
-        }
+        for (Node neighbor : neighbors) action.notify(neighbor,node1,node2);
     }
     
     /** 
@@ -675,10 +652,7 @@ public class Connections
      */
     public void iterateSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
-        for (Node surrogateNeighbor : surrogateNeighbors)
-        {
-            action.notify(surrogateNeighbor,node1,node2);
-        }
+        for (Node surrogateNeighbor : surrogateNeighbors) action.notify(surrogateNeighbor,node1,node2);
     }
     
     /** 
@@ -690,10 +664,7 @@ public class Connections
      */
     public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
-        for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
-        {
-            action.notify(inverseSurrogateNeighbor, node1, node2);
-        }
+        for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors) action.notify(inverseSurrogateNeighbor, node1, node2);
     }
 }
 
