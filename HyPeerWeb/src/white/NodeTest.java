@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 /**
  * 
- * @author Brian Daviss
+ * @author Brian Davis
  *
  */
 
