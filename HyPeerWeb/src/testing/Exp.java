@@ -1091,27 +1091,23 @@ public class Exp {
         boolean insertionError = false;
         System.out.print("    ");
 
-        for (int size = 3; size <= HYPEERWEB_SIZE * 3; size++) {
+        for (int size = 2; size < HYPEERWEB_SIZE; size++) {
             if (VERBOSE) {
-                System.out
-                        .println("Testing Node Insertion on HyPeerWeb of size "
+                System.out.println("Testing Node Insertion on HyPeerWeb of size "
                                 + size + "/" + HYPEERWEB_SIZE * 3);
-            } else {
-                System.out.print(size + " ");
             }
+            else System.out.print(size + " ");
 
             hypeerweb.clear();
             Node node0 = new Node(0);
             hypeerweb.addToHyPeerWeb(node0, null);
             Node firstNode = hypeerweb.getNode(0);
-            SimplifiedNodeDomain simplifiedNodeDomain = firstNode
-                    .constructSimplifiedNodeDomain();
+            SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
             ExpectedResult expectedResult = new ExpectedResult(1, 0);
 
             if (!simplifiedNodeDomain.equals(expectedResult)) {
                 insertionError = true;
-                printErrorMessage(size, null, simplifiedNodeDomain,
-                        expectedResult);
+                printErrorMessage(size, null, simplifiedNodeDomain, expectedResult);
             }
 
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
@@ -1124,19 +1120,17 @@ public class Exp {
                 hypeerweb.removeFromHyPeerWeb();
 
                 for (int i = 0; i < sizeMax; i++) {
-                    Node nodei = hypeerweb.getNode(i);
-                    simplifiedNodeDomain = nodei
-                            .constructSimplifiedNodeDomain();
+                    Node node = hypeerweb.getNode(i);
+                    simplifiedNodeDomain = node.constructSimplifiedNodeDomain();
                     expectedResult = new ExpectedResult(sizeMax, i);
 
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
                         insertionError = true;
-                        printErrorMessage(sizeMax, simplifiedNodeDomain,
-                                expectedResult);
-                        int stop=0;
+                        printErrorMessage(sizeMax, simplifiedNodeDomain, expectedResult);
                     }
                 }
             }
+            if (insertionError) return;
         }
         if (!VERBOSE) {
             System.out.println();

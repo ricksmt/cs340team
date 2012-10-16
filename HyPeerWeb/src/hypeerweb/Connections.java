@@ -7,8 +7,6 @@
 
 package hypeerweb;
 
-import hypeerweb.Node.State;
-
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -170,7 +168,8 @@ public class Connections
     
     /**
      * Set Fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setFold(final Node node) 
     {
@@ -180,7 +179,8 @@ public class Connections
 
     /**
      * Set surrogate fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setSurrogateFold(final Node node) 
     {
@@ -190,7 +190,8 @@ public class Connections
 
     /**
      * Set inverse surrogate fold
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void setInverseSurrogateFold(final Node node) 
     {
@@ -199,7 +200,8 @@ public class Connections
     
     /**
      * Add node to set of neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addNeighbor(final Node node) 
     {
@@ -210,7 +212,8 @@ public class Connections
 
     /**
      * Remove node from set of neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeNeighbor(final Node node) 
     {
@@ -219,7 +222,8 @@ public class Connections
 
     /**
      * Add node to set of surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addSurrogateNeighbor(final Node node) 
     {
@@ -229,7 +233,8 @@ public class Connections
 
     /** 
      * Remove node from set of surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeSurrogateNeighbor(final Node node) 
     {
@@ -238,7 +243,8 @@ public class Connections
     
     /**
      * Add node to set of inverse surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void addInverseSurrogateNeighbor(final Node node)
     {
@@ -248,7 +254,8 @@ public class Connections
 
     /**
      * Remove node from set of inverse surrogate neighbors
-     * @param node
+     * @obvious
+     * @param node 
      */
     public void removeInverseSurrogateNeighbor(final Node node) 
     {
@@ -385,8 +392,8 @@ public class Connections
      * 
      * @pre neighbors set exists
      * @post owner is added to end of neighbors set
-     * @param owner
-     * @return sorted set of neighbors
+     * @param owner 
+     * @return sorted set of neighbors to the owner
      */
     private static SortedSet<Node> getLargerNeighbors(final Node owner)
     {
@@ -453,6 +460,7 @@ public class Connections
     /**
      * Returns a Connections object will all new connections of child Node
      * 
+     * @param parent 
      * @pre method is called by Parent Node
      * @post childConnections = 
      *      - neighbors = parent's inverse surrogate neighbors
@@ -491,6 +499,8 @@ public class Connections
      * 
      * Sets parent's fold
      * 
+     * @param selfNode 
+     * 
      * @pre parent Node calls parentNotify
      * @post all inverse surrogate neighbors are notified that parentNode is no longer their 
      * surrogate neighbor
@@ -520,10 +530,13 @@ public class Connections
      *      - Fold
      *      - Neighbors
      *      - Surrogate Neighbors 
+     *      
+     * @param childNode 
+     * @param parentNode 
+     * 
      * @pre childNode has all of its Connections.
      * @post all Connections of childNode are notified of new Connection between childNode
      * and Node.
-     * @param childNode
      */
     public void childNotify(final Node childNode, final Node parentNode)
 	{
@@ -636,7 +649,8 @@ public class Connections
      * @param node - child node
      * @return parent node
      */
-    private Node getParent(final Node node) {
+    private Node getParent(final Node node)
+    {
         return node.getLowestNeighbor();
 
     }
@@ -648,7 +662,7 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public void iterateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateNeighbors(final Node node1, final Node node2, final Action action)
     {
         for (Node neighbor : neighbors)
         {
@@ -663,7 +677,7 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public void iterateSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
         for (Node surrogateNeighbor : surrogateNeighbors)
         {
@@ -678,7 +692,7 @@ public class Connections
      * @param node2 - NULL_NODE or node that will replace node1 
      * @param action - what action to perform
      */
-    public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, Action action)
+    public void iterateInverseSurrogateNeighbors(final Node node1, final Node node2, final Action action)
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors)
         {
