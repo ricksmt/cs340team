@@ -572,7 +572,7 @@ public class Connections
         // Remove me as an inverse surrogate neighbor
         deletionPoint.connections.iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
-        if (deletionPoint.connections.getFold().connections.getSurrogateFold() != Node.NULL_NODE)
+        if (deletionPoint.connections.getFold().connections.getSurrogateFold() != Node.NULL_NODE || (deletionPoint.state == Node.State.CAP && deletionPoint.webid.getValue() != 1))
         {
             deletionPoint.connections.getFold().setSurrogateFold(parent);
             deletionPoint.connections.getFold().setFold(Node.NULL_NODE);
