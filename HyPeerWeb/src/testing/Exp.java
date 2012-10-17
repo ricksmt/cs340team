@@ -17,8 +17,8 @@ public class Exp {
         HyPeerWebDatabase.initHyPeerWebDatabase();
         HyPeerWebDatabase.getSingleton().clear();
         hypeerweb = HyPeerWeb.getSingleton();
-        testPhase1();
-        testPhase2();
+        //testPhase1();
+        //testPhase2();
         testPhase3();
     }
 
@@ -1127,7 +1127,7 @@ public class Exp {
                     Node nodei = hypeerweb.getNode(i);
                     simplifiedNodeDomain = nodei
                             .constructSimplifiedNodeDomain();
-                    expectedResult = new ExpectedResult(sizeMax, i);
+                    expectedResult = new ExpectedResult(sizeMax-1, i);
 
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
                         insertionError = true;
@@ -1137,6 +1137,7 @@ public class Exp {
                     }
                 }
             }
+            return;
         }
         if (!VERBOSE) {
             System.out.println();
