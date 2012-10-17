@@ -600,9 +600,6 @@ public class Connections
     //called on a node to be deleted
     public static void replace(final Node selfNode, final Node deletionPoint)
     {
-        System.out.println(System.getProperty("line.separator") + "Deleting: "+ selfNode.webid.getValue());
-        System.out.println("Deletion point: " + deletionPoint.webid.getValue());
-        
         // Give deletion Point all the selfNode's connections
         deletionPoint.connections = selfNode.connections;
         deletionPoint.setWebId(new WebId(selfNode.getWebId()));
@@ -611,13 +608,6 @@ public class Connections
         selfNode.connections.iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
         selfNode.connections.iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
         selfNode.connections.iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
-        
-//        if(selfNode.connections.fold != Node.NULL_NODE) selfNode.connections.fold.setFold(deletionPoint);
-//        if(selfNode.connections.surrogateFold != Node.NULL_NODE) selfNode.connections.surrogateFold.setInverseSurrogateFold(deletionPoint);
-//        if(selfNode.connections.inverseSurrogateFold != Node.NULL_NODE)
-//        {
-//            selfNode.connections.inverseSurrogateFold.setSurrogateFold(deletionPoint);
-//        }
     }
 
     /**
