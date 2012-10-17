@@ -593,6 +593,7 @@ public class Connections
     {
         // Give deletion Point all the selfNode's connections
         deletionPoint.connections = this;
+        deletionPoint.setWebId(new WebId(selfNode.getWebId()));
         
         // Replace selfNode with deletionPoint node in all connections
         iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);

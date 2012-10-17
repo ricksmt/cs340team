@@ -174,6 +174,7 @@ public class HyPeerWeb
 	    int id = (new Random()).nextInt(nodes.size());
 	    Node node = nodes.get(id);
 	    node.removeFromHyPeerWeb();
+	    nodes.remove(node);
 	}
 	
 	/** 
@@ -186,5 +187,6 @@ public class HyPeerWeb
     {
         Node node = nodes.get(id);
         node.removeFromHyPeerWeb();
+        nodes.remove(node);
     }
 }
