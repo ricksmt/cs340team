@@ -35,7 +35,6 @@ public class Node implements Comparable<Node>
             {
                 return n;
             }
-            
             public State getInitialStateofChild()
             {
                 return CAP;
@@ -53,7 +52,6 @@ public class Node implements Comparable<Node>
                 if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
                 else return n.getHighestNeighbor();
             }
-            
             public State getInitialStateofChild()
             {
                 return DOWN;
@@ -71,7 +69,6 @@ public class Node implements Comparable<Node>
             {
                 return n.getHighestNeighbor();//Or highest fold?
             }
-            
             public State getInitialStateofChild()
             {
                 return DOWN;
@@ -122,6 +119,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
+	 * @return the neighboring node with the largest id
 	 */
 	public Node getHighestNeighbor()
 	{
@@ -130,6 +128,7 @@ public class Node implements Comparable<Node>
 	
 	/**
      * @obvious
+     * @return the neighboring node with the smallest id
      */
     public Node getLowestNeighbor()
     {
@@ -138,6 +137,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
+     * @return the surrogate neighbor node with the largest id
 	 */
     public Node getHighestSurrogateNeighbor()
     {
@@ -204,7 +204,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param webId
+	 * @param webId 
 	 */
 	public void setWebId(final WebId webId) 
 	{
@@ -213,7 +213,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param state
+	 * @param state 
 	 */
 	public void setState(final State state)
 	{
@@ -222,7 +222,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param node
+	 * @param node 
 	 */
 	public void setFold(final Node node) 
 	{
@@ -232,7 +232,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param node
+	 * @param node 
 	 */
 	public void setSurrogateFold(final Node node) 
 	{
@@ -242,7 +242,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param node
+	 * @param node 
 	 */
 	public void setInverseSurrogateFold(final Node node) 
 	{
@@ -251,7 +251,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param node
+	 * @param node 
 	 */
 	public void addNeighbor(final Node node) 
 	{
@@ -262,7 +262,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
-	 * @param node
+	 * @param node 
 	 */
 	public void removeNeighbor(final Node node) 
 	{
@@ -280,6 +280,7 @@ public class Node implements Comparable<Node>
 	
 	/**
 	 * @obvious
+	 * @return the height of this node
 	 */
 	public int getHeight()
 	{
@@ -289,18 +290,16 @@ public class Node implements Comparable<Node>
 	
 	/**
      * @obvious
-     * @param node0
+     * @param node0 
      */
     public void addUpPointer(final Node node0)
     {
-        // Cannot add itself as an Up Pointer
-        if(node0 != this)
-            connections.addInverseSurrogateNeighbor(node0);
+        if(node0 != this) connections.addInverseSurrogateNeighbor(node0);
     }
     
     /**
      * @obvious
-     * @param node
+     * @param node 
      */
     public void removeUpPointer(final Node node)
     {
@@ -309,7 +308,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
-     * @param node
+     * @param node 
      */
     public void addDownPointer(final Node node)
     {
@@ -320,7 +319,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
-     * @param node
+     * @param node 
      */
     public void removeDownPointer(final Node node)
     {
@@ -329,7 +328,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
-     * @param node
+     * @return a set of the neighboring nodes ids
      */
     public HashSet<Integer> getNeighborsIds()
     {
@@ -361,7 +360,7 @@ public class Node implements Comparable<Node>
      * 
      * @pre start node is part of a valid HyPeerWeb. This node is not part of the HyPeerWeb.
      * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
-     * @param startNode
+     * @param startNode 
      */
     public void insertSelf(final Node startNode)
     {
@@ -386,8 +385,8 @@ public class Node implements Comparable<Node>
     
     /**
      * findInsertionPoint
-     * @param startNode
-     * @return The node which is the insertion point/
+     * @param startNode 
+     * @return The node which is the insertion point
      */
     private Node findInsertionPoint(Node startNode)
     {
@@ -414,12 +413,11 @@ public class Node implements Comparable<Node>
     public void removeFromHyPeerWeb()
     {
         // find deletionPoint from this point
-        Node deletionPoint = findDeletionPoint(this);
+        final Node deletionPoint = findDeletionPoint(this);
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        connections.replace(this,deletionPoint);
-        
+        if(getWebId() != deletionPoint.getWebId()) Connections.replace(this, deletionPoint);
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
     
@@ -459,7 +457,7 @@ public class Node implements Comparable<Node>
      */
     private void disconnectDeletionPoint()
     {
-        connections.disconnect(this);
+        Connections.disconnect(this);
     }
     
     /**
@@ -476,6 +474,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
+     * @return the fold's id
      */
     public int getFoldId()
     {
@@ -484,6 +483,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
+     * @return the surrogate fold's id
      */
     public int getSurrogateFoldId()
     {
@@ -492,6 +492,7 @@ public class Node implements Comparable<Node>
     
     /**
      * @obvious
+     * @return the inverse surrogate fold's id
      */
     public int getInverseSurrogateFoldId()
     {

@@ -17,8 +17,8 @@ public class Exp {
         HyPeerWebDatabase.initHyPeerWebDatabase();
         HyPeerWebDatabase.getSingleton().clear();
         hypeerweb = HyPeerWeb.getSingleton();
-        //testPhase1();
-        //testPhase2();
+        testPhase1();
+        testPhase2();
         testPhase3();
     }
 
@@ -197,62 +197,51 @@ public class Exp {
         SimplifiedNodeDomain simpleDomain = node
                 .constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().size() != 1) {
-            System.err
-                    .println("When invoking addNeighbor(Node) on a node with no neighbors the number of neighbors should be 1 but is "
+            System.err.println("When invoking addNeighbor(Node) on a node with no neighbors the number of neighbors should be 1 but is "
                             + simpleDomain.getNeighbors().size() + ".");
         }
         if (!simpleDomain.getNeighbors().contains(0)) {
-            System.err
-                    .println("When invoking addNeighbor(Node) on a node with no neighbors node 1 should be a neighbor but is not.");
+            System.err.println("When invoking addNeighbor(Node) on a node with no neighbors node 1 should be a neighbor but is not.");
         }
 
         node.addNeighbor(neighbor1);
         node.addNeighbor(neighbor2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().size() != 3) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node, the number of neighbors should be 3 but is "
+            System.err.println("After adding node0, node1, and node2 as neighbors to node, the number of neighbors should be 3 but is "
                             + simpleDomain.getNeighbors().size() + ".");
         }
         if (!simpleDomain.getNeighbors().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node, node 0 should be a neighbor but is not.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node, node 0 should be a neighbor but is not.");
         }
         if (!simpleDomain.getNeighbors().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node, node 1 should be a neighbor but is not.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node, node 1 should be a neighbor but is not.");
         }
         if (!simpleDomain.getNeighbors().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node, node 2 should be a neighbor but is not.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node, node 2 should be a neighbor but is not.");
         }
 
         node.removeNeighbor(neighbor0);
         node.removeNeighbor(neighbor2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().size() != 1) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, the number of neighbors should be 1 but is "
+            System.err.println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, the number of neighbors should be 1 but is "
                             + simpleDomain.getNeighbors().size() + ".");
         }
         if (simpleDomain.getNeighbors().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 0 should NOT be a neighbor but is.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 0 should NOT be a neighbor but is.");
         }
         if (simpleDomain.getNeighbors().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 2 should NOT be a neighbor but is.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 2 should NOT be a neighbor but is.");
         }
         if (!simpleDomain.getNeighbors().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 1 should be a neighbor but is NOT.");
+            System.err.println("After adding node0, node1, and node2 as neighbors to node and then removing node0 and node2 as neighbors, node 1 should be a neighbor but is NOT.");
         }
 
         node.removeNeighbor(neighbor1);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().size() != 0) {
-            System.err
-                    .println("After adding node0, node1, and node2 as neighbors to node and then removing node0, node1, and node2 as neighbors, "
+            System.err.println("After adding node0, node1, and node2 as neighbors to node and then removing node0, node1, and node2 as neighbors, "
                             + "the number of neighbors should be 0 but is "
                             + simpleDomain.getNeighbors().size());
         }
@@ -260,8 +249,7 @@ public class Exp {
         return error;
     }
 
-    private static boolean testAddingAndRemovingUpPointers(Node node,
-            boolean error) {
+    private static boolean testAddingAndRemovingUpPointers(Node node, boolean error) {
         Node node0 = new Node(0);
         Node node1 = new Node(1);
         Node node2 = new Node(2);
@@ -271,65 +259,53 @@ public class Exp {
         Node upPointer2 = node2;
 
         node.addUpPointer(upPointer0);
-        SimplifiedNodeDomain simpleDomain = node
-                .constructSimplifiedNodeDomain();
+        SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getUpPointers().size() != 1) {
-            System.err
-                    .println("When invoking addUpPointer(Node) on a node with no upPointers the number of upPointers should be 1 but is "
+            System.err.println("When invoking addUpPointer(Node) on a node with no upPointers the number of upPointers should be 1 but is "
                             + simpleDomain.getUpPointers().size() + ".");
         }
         if (!simpleDomain.getUpPointers().contains(0)) {
-            System.err
-                    .println("When invoking addUpPointer(Node) on a node with no upPointers node 1 should be an upPointer but is not.");
+            System.err.println("When invoking addUpPointer(Node) on a node with no upPointers node 1 should be an upPointer but is not.");
         }
 
         node.addUpPointer(upPointer1);
         node.addUpPointer(upPointer2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getUpPointers().size() != 3) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node, the number of upPointers should be 3 but is "
+            System.err.println("After adding node0, node1, and node2 as upPointers to node, the number of upPointers should be 3 but is "
                             + simpleDomain.getUpPointers().size() + ".");
         }
         if (!simpleDomain.getUpPointers().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node, node 0 should be a upPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node, node 0 should be a upPointer but is not.");
         }
         if (!simpleDomain.getUpPointers().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node, node 1 should be a upPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node, node 1 should be a upPointer but is not.");
         }
         if (!simpleDomain.getUpPointers().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node, node 2 should be a upPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node, node 2 should be a upPointer but is not.");
         }
 
         node.removeUpPointer(upPointer0);
         node.removeUpPointer(upPointer2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getUpPointers().size() != 1) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, the number of upPointers should be 1 but is "
+            System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, the number of upPointers should be 1 but is "
                             + simpleDomain.getUpPointers().size());
         }
         if (simpleDomain.getUpPointers().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 0 should NOT be a upPointer but is.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 0 should NOT be a upPointer but is.");
         }
         if (simpleDomain.getUpPointers().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 2 should NOT be a upPointer but is.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 2 should NOT be a upPointer but is.");
         }
         if (!simpleDomain.getUpPointers().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 1 should be a upPointer but is NOT.");
+            System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0 and node2 as upPointers, node 1 should be a upPointer but is NOT.");
         }
 
         node.removeUpPointer(upPointer1);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getUpPointers().size() != 0) {
-            System.err
-                    .println("After adding node0, node1, and node2 as upPointers to node and then removing node0, node1, and node2 as upPointers, "
+            System.err.println("After adding node0, node1, and node2 as upPointers to node and then removing node0, node1, and node2 as upPointers, "
                             + "the number of upPointers should be 0 but is "
                             + simpleDomain.getUpPointers().size() + ".");
         }
@@ -337,8 +313,7 @@ public class Exp {
         return error;
     }
 
-    private static boolean testAddingAndRemovingDownPointers(Node node,
-            boolean error) {
+    private static boolean testAddingAndRemovingDownPointers(Node node, boolean error) {
         Node node0 = new Node(0);
         Node node1 = new Node(1);
         Node node2 = new Node(2);
@@ -351,63 +326,52 @@ public class Exp {
         SimplifiedNodeDomain simpleDomain = node
                 .constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().size() != 1) {
-            System.err
-                    .println("When invoking addDownPointer(Node) on a node with no downPointers the number of downPointers should be 1 but is "
+            System.err.println("When invoking addDownPointer(Node) on a node with no downPointers the number of downPointers should be 1 but is "
                             + simpleDomain.getDownPointers().size() + ".");
         }
         if (!simpleDomain.getDownPointers().contains(0)) {
-            System.err
-                    .println("When invoking addDownPointer(Node) on a node with no downPointers node 1 should be a downPointer but is not.");
+            System.err.println("When invoking addDownPointer(Node) on a node with no downPointers node 1 should be a downPointer but is not.");
         }
 
         node.addDownPointer(downPointer1);
         node.addDownPointer(downPointer2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().size() != 3) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node, the number of downPointers should be 3 but is "
+            System.err.println("After adding node0, node1, and node2 as downPointers to node, the number of downPointers should be 3 but is "
                             + simpleDomain.getDownPointers().size() + ".");
         }
         if (!simpleDomain.getDownPointers().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node, node 0 should be a downPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node, node 0 should be a downPointer but is not.");
         }
         if (!simpleDomain.getDownPointers().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node, node 1 should be a downPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node, node 1 should be a downPointer but is not.");
         }
         if (!simpleDomain.getDownPointers().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node, node 2 should be a downPointer but is not.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node, node 2 should be a downPointer but is not.");
         }
 
         node.removeDownPointer(downPointer0);
         node.removeDownPointer(downPointer2);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().size() != 1) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, "
+            System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, "
                             + "the number of downPointers should be 1 but is "
                             + simpleDomain.getDownPointers().size() + ".");
         }
         if (simpleDomain.getDownPointers().contains(0)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 0 should NOT be a downPointer but is.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 0 should NOT be a downPointer but is.");
         }
         if (simpleDomain.getDownPointers().contains(2)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 2 should NOT be a downPointer but is.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 2 should NOT be a downPointer but is.");
         }
         if (!simpleDomain.getDownPointers().contains(1)) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 1 should be a downPointer but is NOT.");
+            System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0 and node2 as downPointers, node 1 should be a downPointer but is NOT.");
         }
 
         node.removeDownPointer(downPointer1);
         simpleDomain = node.constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().size() != 0) {
-            System.err
-                    .println("After adding node0, node1, and node2 as downPointers to node and then removing node0, node1, and node2 as downPointers, "
+            System.err.println("After adding node0, node1, and node2 as downPointers to node and then removing node0, node1, and node2 as downPointers, "
                             + "the number of downPointers should be 0 but is "
                             + simpleDomain.getDownPointers().size() + ".");
         }
@@ -422,48 +386,39 @@ public class Exp {
         hypeerweb.addNode(node0);
         Node node = hypeerweb.getNode(0);
         if (node == null) {
-            System.err
-                    .println("When a node is added to the HyPeerWeb, it should be in the database but hypeerweb.getNode(0) returned null.");
+            System.err.println("When a node is added to the HyPeerWeb, it should be in the database but hypeerweb.getNode(0) returned null.");
         }
         if (node != null && node != node0) {
-            System.err
-                    .println("When a node is added to the HyPeerWeb, it should not be a copy of the node added but it appears to be.");
+            System.err.println("When a node is added to the HyPeerWeb, it should not be a copy of the node added but it appears to be.");
             error = true;
             errorCount++;
 
         }
         if (!hypeerweb.contains(node0)) {
-            System.err
-                    .println("After adding a newly created node0 to the HyPeerWeb, the HyPeerWeb does not contain node0.");
+            System.err.println("After adding a newly created node0 to the HyPeerWeb, the HyPeerWeb does not contain node0.");
             error = true;
             errorCount++;
         }
         if (node != null && !node.equals(node0)) {
-            System.err
-                    .println("After adding a newly created node0 to the HyPeerWeb, the node in theHyPeerWeb does not equal node0.");
+            System.err.println("After adding a newly created node0 to the HyPeerWeb, the node in theHyPeerWeb does not equal node0.");
             error = true;
             errorCount++;
         }
 
-        SimplifiedNodeDomain simpleDomain = hypeerweb.getNode(0)
-                .constructSimplifiedNodeDomain();
+        SimplifiedNodeDomain simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("After adding a newly created node0 to the HyPeerWeb, the node does not exist in the database.");
+            System.err.println("After adding a newly created node0 to the HyPeerWeb, the node does not exist in the database.");
             error = true;
             errorCount++;
         }
-        if (simpleDomain != null
-                && !simpleDomain.equals(node0.constructSimplifiedNodeDomain())) {
-            System.err
-                    .println("After adding a newly created node0 to the HyPeerWeb, the node in the database is not the same as the node added.");
+        if (simpleDomain != null && !simpleDomain.equals(node0.constructSimplifiedNodeDomain())) {
+            System.err.println("After adding a newly created node0 to the HyPeerWeb, the node in the database is not the same as the node added.");
             error = true;
             errorCount++;
         }
 
         if (!error) {
-            System.out
-                    .println("    No errors found while testing the addition of a node to the HyPeerWeb.");
+            System.out.println("    No errors found while testing the addition of a node to the HyPeerWeb.");
         }
 
         hypeerweb.clear();
@@ -497,27 +452,23 @@ public class Exp {
         SimplifiedNodeDomain simpleDomain = hypeerweb.getNode(0)
                 .constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
                             + "    node0 disappeared and is not in the database.");
         }
         if (simpleDomain != null && simpleDomain.getNeighbors().size() != 2) {
-            System.err
-                    .println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
                             + "    there should be two neighbors of node0 in the database but there are not.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && !simpleDomain.getNeighbors().contains(1)) {
-            System.err
-                    .println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node1 as a neighbor but does not.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && !simpleDomain.getNeighbors().contains(2)) {
-            System.err
-                    .println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node2 as a neighbor but does not.");
             error = true;
             errorCount++;
@@ -526,22 +477,19 @@ public class Exp {
         node0.addUpPointer(upPointer3);
         simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When adding node3 as an UpPointer to node0 which is already in the database,\n"
+            System.err.println("When adding node3 as an UpPointer to node0 which is already in the database,\n"
                             + "    node0 disappeared and is not in the database.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && simpleDomain.getUpPointers().size() != 1) {
-            System.err
-                    .println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as neighbors to node0 which is already in the database,\n"
                             + "    there should be two neighbors of node0 in the database but there are not.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && !simpleDomain.getUpPointers().contains(3)) {
-            System.err
-                    .println("When adding node3 as an UpPointer to node0 which is already in the database,\n"
+            System.err.println("When adding node3 as an UpPointer to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node3 as an UpPointer but does not.");
             error = true;
             errorCount++;
@@ -551,29 +499,25 @@ public class Exp {
         node0.addDownPointer(downPointer5);
         simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n"
                             + "    node0 disappeared and is not in the database.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && simpleDomain.getDownPointers().size() != 2) {
-            System.err
-                    .println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n"
+            System.err.println("When adding node1 and node2 as downPointers to node0 which is already in the database,\n"
                             + "    there should be two downPointers of node0 in the database but there are not.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && !simpleDomain.getDownPointers().contains(4)) {
-            System.err
-                    .println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n"
+            System.err.println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node4 as a DownPointer but does not.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && !simpleDomain.getDownPointers().contains(5)) {
-            System.err
-                    .println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n"
+            System.err.println("When adding node4 and node5 as DownPointers to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node5 as a DownPointer but does not.");
             error = true;
             errorCount++;
@@ -582,15 +526,13 @@ public class Exp {
         node0.setFold(node6);
         simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When setting node6 as the fold to node0 which is already in the database,\n"
+            System.err.println("When setting node6 as the fold to node0 which is already in the database,\n"
                             + "    node0 disappeared and is not in the database.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && simpleDomain.getFold() != 6) {
-            System.err
-                    .println("When setting node6 as the fold to node0 which is already in the database,\n"
+            System.err.println("When setting node6 as the fold to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node6 as its fold but does not, it has node "
                             + simpleDomain.getFold() + ".");
             error = true;
@@ -600,15 +542,13 @@ public class Exp {
         node0.setSurrogateFold(node7);
         simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When setting node7 as the surrogateFold to node0 which is already in the database,\n"
+            System.err.println("When setting node7 as the surrogateFold to node0 which is already in the database,\n"
                             + "    node0 disappeared and is not in the database.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && simpleDomain.getSurrogateFold() != 7) {
-            System.err
-                    .println("When setting node7 as the surrogateFold to node0 which is already in the database,\n"
+            System.err.println("When setting node7 as the surrogateFold to node0 which is already in the database,\n"
                             + "    the persistant version of node0 should have node7 as its surrogateFold but does not, it is node "
                             + simpleDomain.getSurrogateFold() + ".");
             error = true;
@@ -618,15 +558,13 @@ public class Exp {
         node0.setSurrogateFold(Node.NULL_NODE);
         simpleDomain = hypeerweb.getNode(0).constructSimplifiedNodeDomain();
         if (simpleDomain == null) {
-            System.err
-                    .println("When setting the surrogateFold of node0 (which is already in the database) to null,\n"
+            System.err.println("When setting the surrogateFold of node0 (which is already in the database) to null,\n"
                             + "    node0 disappeared and is not in the database.");
             error = true;
             errorCount++;
         }
         if (simpleDomain != null && simpleDomain.getSurrogateFold() != -1) {
-            System.err
-                    .println("When setting the surrogateFold of node0 (which is already in the database) to null\n"
+            System.err.println("When setting the surrogateFold of node0 (which is already in the database) to null\n"
                             + "    the persistant version of node0 should have the surrogateFold as null but does not, "
                             + "    it is node "
                             + simpleDomain.getSurrogateFold() + ".");
@@ -635,8 +573,7 @@ public class Exp {
         }
 
         if (!error) {
-            System.out
-                    .println("    No errors found while testing the addition of information to a node already in the HyPeerWeb.");
+            System.out.println("    No errors found while testing the addition of information to a node already in the HyPeerWeb.");
         }
 
         hypeerweb.clear();
@@ -664,18 +601,15 @@ public class Exp {
         node0.addDownPointer(node6);
 
         node0.removeNeighbor(node1);
-        SimplifiedNodeDomain simpleDomain = node0
-                .constructSimplifiedNodeDomain();
+        SimplifiedNodeDomain simpleDomain = node0.constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().contains(1)) {
-            System.err
-                    .println("When removing node1 as a neighbor of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node1 as a neighbor of node0 which is already in the HyPeerWeb,\n"
                             + "    node1 was not removed from node0 in the database.");
             error = true;
             errorCount++;
         }
         if (!simpleDomain.getNeighbors().contains(2)) {
-            System.err
-                    .println("When removing node1 as a neighbor of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node1 as a neighbor of node0 which is already in the HyPeerWeb,\n"
                             + "    node2 was also removed.");
             error = true;
             errorCount++;
@@ -684,8 +618,7 @@ public class Exp {
         node0.removeNeighbor(node2);
         simpleDomain = node0.constructSimplifiedNodeDomain();
         if (simpleDomain.getNeighbors().contains(2)) {
-            System.err
-                    .println("When removing node2 as a neighbor of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node2 as a neighbor of node0 which is already in the HyPeerWeb,\n"
                             + "    node2 was not removed.");
             error = true;
             errorCount++;
@@ -694,15 +627,13 @@ public class Exp {
         node0.removeUpPointer(node4);
         simpleDomain = node0.constructSimplifiedNodeDomain();
         if (simpleDomain.getUpPointers().contains(4)) {
-            System.err
-                    .println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n"
                             + "    node4 was not removed from node0 in the database.");
             error = true;
             errorCount++;
         }
         if (!simpleDomain.getUpPointers().contains(3)) {
-            System.err
-                    .println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node4 as an UpPointer of node0 which is already in the HyPeerWeb,\n"
                             + "    node3 was also removed.");
             error = true;
             errorCount++;
@@ -711,15 +642,13 @@ public class Exp {
         node0.removeDownPointer(node5);
         simpleDomain = node0.constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().contains(5)) {
-            System.err
-                    .println("When removing node5 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node5 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
                             + "    node5 was not removed from node0 in the database.");
             error = true;
             errorCount++;
         }
         if (!simpleDomain.getDownPointers().contains(6)) {
-            System.err
-                    .println("When removing node1 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node1 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
                             + "    node6 was also removed.");
             error = true;
             errorCount++;
@@ -728,16 +657,14 @@ public class Exp {
         node0.removeDownPointer(node6);
         simpleDomain = node0.constructSimplifiedNodeDomain();
         if (simpleDomain.getDownPointers().contains(6)) {
-            System.err
-                    .println("When removing node6 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
+            System.err.println("When removing node6 as a DownPointer of node0 which is already in the HyPeerWeb,\n"
                             + "    node6 was not removed.");
             error = true;
             errorCount++;
         }
 
         if (!error) {
-            System.out
-                    .println("    No errors found while testing the removal of information from a node already in the HyPeerWeb.");
+            System.out.println("    No errors found while testing the removal of information from a node already in the HyPeerWeb.");
         }
 
         hypeerweb.clear();
@@ -781,15 +708,13 @@ public class Exp {
         hypeerweb.reload("temp2.db");
         hypeerweb.reload("temp.db");
         if (hypeerweb.size() != 0) {
-            System.err
-                    .println("When opening an empty database, 'temp.db', the database was not empty.");
+            System.err.println("When opening an empty database, 'temp.db', the database was not empty.");
             error = true;
             errorCount++;
         }
         Node node = hypeerweb.getNode(0);
         if (node != null) {
-            System.err
-                    .println("When opening an empty database, 'temp.db', it should be empty");
+            System.err.println("When opening an empty database, 'temp.db', it should be empty");
             error = true;
             errorCount++;
         }
@@ -797,8 +722,7 @@ public class Exp {
 
         hypeerweb.reload();
         if (hypeerweb.size() != 3) {
-            System.err
-                    .println("After reloading the original database, the HyPeerWeb should have 3 nodes in it but it has "
+            System.err.println("After reloading the original database, the HyPeerWeb should have 3 nodes in it but it has "
                             + hypeerweb.size() + ".");
             error = true;
             errorCount++;
@@ -806,43 +730,37 @@ public class Exp {
 
         node = hypeerweb.getNode(0);
         if (node == null) {
-            System.err
-                    .println("After reloading the original database, node 0 was not found."
+            System.err.println("After reloading the original database, node 0 was not found."
                             + hypeerweb.size() + ".");
             error = true;
             errorCount++;
-        } else {
-            SimplifiedNodeDomain simpleDomain = node
-                    .constructSimplifiedNodeDomain();
+        }
+        else {
+            SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
             if (simpleDomain.getNeighbors().size() != 2) {
-                System.err
-                        .println("After reloading the original database, there should be only 2 neighbors of node 0 but there are "
+                System.err.println("After reloading the original database, there should be only 2 neighbors of node 0 but there are "
                                 + simpleDomain.getNeighbors().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getNeighbors().contains(1)) {
-                System.err
-                        .println("After reloading the original database, node 0 does not have node 1 as a neighbor.");
+                System.err.println("After reloading the original database, node 0 does not have node 1 as a neighbor.");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getNeighbors().contains(2)) {
-                System.err
-                        .println("After reloading the original database, node 0 does not have node 2 as a neighbor.");
+                System.err.println("After reloading the original database, node 0 does not have node 2 as a neighbor.");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getUpPointers().size() != 0) {
-                System.err
-                        .println("After reloading the original database, node 0 should have no UpPointers but has "
+                System.err.println("After reloading the original database, node 0 should have no UpPointers but has "
                                 + simpleDomain.getUpPointers().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getDownPointers().size() != 0) {
-                System.err
-                        .println("After reloading the original database, node 0 should have no DownPointers but has "
+                System.err.println("After reloading the original database, node 0 should have no DownPointers but has "
                                 + simpleDomain.getDownPointers().size() + ".");
                 error = true;
                 errorCount++;
@@ -856,8 +774,7 @@ public class Exp {
             // }
             if (simpleDomain.getSurrogateFold() != 1) {
                 int surrogateFold = simpleDomain.getSurrogateFold();
-                System.err
-                        .println("After reloading the original database, node 0 should have node1 as a surroguteFold but, "
+                System.err.println("After reloading the original database, node 0 should have node1 as a surroguteFold but, "
                                 + (surrogateFold == -1 ? " the surrogateFold is null."
                                         : (" found node "
                                                 + Integer
@@ -869,51 +786,44 @@ public class Exp {
 
         node = hypeerweb.getNode(1);
         if (node == null) {
-            System.err
-                    .println("After reloading the original database, node 1 was not found."
+            System.err.println("After reloading the original database, node 1 was not found."
                             + hypeerweb.size() + ".");
             error = true;
             errorCount++;
-        } else {
-            SimplifiedNodeDomain simpleDomain = node
-                    .constructSimplifiedNodeDomain();
+        }
+        else {
+            SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
             if (simpleDomain.getNeighbors().size() != 1) {
-                System.err
-                        .println("After reloading the original database, there should be only 1 neighbor of node 1 but there are "
+                System.err.println("After reloading the original database, there should be only 1 neighbor of node 1 but there are "
                                 + simpleDomain.getNeighbors().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getNeighbors().contains(0)) {
-                System.err
-                        .println("After reloading the original database, node 1 does not have node 0 as a neighbor.");
+                System.err.println("After reloading the original database, node 1 does not have node 0 as a neighbor.");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getUpPointers().size() != 1) {
-                System.err
-                        .println("After reloading the original database, node 1 should have 1 UpPointer but has "
+                System.err.println("After reloading the original database, node 1 should have 1 UpPointer but has "
                                 + simpleDomain.getUpPointers().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getUpPointers().contains(2)) {
-                System.err
-                        .println("After reloading the original database, node 1 does not have node 2 as an UpPointer.");
+                System.err.println("After reloading the original database, node 1 does not have node 2 as an UpPointer.");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getDownPointers().size() != 0) {
-                System.err
-                        .println("After reloading the original database, node 1 should have no DownPointers but has "
+                System.err.println("After reloading the original database, node 1 should have no DownPointers but has "
                                 + simpleDomain.getDownPointers().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getFold() != 2) {
                 int fold = simpleDomain.getFold();
-                System.err
-                        .println("After reloading the original database, node 1 should have node 2 as a fold but "
+                System.err.println("After reloading the original database, node 1 should have node 2 as a fold but "
                                 + (fold == -1 ? " the fold is null."
                                         : (" found node "
                                                 + Integer.toString(fold) + ".")));
@@ -922,8 +832,7 @@ public class Exp {
             }
             if (simpleDomain.getSurrogateFold() != 0) {
                 int surrogateFold = simpleDomain.getFold();
-                System.err
-                        .println("After reloading the original database, node 1 should have node 0 as a surrogateFold but, "
+                System.err.println("After reloading the original database, node 1 should have node 0 as a surrogateFold but, "
                                 + (surrogateFold == -1 ? " the surrogateFold is null."
                                         : (" found node "
                                                 + Integer
@@ -935,65 +844,52 @@ public class Exp {
 
         node = hypeerweb.getNode(2);
         if (node == null) {
-            System.err
-                    .println("After reloading the original database, node 2 was not found."
+            System.err.println("After reloading the original database, node 2 was not found."
                             + hypeerweb.size() + ".");
             error = true;
             errorCount++;
-        } else {
-            SimplifiedNodeDomain simpleDomain = node
-                    .constructSimplifiedNodeDomain();
+        }
+        else {
+            SimplifiedNodeDomain simpleDomain = node.constructSimplifiedNodeDomain();
             if (simpleDomain.getNeighbors().size() != 1) {
-                System.err
-                        .println("After reloading the original database, there should be only 1 neighbor of node 2 but there are "
+                System.err.println("After reloading the original database, there should be only 1 neighbor of node 2 but there are "
                                 + simpleDomain.getNeighbors().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getNeighbors().contains(0)) {
-                System.err
-                        .println("After reloading the original database, node 2 does not have node 0 as a neighbor.");
+                System.err.println("After reloading the original database, node 2 does not have node 0 as a neighbor.");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getUpPointers().size() != 0) {
-                System.err
-                        .println("After reloading the original database, node 2 should have no UpPointers but has "
+                System.err.println("After reloading the original database, node 2 should have no UpPointers but has "
                                 + simpleDomain.getUpPointers().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getDownPointers().size() != 1) {
-                System.err
-                        .println("After reloading the original database, node 2 should have 1 DownPointer but has "
+                System.err.println("After reloading the original database, node 2 should have 1 DownPointer but has "
                                 + simpleDomain.getDownPointers().size() + ".");
                 error = true;
                 errorCount++;
             }
             if (!simpleDomain.getDownPointers().contains(1)) {
-                System.err
-                        .println("After reloading the original database, node 2 does not have node 1 as a DownPointer.");
+                System.err.println("After reloading the original database, node 2 does not have node 1 as a DownPointer.");
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getFold() != 1) {
                 int fold = simpleDomain.getFold();
-                System.err
-                        .println("After reloading the original database, node 2 should have node 1 as a fold but "
-                                + (fold == -1 ? " the fold is null."
-                                        : (" found node "
-                                                + Integer.toString(fold) + ".")));
+                System.err.println("After reloading the original database, node 2 should have node 1 as a fold but "
+                      + (fold == -1 ? " the fold is null." : (" found node "  + Integer.toString(fold) + ".")));
                 error = true;
                 errorCount++;
             }
             if (simpleDomain.getSurrogateFold() != -1) {
                 int surrogateFold = simpleDomain.getFold();
-                System.err
-                        .println("After reloading the original database, node 2 should have node 1 as a surrogateFold but, "
-                                + (surrogateFold == -1 ? " the surrogateFold is null."
-                                        : (" found node "
-                                                + Integer
-                                                        .toString(surrogateFold) + ".")));
+                System.err.println("After reloading the original database, node 2 should have node 1 as a surrogateFold but, "
+                      + (surrogateFold == -1 ? " the surrogateFold is null." : (" found node " + Integer.toString(surrogateFold) + ".")));
                 error = true;
                 errorCount++;
             }
@@ -1004,15 +900,13 @@ public class Exp {
         hypeerweb.reload("temp.db");
         hypeerweb.clear();
         if (hypeerweb.size() != 0) {
-            System.err
-                    .println("When opening a database and then clearing it, 'temp.db', the database should be empty.");
+            System.err.println("When opening a database and then clearing it, 'temp.db', the database should be empty.");
             error = true;
             errorCount++;
         }
 
         if (!error) {
-            System.out
-                    .println("    No errors found while testing the creation of a HyPeerWeb from an existing database.");
+            System.out.println("    No errors found while testing the creation of a HyPeerWeb from an existing database.");
         }
     }
 
@@ -1026,10 +920,10 @@ public class Exp {
 
         for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
             if (VERBOSE) {
-                System.out
-                        .println("Testing Node Insertion on HyPeerWeb of size "
+                System.out.println("Testing Node Insertion on HyPeerWeb of size "
                                 + size + "/" + HYPEERWEB_SIZE);
-            } else {
+            }
+            else {
                 System.out.print(size + " ");
             }
 
@@ -1037,14 +931,12 @@ public class Exp {
             Node node0 = new Node(0);
             hypeerweb.addToHyPeerWeb(node0, null);
             Node firstNode = hypeerweb.getNode(0);
-            SimplifiedNodeDomain simplifiedNodeDomain = firstNode
-                    .constructSimplifiedNodeDomain();
+            SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
             ExpectedResult expectedResult = new ExpectedResult(1, 0);
 
             if (!simplifiedNodeDomain.equals(expectedResult)) {
                 insertionError = true;
-                printErrorMessage(size, null, simplifiedNodeDomain,
-                        expectedResult);
+                printErrorMessage(size, null, simplifiedNodeDomain, expectedResult);
             }
 
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
@@ -1056,21 +948,17 @@ public class Exp {
 
                 for (int i = 0; i < size; i++) {
                     Node nodei = hypeerweb.getNode(i);
-                    simplifiedNodeDomain = nodei
-                            .constructSimplifiedNodeDomain();
+                    simplifiedNodeDomain = nodei.constructSimplifiedNodeDomain();
                     expectedResult = new ExpectedResult(size, i);
 
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
                         insertionError = true;
-                        printErrorMessage(size, startNode,
-                                simplifiedNodeDomain, expectedResult);
+                        printErrorMessage(size, startNode, simplifiedNodeDomain, expectedResult);
                     }
                 }
             }
         }
-        if (!VERBOSE) {
-            System.out.println();
-        }
+        if (!VERBOSE) System.out.println();
 
         if (insertionError) {
             double decimalPercent = ((double) PHASE_2_TEST_COUNT - (double) errorCount)
@@ -1078,9 +966,8 @@ public class Exp {
             int integerPercent = (int) (decimalPercent * 100.0d);
             System.out.println("    Insertion Error: Phase 2 Score = "
                     + integerPercent + "%");
-        } else {
-            System.out.println("    No Insertion Errors: Phase 2 Score = 100%");
         }
+        else System.out.println("    No Insertion Errors: Phase 2 Score = 100%");
     }
 
     static private void testPhase3() {
@@ -1091,78 +978,58 @@ public class Exp {
         boolean insertionError = false;
         System.out.print("    ");
 
-        for (int size = 3; size <= HYPEERWEB_SIZE * 3; size++) {
-            if (VERBOSE) {
-                System.out
-                        .println("Testing Node Insertion on HyPeerWeb of size "
-                                + size + "/" + HYPEERWEB_SIZE * 3);
-            } else {
-                System.out.print(size + " ");
-            }
+        for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
+            if (VERBOSE) System.out.println("Testing Node Insertion on HyPeerWeb of size " + size + "/" + HYPEERWEB_SIZE * 3);
+            else System.out.print(size + " ");
 
             hypeerweb.clear();
             Node node0 = new Node(0);
             hypeerweb.addToHyPeerWeb(node0, null);
             Node firstNode = hypeerweb.getNode(0);
-            SimplifiedNodeDomain simplifiedNodeDomain = firstNode
-                    .constructSimplifiedNodeDomain();
+            SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
             ExpectedResult expectedResult = new ExpectedResult(1, 0);
 
             if (!simplifiedNodeDomain.equals(expectedResult)) {
                 insertionError = true;
-                printErrorMessage(size, null, simplifiedNodeDomain,
-                        expectedResult);
+                printErrorMessage(size, null, simplifiedNodeDomain, expectedResult);
             }
 
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
                 int sizeMax = size;
-                if (size > 32)
-                    sizeMax = 32;
+                if (size > 32) sizeMax = 32;
                    
-                createHyPeerWebWith(sizeMax - 1);
+                createHyPeerWebWith(sizeMax--);
                 // Remove random node
                 hypeerweb.removeFromHyPeerWeb();
 
-                for (int i = 0; i < sizeMax-1; i++) {
-                    Node nodei = hypeerweb.getNode(i);
-                    simplifiedNodeDomain = nodei
-                            .constructSimplifiedNodeDomain();
-                    expectedResult = new ExpectedResult(sizeMax-1, i);
+                for (int i = 0; i < sizeMax; i++) {
+                    Node node = hypeerweb.getNode(i);
+                    simplifiedNodeDomain = node.constructSimplifiedNodeDomain();
+                    expectedResult = new ExpectedResult(sizeMax, i);
 
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
                         insertionError = true;
-                        printErrorMessage(sizeMax, simplifiedNodeDomain,
-                                expectedResult);
-                        int stop=0;
+                        printErrorMessage(sizeMax, simplifiedNodeDomain, expectedResult);
                     }
                 }
             }
-            return;
+            if (insertionError) return;
         }
-        if (!VERBOSE) {
-            System.out.println();
-        }
+        if (!VERBOSE) System.out.println();
 
         if (insertionError) {
-            double decimalPercent = ((double) PHASE_2_TEST_COUNT - (double) errorCount)
-                    / (double) PHASE_2_TEST_COUNT;
+            double decimalPercent = ((double) PHASE_2_TEST_COUNT - (double) errorCount)  / (double) PHASE_2_TEST_COUNT;
             int integerPercent = (int) (decimalPercent * 100.0d);
-            System.out.println("    Insertion Error: Phase 2 Score = "
-                    + integerPercent + "%");
-        } else {
-            System.out.println("    No Insertion Errors: Phase 2 Score = 100%");
+            System.out.println("    Deletion Error: Phase 3 Score = " + integerPercent + "%");
         }
+        else System.out.println("    No Deletion Errors: Phase 3 Score = 100%");
     }
 
-    private static void printErrorMessage(int size, Node startNode,
-            SimplifiedNodeDomain simplifiedNodeDomain,
-            ExpectedResult expectedResult) {
+    private static void printErrorMessage(int size, Node startNode, SimplifiedNodeDomain simplifiedNodeDomain, ExpectedResult expectedResult) {
         errorCount++;
 
-        System.out
-                .println("-------------------------------------------------------------");
-        System.out.println("INSERTION ERROR when HyPeerWebSize = " + size
-                + ", Start Location: " + startNode);
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("INSERTION ERROR when HyPeerWebSize = " + size + ", Start Location: " + startNode);
         System.out.println("Node Information:");
         System.out.println(simplifiedNodeDomain);
         System.out.println();
@@ -1170,15 +1037,11 @@ public class Exp {
         System.out.println(expectedResult);
     }
 
-    private static void printErrorMessage(int size,
-            SimplifiedNodeDomain simplifiedNodeDomain,
-            ExpectedResult expectedResult) {
+    private static void printErrorMessage(int size, SimplifiedNodeDomain simplifiedNodeDomain, ExpectedResult expectedResult) {
         errorCount++;
 
-        System.out
-                .println("-------------------------------------------------------------");
-        System.out
-                .println("DELETEION ERROR when HyPeerWebSize = " + size + ".");
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("Deletion ERROR when HyPeerWebSize = " + size + ".");
         System.out.println("Node Information:");
         System.out.println(simplifiedNodeDomain);
         System.out.println();
