@@ -572,7 +572,8 @@ public class Connections
         // Remove me as an inverse surrogate neighbor
         deletionPoint.connections.iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
-        if (deletionPoint.connections.getFold().connections.getSurrogateFold() != Node.NULL_NODE || (deletionPoint.state == Node.State.CAP && deletionPoint.webid.getValue() != 1))
+        if(deletionPoint.getFoldId() == parent.getWebId()) parent.connections.setFold(parent);
+        else if (parent.connections.getSurrogateFold() == Node.NULL_NODE)
         {
             deletionPoint.connections.getFold().setSurrogateFold(parent);
             deletionPoint.connections.getFold().setFold(Node.NULL_NODE);
@@ -582,8 +583,8 @@ public class Connections
         {
             deletionPoint.connections.getFold().setFold(parent);
             deletionPoint.connections.getFold().setInverseSurrogateFold(Node.NULL_NODE);
-            if(parent.getWebId() != deletionPoint.getFoldId()) parent.setFold(parent.connections.getSurrogateFold());
-            parent.setSurrogateFold(Node.NULL_NODE);// Zero case ^^^
+            parent.setFold(parent.connections.getSurrogateFold());
+            parent.setSurrogateFold(Node.NULL_NODE);
         }
         
         // if deletion node is Cap Node set parent node to be the Cap Node
@@ -599,10 +600,6 @@ public class Connections
     //called on a node to be deleted
     public static void replace(final Node selfNode, final Node deletionPoint)
     {
-        System.out.println(System.getProperty("line.separator") + "Deleting: "+ selfNode.webid.getValue());
-        System.out.println("Deletion point: " + deletionPoint.webid.getValue());
-        if(selfNode.getWebId() == deletionPoint.getWebId()) return;// Don't want to replace self.
-        
         // Give deletion Point all the selfNode's connections
         deletionPoint.connections = selfNode.connections;
         deletionPoint.setWebId(new WebId(selfNode.getWebId()));
@@ -611,13 +608,6 @@ public class Connections
         selfNode.connections.iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
         selfNode.connections.iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
         selfNode.connections.iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
-        
-//        if(selfNode.connections.fold != Node.NULL_NODE) selfNode.connections.fold.setFold(deletionPoint);
-//        if(selfNode.connections.surrogateFold != Node.NULL_NODE) selfNode.connections.surrogateFold.setInverseSurrogateFold(deletionPoint);
-//        if(selfNode.connections.inverseSurrogateFold != Node.NULL_NODE)
-//        {
-//            selfNode.connections.inverseSurrogateFold.setSurrogateFold(deletionPoint);
-//        }
     }
 
     /**

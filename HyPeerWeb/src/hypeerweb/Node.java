@@ -417,8 +417,7 @@ public class Node implements Comparable<Node>
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        Connections.replace(this, deletionPoint);
-        
+        if(getWebId() != deletionPoint.getWebId()) Connections.replace(this, deletionPoint);
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
     
