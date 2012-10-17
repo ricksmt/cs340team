@@ -572,7 +572,8 @@ public class Connections
         // Remove me as an inverse surrogate neighbor
         deletionPoint.connections.iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
-        if (deletionPoint.connections.getFold().connections.getSurrogateFold() != Node.NULL_NODE || (deletionPoint.state == Node.State.CAP && deletionPoint.webid.getValue() != 1))
+        if(deletionPoint.getFoldId() == parent.getWebId()) parent.connections.setFold(parent);
+        else if (parent.connections.getSurrogateFold() == Node.NULL_NODE)
         {
             deletionPoint.connections.getFold().setSurrogateFold(parent);
             deletionPoint.connections.getFold().setFold(Node.NULL_NODE);
@@ -582,8 +583,8 @@ public class Connections
         {
             deletionPoint.connections.getFold().setFold(parent);
             deletionPoint.connections.getFold().setInverseSurrogateFold(Node.NULL_NODE);
-            if(parent.getWebId() != deletionPoint.getFoldId()) parent.setFold(parent.connections.getSurrogateFold());
-            parent.setSurrogateFold(Node.NULL_NODE);// Zero case ^^^
+            parent.setFold(parent.connections.getSurrogateFold());
+            parent.setSurrogateFold(Node.NULL_NODE);
         }
         
         // if deletion node is Cap Node set parent node to be the Cap Node
@@ -601,7 +602,6 @@ public class Connections
     {
         System.out.println(System.getProperty("line.separator") + "Deleting: "+ selfNode.webid.getValue());
         System.out.println("Deletion point: " + deletionPoint.webid.getValue());
-        if(selfNode.getWebId() == deletionPoint.getWebId()) return;// Don't want to replace self.
         
         // Give deletion Point all the selfNode's connections
         deletionPoint.connections = selfNode.connections;
