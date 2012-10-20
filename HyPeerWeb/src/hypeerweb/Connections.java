@@ -409,7 +409,7 @@ public class Connections
      */
     public Node getHighestNeighbor()
     {
-        return neighbors.last();
+        return neighbors.size() > 0 ? neighbors.last() : Node.NULL_NODE;
     }
     
     /**
@@ -421,7 +421,7 @@ public class Connections
      */
     public Node getLowestNeighbor()
     {
-        return neighbors.first();
+        return neighbors.size() > 0 ? neighbors.first() : Node.NULL_NODE;
     }
 
     /**

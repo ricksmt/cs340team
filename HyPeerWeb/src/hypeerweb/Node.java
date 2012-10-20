@@ -445,6 +445,7 @@ public class Node implements Comparable<Node>
         {
             startNode = currentNode;
             currentNode = currentNode.getHighestNeighbor();
+            if(currentNode == Node.NULL_NODE) currentNode = startNode;
         }
         while(currentNode.getWebId() > startNode.getWebId()); 
         return startNode;

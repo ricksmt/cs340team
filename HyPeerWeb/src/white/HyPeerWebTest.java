@@ -6,16 +6,33 @@ import hypeerweb.HyPeerWebDatabase;
 import hypeerweb.Node;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HyPeerWebTest extends TestCase{
     
     HyPeerWeb hypeerweb;
 
+    @BeforeClass
+    public void setUpBeforeClass() {
+        try{
+            hypeerweb = HyPeerWeb.getSingleton();
+            hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
+            hypeerweb.clear();
+            hypeerweb.saveToDatabase();
+        }
+        catch(Exception e){
+            hypeerweb = null;
+        }
+    }
+
     @Before
     public void setUp() {
         try{
             hypeerweb = HyPeerWeb.getSingleton();
+            hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
+            hypeerweb.clear();
+            hypeerweb.saveToDatabase();
         }
         catch(Exception e){
             hypeerweb = null;
@@ -50,10 +67,17 @@ public class HyPeerWebTest extends TestCase{
 
     @Test
     public void testReloadString() {
+        hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
+        hypeerweb.clear();
         hypeerweb.saveToDatabase();
-        hypeerweb.addNode(new Node(0));
+        assertTrue(hypeerweb.size() == 0);
         hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
         assertTrue(hypeerweb.size() == 0);
+        hypeerweb.addNode(new Node(0));
+        hypeerweb.saveToDatabase();
+        hypeerweb.clear();
+        hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
+        assertTrue(hypeerweb.size() == 1);
     }
 
     @Test
@@ -69,18 +93,27 @@ public class HyPeerWebTest extends TestCase{
 
     @Test
     public void testReload() {
-        hypeerweb.saveToDatabase();
+        hypeerweb.reload();
+        System.out.println("Size = " + hypeerweb.size());
+        assertTrue(hypeerweb.size() == 0);
         hypeerweb.addNode(new Node(0));
         hypeerweb.reload();
         assertTrue(hypeerweb.size() == 0);
+        hypeerweb.addNode(new Node(0));
+        hypeerweb.saveToDatabase();
+        hypeerweb.reload();
+        assertTrue(hypeerweb.size() == 1);
     }
 
     @Test
     public void testSaveToDatabase() {
+        hypeerweb.clear();
         hypeerweb.saveToDatabase();
-        hypeerweb.addNode(new Node(0));
-        hypeerweb.reload();
         assertTrue(hypeerweb.size() == 0);
+        hypeerweb.addNode(new Node(0));
+        hypeerweb.saveToDatabase();
+        hypeerweb.reload();
+        assertTrue(hypeerweb.size() == 1);
     }
 
     @Test
