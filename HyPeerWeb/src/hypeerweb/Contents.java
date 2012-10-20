@@ -3,6 +3,11 @@ package hypeerweb;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * An arbitrary collection of named objects.
+ * 
+ * @author Matthew
+ */
 public final class Contents
 {
     
