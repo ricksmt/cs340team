@@ -401,11 +401,11 @@ public class Connections
     }
 
     /**
-     * Returns the largest neighbor 
+     * Returns the largest neighbor or NULL NODE if no such neighbor exists.
      * 
      * @pre neighbors set exists
      * @post largest neighbor is found and returned
-     * @return largest neighbor
+     * @return largest neighbor or NULL NODE if no such neighbor exists.
      */
     public Node getHighestNeighbor()
     {
@@ -413,11 +413,11 @@ public class Connections
     }
     
     /**
-     * Returns the smallest neighbor 
+     * Returns the smallest neighbor or NULL NODE if no such neighbor exists.
      * 
      * @pre neighbors set exists
      * @post smallest neighbor is found and returned
-     * @return smallest neighbor
+     * @return smallest neighbor or NULL NODE if no such neighbor exists.
      */
     public Node getLowestNeighbor()
     {

@@ -120,6 +120,7 @@ public class Node implements Comparable<Node>
 	/**
 	 * @obvious
 	 * @return the neighboring node with the largest id
+	 *     or this node if no such neighbor exists.
 	 */
 	public Node getHighestNeighbor()
 	{
@@ -129,6 +130,7 @@ public class Node implements Comparable<Node>
 	/**
      * @obvious
      * @return the neighboring node with the smallest id
+     *     or this node if no such neighbor exists.
      */
     public Node getLowestNeighbor()
     {
