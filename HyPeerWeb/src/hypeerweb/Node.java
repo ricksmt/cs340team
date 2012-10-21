@@ -96,6 +96,11 @@ public class Node implements Comparable<Node>
     protected WebId webid;
     
     /**
+     * This node's contents.
+     */
+    protected Contents contents;
+    
+    /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
     protected Connections connections;
@@ -114,12 +119,26 @@ public class Node implements Comparable<Node>
 		webid = new WebId(i);
 		connections = new Connections();
 		connections.setFold(this);
+		contents = new Contents();
 		state = State.CAP;
+	}
+	
+	/**
+	 * Gets this node's contents
+	 * 
+	 * @pre None
+	 * @post See return
+	 * @return This node's contents.
+	 */
+	public Contents getContents()
+	{
+	    return contents;
 	}
 	
 	/**
 	 * @obvious
 	 * @return the neighboring node with the largest id
+	 *     or this node if no such neighbor exists.
 	 */
 	public Node getHighestNeighbor()
 	{
@@ -129,6 +148,7 @@ public class Node implements Comparable<Node>
 	/**
      * @obvious
      * @return the neighboring node with the smallest id
+     *     or this node if no such neighbor exists.
      */
     public Node getLowestNeighbor()
     {
@@ -445,6 +465,7 @@ public class Node implements Comparable<Node>
         {
             startNode = currentNode;
             currentNode = currentNode.getHighestNeighbor();
+            if(currentNode == Node.NULL_NODE) currentNode = startNode;
         }
         while(currentNode.getWebId() > startNode.getWebId()); 
         return startNode;
@@ -498,7 +519,19 @@ public class Node implements Comparable<Node>
     {
         return connections.getInverseSurrogateFoldId();
     }
-
+    
+    /**
+     * The accept method for the visitor Pattern.
+     * 
+     * @param visitor 
+     * @param parameters 
+     * @pre visitor ≠ null AND parameters ≠ null AND visitor.visit(this, parameters).pre-condition
+     * @post visitor.visit(this, parameters).post-condition
+     */
+    public void accept(final Visitor visitor, final Parameters parameters)
+    {
+        // TODO Implement this.
+    }
 
     @Override
     public int compareTo(final Node o)

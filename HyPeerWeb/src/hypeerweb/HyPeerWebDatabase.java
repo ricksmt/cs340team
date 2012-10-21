@@ -213,7 +213,18 @@ public class HyPeerWebDatabase
             dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
             dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
             dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
-            dropTables.executeBatch();
+            while(true)
+            {
+                try
+                { 
+                    dropTables.executeBatch();
+                    break;
+                }
+                catch(final BatchUpdateException e)
+                {
+                    continue;
+                }
+            }
             dropTables.close();
         }
         catch(final SQLException e)
@@ -437,7 +448,18 @@ public class HyPeerWebDatabase
             saveNode.addBatch();
             
             connection.setAutoCommit(false);
-            saveNode.executeBatch();
+            while(true)
+            {
+                try
+                { 
+                    saveNode.executeBatch();
+                    break;
+                }
+                catch(final BatchUpdateException e)
+                {
+                    continue;
+                }
+            }
             connection.setAutoCommit(true);
             saveNode.close();
         }
@@ -473,7 +495,18 @@ public class HyPeerWebDatabase
                 saveNeighbors.addBatch();
             }
             connection.setAutoCommit(false);
-            saveNeighbors.executeBatch();
+            while(true)
+            {
+                try
+                { 
+                    saveNeighbors.executeBatch();
+                    break;
+                }
+                catch(final BatchUpdateException e)
+                {
+                    continue;
+                }
+            }
             connection.setAutoCommit(true);
             saveNeighbors.close();
         }
@@ -510,7 +543,18 @@ public class HyPeerWebDatabase
                 saveSurNeighbors.addBatch();
             }
             connection.setAutoCommit(false);
-            saveSurNeighbors.executeBatch();
+            while(true)
+            {
+                try
+                { 
+                    saveSurNeighbors.executeBatch();
+                    break;
+                }
+                catch(final BatchUpdateException e)
+                {
+                    continue;
+                }
+            }
             connection.setAutoCommit(true);
             saveSurNeighbors.close(); 
         }
