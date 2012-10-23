@@ -32,6 +32,8 @@ public class HyPeerWebDatabase
      */
     public static String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
     
+    
+    
     /**
      * the single HyPeerWebDatabase
      */
@@ -209,22 +211,11 @@ public class HyPeerWebDatabase
     {
         try
         {
-            final Statement dropTables = connection.createStatement();
-            dropTables.addBatch("DROP TABLE IF EXISTS Nodes");
-            dropTables.addBatch("DROP TABLE IF EXISTS SurNeighbors");
-            dropTables.addBatch("DROP TABLE IF EXISTS Neighbors");
-            while(true)
-            {
-                try
-                { 
-                    dropTables.executeBatch();
-                    break;
-                }
-                catch(final BatchUpdateException e)
-                {
-                    continue;
-                }
-            }
+            Statement dropTables = connection.createStatement();
+            dropTables.executeUpdate("DROP TABLE IF EXISTS Nodes");
+            dropTables.executeUpdate("DROP TABLE IF EXISTS SurNeighbors");
+            dropTables.executeUpdate("DROP TABLE IF EXISTS Neighbors");
+            
             dropTables.close();
         }
         catch(final SQLException e)
@@ -439,6 +430,7 @@ public class HyPeerWebDatabase
         try
         {
             final PreparedStatement saveNode = connection.prepareStatement("INSERT INTO Nodes VALUES (?, ?, ?, ?, ?)");
+           
             
             saveNode.setInt(1, node.getWebId()); //change when node class is ready
             saveNode.setInt(2, node.getHeight());

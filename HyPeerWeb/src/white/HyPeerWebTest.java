@@ -16,8 +16,9 @@ public class HyPeerWebTest extends TestCase{
     @BeforeClass
     public void setUpBeforeClass() {
         try{
+            HyPeerWebDatabase.initHyPeerWebDatabase();
+            HyPeerWebDatabase.getSingleton().clear();
             hypeerweb = HyPeerWeb.getSingleton();
-            hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
             hypeerweb.clear();
             hypeerweb.saveToDatabase();
         }
@@ -29,8 +30,9 @@ public class HyPeerWebTest extends TestCase{
     @Before
     public void setUp() {
         try{
+            HyPeerWebDatabase.initHyPeerWebDatabase();
+            HyPeerWebDatabase.getSingleton().clear();
             hypeerweb = HyPeerWeb.getSingleton();
-            hypeerweb.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
             hypeerweb.clear();
             hypeerweb.saveToDatabase();
         }
@@ -51,6 +53,8 @@ public class HyPeerWebTest extends TestCase{
 
     @Test
     public void testClear() {
+       
+        
         hypeerweb.clear();
         assertTrue(hypeerweb.size() == 0);
         hypeerweb.addNode(new Node(0));
@@ -107,6 +111,8 @@ public class HyPeerWebTest extends TestCase{
 
     @Test
     public void testSaveToDatabase() {
+        
+        
         hypeerweb.clear();
         hypeerweb.saveToDatabase();
         assertTrue(hypeerweb.size() == 0);
