@@ -402,14 +402,12 @@ public class Node implements Comparable<Node>
         // Parent Notify
         parent.connections.parentNotify(parent);
     }
-    
     /**
-     * findInsertionPoint
-     * @param startNode 
-     * @return The node which is the insertion point
+     * findCapNode
+     * @param startNode
+     * @return
      */
-    private Node findInsertionPoint(Node startNode)
-    {
+    public Node findCapNode(Node startNode){
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
         while(currentNode != startNode)
@@ -417,6 +415,18 @@ public class Node implements Comparable<Node>
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
         }//The cap node is now found (currentNode).
+        
+        return currentNode;
+    }
+    /**
+     * findInsertionPoint
+     * @param startNode 
+     * @return The node which is the insertion point
+     */
+    private Node findInsertionPoint(Node startNode)
+    {
+        Node currentNode = startNode.findCapNode(startNode);
+       //The cap node is now found (currentNode).
         
         do
         {
@@ -538,5 +548,13 @@ public class Node implements Comparable<Node>
     public int compareTo(final Node o)
     {
         return webid.compareTo(o.webid);
+    }
+    /**
+     * 
+     * @return
+     */
+    public Node getFold() {
+        Node fold = connections.getFold();
+        return fold;
     }
 }
