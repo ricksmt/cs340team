@@ -46,8 +46,9 @@ public abstract class SendVisitor implements Visitor
     @Override
     public void visit(final Node node, final Parameters parameters)
     {
-        // TODO Auto-generated method stub
-        // TODO Do we need to do the javadoc?
+        assert node != null && parameters != null && node != Node.NULL_NODE;
+        if(node.getWebId() == (Integer) parameters.get(TARGET_KEY)) targetOperation(node, parameters);
+        else intermediateOperation(node, parameters);
     }
 
     /**
@@ -74,6 +75,6 @@ public abstract class SendVisitor implements Visitor
      */
     protected void intermediateOperation(final Node node, final Parameters parameters)
     {
-        
+        assert node != null && parameters != null && node != Node.NULL_NODE;
     }
 }

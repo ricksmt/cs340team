@@ -530,7 +530,8 @@ public class Node implements Comparable<Node>
      */
     public void accept(final Visitor visitor, final Parameters parameters)
     {
-        // TODO Implement this.
+        // TODO Implement this. Who accepts? (Broadcast vs Send)
+        visitor.visit(this, parameters);
     }
 
     @Override

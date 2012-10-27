@@ -42,8 +42,7 @@ public abstract class BroadcastVisitor implements Visitor
     @Override
     public void visit(final Node node, final Parameters parameters)
     {
-        // TODO Auto-generated method stub
-        // TODO Do we need to do the javadoc?
+        operation(node, parameters);
     }
 
     /**
