@@ -264,7 +264,7 @@ public class HyPeerWebDatabase
                 final PreparedStatement nodeStat = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
                 nodeStat.setInt(1, id);
                 final ResultSet nodeSet = nodeStat.executeQuery();
-                nodeStat.close();
+                //nodeStat.close();
                 
                 if(nodeSet.next())
                 {
@@ -272,7 +272,7 @@ public class HyPeerWebDatabase
                     if(nodeSet.getInt("InvSurFold")>=0) currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
                     if(nodeSet.getInt("SurFold")>=0) currNode.setSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
                 }
-                
+                nodeStat.close();
                 final HashSet<Integer> neighbors = loadNeighbors(id);
                 for(int neighborId: neighbors) currNode.addNeighbor(nodes.get(neighborId));
                 
