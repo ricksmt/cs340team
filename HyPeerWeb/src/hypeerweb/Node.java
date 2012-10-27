@@ -67,7 +67,7 @@ public class Node implements Comparable<Node>
             @Override
             public Node findCapNode(final Node n)
             {
-                return n.getHighestNeighbor();//Or highest fold?
+                return n.getHighestNeighbor();
             }
             public State getInitialStateofChild()
             {

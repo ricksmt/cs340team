@@ -774,7 +774,7 @@ public class Exp {
             // }
             if (simpleDomain.getSurrogateFold() != 1) {
                 int surrogateFold = simpleDomain.getSurrogateFold();
-                System.err.println("After reloading the original database, node 0 should have node1 as a surroguteFold but, "
+                System.err.println("After reloading the original database, node 0 should have node 1 as a surrogateFold but, "
                                 + (surrogateFold == -1 ? " the surrogateFold is null."
                                         : (" found node "
                                                 + Integer

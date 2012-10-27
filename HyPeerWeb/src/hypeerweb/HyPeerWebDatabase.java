@@ -211,16 +211,24 @@ public class HyPeerWebDatabase
     {
         try
         {
-            Statement dropTables = connection.createStatement();
-            dropTables.executeUpdate("DROP TABLE IF EXISTS Nodes");
-            dropTables.executeUpdate("DROP TABLE IF EXISTS SurNeighbors");
-            dropTables.executeUpdate("DROP TABLE IF EXISTS Neighbors");
-            
-            dropTables.close();
+            final Statement dropTables = connection.createStatement();
+            try
+            {
+                
+                dropTables.executeUpdate("DROP TABLE IF EXISTS Nodes");
+                dropTables.executeUpdate("DROP TABLE IF EXISTS SurNeighbors");
+                dropTables.executeUpdate("DROP TABLE IF EXISTS Neighbors");
+                dropTables.close();
+            }
+            catch(final SQLException e)
+            {
+                System.out.println("There was an error clearing the database.");
+                e.printStackTrace();
+            }
         }
         catch(final SQLException e)
         {
-            System.out.println("There was an error clearing the database.");
+            System.out.println("Could not connect to the database.");
             e.printStackTrace();
         }
     }
@@ -237,10 +245,9 @@ public class HyPeerWebDatabase
         try
         {
             final HashMap<Integer,Node> nodes = new HashMap<Integer,Node>();
-            final Statement stat = connection.createStatement();
             
             //load the nodes
-            final ResultSet rs = stat.executeQuery("select WebId from Nodes;");
+            final ResultSet rs = connection.createStatement().executeQuery("select WebId from Nodes;");
             while (rs.next())
             {
                 final int webId = rs.getInt("WebId");
@@ -257,6 +264,7 @@ public class HyPeerWebDatabase
                 final PreparedStatement nodeStat = connection.prepareStatement("SELECT * FROM Nodes WHERE WebId = ?");
                 nodeStat.setInt(1, id);
                 final ResultSet nodeSet = nodeStat.executeQuery();
+                nodeStat.close();
                 
                 if(nodeSet.next())
                 {

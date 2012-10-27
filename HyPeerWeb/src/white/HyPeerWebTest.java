@@ -13,28 +13,14 @@ public class HyPeerWebTest extends TestCase{
     
     HyPeerWeb hypeerweb;
 
-    @BeforeClass
-    public void setUpBeforeClass() {
-        try{
-            HyPeerWebDatabase.initHyPeerWebDatabase();
-            HyPeerWebDatabase.getSingleton().clear();
-            hypeerweb = HyPeerWeb.getSingleton();
-            hypeerweb.clear();
-            hypeerweb.saveToDatabase();
-        }
-        catch(Exception e){
-            hypeerweb = null;
-        }
-    }
-
     @Before
     public void setUp() {
         try{
             HyPeerWebDatabase.initHyPeerWebDatabase();
             HyPeerWebDatabase.getSingleton().clear();
+            HyPeerWeb.getSingleton().clear();
+            HyPeerWeb.getSingleton().saveToDatabase();
             hypeerweb = HyPeerWeb.getSingleton();
-            hypeerweb.clear();
-            hypeerweb.saveToDatabase();
         }
         catch(Exception e){
             hypeerweb = null;
@@ -98,7 +84,6 @@ public class HyPeerWebTest extends TestCase{
     @Test
     public void testReload() {
         hypeerweb.reload();
-        System.out.println("Size = " + hypeerweb.size());
         assertTrue(hypeerweb.size() == 0);
         hypeerweb.addNode(new Node(0));
         hypeerweb.reload();
