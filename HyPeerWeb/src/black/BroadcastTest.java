@@ -51,16 +51,17 @@ public class BroadcastTest {
         for(int i=0; i<MAX_SIZE; i++){
             broadcastNode = hypeerweb.getNode(i);
             bv = new BroadcastVisitor();
-            String curMessage = "message #"+i;
+            String curKey = "message"+i;
+            String curMessage = "test"+i;
             params = bv.createInitialParameters();
-            params.set("message", curMessage);
+            params.set(curKey, curMessage);
             
             broadcastNode.accept(bv, params);
             
             for(int j=0;j<MAX_SIZE; j++){
                 Contents curContents = hypeerweb.getNode(j).getContents();
-                assertTrue(curContents.containsKey("message"));
-                String message = (String) curContents.get("message");
+                assertTrue(curContents.containsKey(curKey));
+                String message = (String) curContents.get(curKey);
                 assertTrue(message.equals(curMessage));                
             }
             

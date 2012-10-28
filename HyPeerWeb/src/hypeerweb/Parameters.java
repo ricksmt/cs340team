@@ -2,6 +2,7 @@ package hypeerweb;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An arbitrary collection of named objects.
@@ -64,6 +65,10 @@ public class Parameters
     {
         if(key == null) return;
         map.put(key, value);
+    }
+    
+    public Set<String> getKeys(){
+        return map.keySet();
     }
 
 }

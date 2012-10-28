@@ -113,7 +113,20 @@ public class BroadcastVisitor implements Visitor
         else
         {
             Contents contents = node.getContents();
-            contents.set("message", parameters.get("message"));
+            
+            Set<String> keySet = parameters.getKeys();
+            
+            for(String key : keySet){
+                if (contents.containsKey(key))
+                {
+                        System.err.println("Node " + node.getWebId() + " has already been visited ");
+                }
+                contents.set(key, parameters.get(key));
+            }
+
+            
+            
+            
             for(Node nodeToBroadcast: getNeighborsToBroadcast(node)){
                 nodeToBroadcast.accept(this, parameters);
             }
