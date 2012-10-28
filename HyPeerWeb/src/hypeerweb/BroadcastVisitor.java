@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * 
  * @author Matthew
  */
-public abstract class BroadcastVisitor implements Visitor
+public class BroadcastVisitor implements Visitor
 {
     /** The key used to identify a key-value pair in the parameters list. */
     protected static String STARTED_KEY;
