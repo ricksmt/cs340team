@@ -104,5 +104,20 @@ public abstract class BroadcastVisitor implements Visitor
      * @pre node is not null and parameters is not null.
      * @post True
      */
-    protected abstract void operation(Node node, Parameters parameters);
+    private void operation(Node node, Parameters parameters){
+        if (node.getWebId() == 0)
+            startFromZero = false;
+
+        if (startFromZero)
+            broadcastFromZero(node, parameters);
+        else
+        {
+            Contents contents = node.getContents();
+            contents.set("message", parameters.get("message"));
+            for(Node nodeToBroadcast: getNeighborsToBroadcast(node)){
+                nodeToBroadcast.accept(this, parameters);
+            }
+        }
+
+    }
 }
