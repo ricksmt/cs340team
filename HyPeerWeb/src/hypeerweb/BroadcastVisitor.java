@@ -60,6 +60,7 @@ public class BroadcastVisitor implements Visitor
     {
         Node cap = node.findCapNode(node);
         Node zero = cap.getFold();
+        if(zero.getWebId()!=0) zero = zero.getLowestNeighbor();
         
         zero.accept(this, parameters);
     }

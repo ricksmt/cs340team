@@ -16,7 +16,7 @@ import testing.ExpectedResult;
 
 public class BroadcastTest {
 
-    private static final int MAX_SIZE = 32;
+    private static final int MAX_SIZE = 30;
     HyPeerWeb hypeerweb;
     @Before
     public void setUp() throws Exception {
@@ -29,11 +29,16 @@ public class BroadcastTest {
         hypeerweb = HyPeerWeb.getSingleton();
         hypeerweb.clear();       
     }
+    
+   
+    
+    
+    
 
     @Test
-    public void testBroadcast() {
-              
-
+    public void testBroadcast() {        
+        
+        
         //create hyperweb with size=MAX_SIZE
         hypeerweb.clear();
         Node node0 = new Node(0);
@@ -70,6 +75,6 @@ public class BroadcastTest {
         }
         
         
+    
     }
-
 }
