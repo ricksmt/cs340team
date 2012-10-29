@@ -105,47 +105,47 @@ public class Node implements Comparable<Node>
      */
     protected Connections connections;
     
-	public static final Node NULL_NODE = null;
-	
-	/**
-	 * Constructor for a new node.
-	 * It's webId is given by the parameter.
-	 * @param i
-	 * @pre none
-	 * @post This node has the given webId, and is it's own fold.
-	 */
-	public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
-	{
-		webid = new WebId(i);
-		connections = new Connections();
-		connections.setFold(this);
-		contents = new Contents();
-		state = State.CAP;
-	}
-	
-	/**
-	 * Gets this node's contents
-	 * 
-	 * @pre None
-	 * @post See return
-	 * @return This node's contents.
-	 */
-	public Contents getContents()
-	{
-	    return contents;
-	}
-	
-	/**
-	 * @obvious
-	 * @return the neighboring node with the largest id
-	 *     or this node if no such neighbor exists.
-	 */
-	public Node getHighestNeighbor()
-	{
+    public static final Node NULL_NODE = null;
+    
+    /**
+     * Constructor for a new node.
+     * It's webId is given by the parameter.
+     * @param i
+     * @pre none
+     * @post This node has the given webId, and is it's own fold.
+     */
+    public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
+    {
+        webid = new WebId(i);
+        connections = new Connections();
+        connections.setFold(this);
+        contents = new Contents();
+        state = State.CAP;
+    }
+    
+    /**
+     * Gets this node's contents
+     * 
+     * @pre None
+     * @post See return
+     * @return This node's contents.
+     */
+    public Contents getContents()
+    {
+        return contents;
+    }
+    
+    /**
+     * @obvious
+     * @return the neighboring node with the largest id
+     *     or this node if no such neighbor exists.
+     */
+    public Node getHighestNeighbor()
+    {
         return connections.getHighestNeighbor();
     }
-	
-	/**
+    
+    /**
      * @obvious
      * @return the neighboring node with the smallest id
      *     or this node if no such neighbor exists.
@@ -154,11 +154,11 @@ public class Node implements Comparable<Node>
     {
         return connections.getLowestNeighbor();
     }
-	
-	/**
-	 * @obvious
+    
+    /**
+     * @obvious
      * @return the surrogate neighbor node with the largest id
-	 */
+     */
     public Node getHighestSurrogateNeighbor()
     {
         return connections.getHighestSurrogateNeighbor();
@@ -172,31 +172,31 @@ public class Node implements Comparable<Node>
      * @return SimplifiedNodeDomain representing this node
      */
     public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
-	{
-	    final HashSet<Integer> intNeighbors = new HashSet<Integer>();
-	    final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();
-	    final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();
-	    int tempFold = -1;
-	    int tempSurrogateFold = -1;
-	    int tempInverseSurrogateFold = -1;
-	    
-	    
-	    //convert HashSets to integer hash sets using iteration
-	    Iterator<Node> iter = connections.getNeighbors().iterator();
-	    while(iter.hasNext())
-	    {
-	        final Node temp = iter.next();
-	        intNeighbors.add(temp.webid.getValue());
-	    }
-	    
-	    iter = connections.getSurrogateNeighbors().iterator();
-	    while(iter.hasNext())
+    {
+        final HashSet<Integer> intNeighbors = new HashSet<Integer>();
+        final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();
+        final HashSet<Integer> intInverseSurrogateNeighbors = new HashSet<Integer>();
+        int tempFold = -1;
+        int tempSurrogateFold = -1;
+        int tempInverseSurrogateFold = -1;
+        
+        
+        //convert HashSets to integer hash sets using iteration
+        Iterator<Node> iter = connections.getNeighbors().iterator();
+        while(iter.hasNext())
+        {
+            final Node temp = iter.next();
+            intNeighbors.add(temp.webid.getValue());
+        }
+        
+        iter = connections.getSurrogateNeighbors().iterator();
+        while(iter.hasNext())
         {
             final Node temp = iter.next();
             intSurrogateNeighbors.add(temp.webid.getValue());
         }
-	    
-	    iter = connections.getInverseSurrogateNeighbors().iterator();
+        
+        iter = connections.getInverseSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
@@ -210,105 +210,105 @@ public class Node implements Comparable<Node>
         if(fold != NULL_NODE) tempFold = fold.webid.getValue();
         if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
         if(inverseSurrogateFold != NULL_NODE) tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
-	    
-	    final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
-                                                        		        getHeight(),
+        
+        final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
+                                                                        getHeight(),
                                                                         intNeighbors,
                                                                         intInverseSurrogateNeighbors, 
                                                                         intSurrogateNeighbors,
                                                                         tempFold, 
                                                                         tempSurrogateFold,
                                                                         tempInverseSurrogateFold);
-		return simpleNode;
-	}
-	
-	/**
-	 * @obvious
-	 * @param webId 
-	 */
-	public void setWebId(final WebId webId) 
-	{
-		webid = webId;
-	}
-	
-	/**
-	 * @obvious
-	 * @param state 
-	 */
-	public void setState(final State state)
-	{
-	    this.state = state;
-	}
-	
-	/**
-	 * @obvious
-	 * @param node 
-	 */
-	public void setFold(final Node node) 
-	{
-	    // if node WebId is fold of this.WebId
-	    connections.setFold(node);
-	}
-	
-	/**
-	 * @obvious
-	 * @param node 
-	 */
-	public void setSurrogateFold(final Node node) 
-	{
-	    // if node WebId is surrogate fold of this.WebId
-		connections.setSurrogateFold(node);
-	}
-	
-	/**
-	 * @obvious
-	 * @param node 
-	 */
-	public void setInverseSurrogateFold(final Node node) 
-	{
-	    connections.setInverseSurrogateFold(node);
-	}
-	
-	/**
-	 * @obvious
-	 * @param node 
-	 */
-	public void addNeighbor(final Node node) 
-	{
-	    // if WebIds are neighbors - can't add itself as a neighbor
-	    if(node != this)
-	        connections.addNeighbor(node);
-	}
-	
-	/**
-	 * @obvious
-	 * @param node 
-	 */
-	public void removeNeighbor(final Node node) 
-	{
-	    connections.removeNeighbor(node);
-	}
-	
-	/**
-	 * @obvious
-	 * @return int representation of the node's web id
-	 */
-	public int getWebId()
-	{
-	    return webid.getValue();
-	}
-	
-	/**
-	 * @obvious
-	 * @return the height of this node
-	 */
-	public int getHeight()
-	{
-	    return connections.getNeighbors().size() + connections.getSurrogateNeighbors().size();
-	}
-	
-	
-	/**
+        return simpleNode;
+    }
+    
+    /**
+     * @obvious
+     * @param webId 
+     */
+    public void setWebId(final WebId webId) 
+    {
+        webid = webId;
+    }
+    
+    /**
+     * @obvious
+     * @param state 
+     */
+    public void setState(final State state)
+    {
+        this.state = state;
+    }
+    
+    /**
+     * @obvious
+     * @param node 
+     */
+    public void setFold(final Node node) 
+    {
+        // if node WebId is fold of this.WebId
+        connections.setFold(node);
+    }
+    
+    /**
+     * @obvious
+     * @param node 
+     */
+    public void setSurrogateFold(final Node node) 
+    {
+        // if node WebId is surrogate fold of this.WebId
+        connections.setSurrogateFold(node);
+    }
+    
+    /**
+     * @obvious
+     * @param node 
+     */
+    public void setInverseSurrogateFold(final Node node) 
+    {
+        connections.setInverseSurrogateFold(node);
+    }
+    
+    /**
+     * @obvious
+     * @param node 
+     */
+    public void addNeighbor(final Node node) 
+    {
+        // if WebIds are neighbors - can't add itself as a neighbor
+        if(node != this)
+            connections.addNeighbor(node);
+    }
+    
+    /**
+     * @obvious
+     * @param node 
+     */
+    public void removeNeighbor(final Node node) 
+    {
+        connections.removeNeighbor(node);
+    }
+    
+    /**
+     * @obvious
+     * @return int representation of the node's web id
+     */
+    public int getWebId()
+    {
+        return webid.getValue();
+    }
+    
+    /**
+     * @obvious
+     * @return the height of this node
+     */
+    public int getHeight()
+    {
+        return connections.getNeighbors().size() + connections.getSurrogateNeighbors().size();
+    }
+    
+    
+    /**
      * @obvious
      * @param node0 
      */
