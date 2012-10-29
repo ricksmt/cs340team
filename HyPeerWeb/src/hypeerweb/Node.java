@@ -405,7 +405,10 @@ public class Node implements Comparable<Node>
     /**
      * findCapNode
      * @param startNode
-     * @return
+     * @pre All nodes in the HyPeerWeb are of the correct state and have the correct connections.
+     *      startNode is in the HyPeerWeb
+     * @post No change to HyPeerWeb
+     * @return The cap node of the HyPeerWeb
      */
     public Node findCapNode(Node startNode){
         Node currentNode = startNode.state.findCapNode(startNode);
@@ -421,6 +424,9 @@ public class Node implements Comparable<Node>
     /**
      * findInsertionPoint
      * @param startNode 
+     * @pre All nodes in the HyPeerWeb are of the correct state and have the correct connections.
+     *      startNode is in the HyPeerWeb
+     * @post No change to HyPeerWeb.
      * @return The node which is the insertion point
      */
     private Node findInsertionPoint(Node startNode)
@@ -439,6 +445,11 @@ public class Node implements Comparable<Node>
     
     /**
      * Remove this node from the HypeerWeb
+     * 
+     * @pre this is part of a valid HyPeerWeb and the nodes have the correct state.
+     * @post The deletionPoint node will be removed from the end of the HyPeerWeb and given this node's connections.
+     *       The nodes in this node's connections are updated to point to the just moved deletionPoint node.
+     *       The HyPeerWeb still meets all constraints at the end of the removal.
      */
     public void removeFromHyPeerWeb()
     {
@@ -447,13 +458,17 @@ public class Node implements Comparable<Node>
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        if(getWebId() != deletionPoint.getWebId()) Connections.replace(this, deletionPoint);
+        if(getWebId() != deletionPoint.getWebId())
+            Connections.replace(this, deletionPoint);
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
     
     /**
      * Find the deletion point from startNode
      * @param startNode 
+     * @pre All nodes in the HyPeerWeb are of the correct state and have the correct connections.
+     *      startNode is in the HyPeerWeb
+     * @post No change to HyPeerWeb.
      * @return The node which is the deletion point
      */
     private Node findDeletionPoint(Node startNode)

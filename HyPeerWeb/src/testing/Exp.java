@@ -1010,6 +1010,7 @@ public class Exp {
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
                         insertionError = true;
                         printErrorMessage(sizeMax, simplifiedNodeDomain, expectedResult);
+                        int stop=0;
                     }
                 }
             }
