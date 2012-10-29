@@ -81,6 +81,8 @@ public class Node2 extends TestCase
     
     }
     
+    
+    
     public void testInsertSelf()
     {
         node1.insertSelf(node0);
@@ -97,7 +99,88 @@ public class Node2 extends TestCase
     
     public void testFindCapNode()
     {
-       
+        /*Here is the cases needing tested for findCapNode.
+         * For a hypeerweb of various sizes 
+         * (complete[16], incomplete [18], small[0,1,2,3,4,5], big[1000])
+         * -The start point is node 0
+         * -The start point is the cap node
+         * -The start point is inbetween the 
+         * -(for incomplete) The start node is above the cap node (on edge)
+         * 
+         * 
+         */
+        
+        Node node0 = new Node(0);
+        node0.setState(State.CAP);
+        Node node1 = new Node(1);
+        Node node2 = new Node(2);
+        Node node3 = new Node(3);
+        Node node4 = new Node(4);
+        
+        //size 1
+        node0.setFold(node0);
+        assert node0.findCapNode(node0).getWebId() == 0;
+        
+        //size 2
+        node1.setState(State.STANDARD);
+        node0.setState(State.CAP);
+        node0.addNeighbor(node1);
+        node1.addNeighbor(node0);
+        node0.setFold(node1);
+        node1.setFold(node0);
+        
+        assert node0.findCapNode(node0).getWebId() == 0;
+        assert node0.findCapNode(node1).getWebId() == 0;
+        
+        //size 3
+        node2.setState(State.DOWN);
+        node1.setState(State.CAP);
+        node0.setState(State.STANDARD);
+        node0.addNeighbor(node2);
+        node2.addNeighbor(node0);
+        node0.setFold(Node.NULL_NODE);
+        node1.setFold(node2);
+        node0.setSurrogateFold(node1);
+        node1.setInverseSurrogateFold(node0);
+        node2.setFold(node1);
+        
+        assert node0.findCapNode(node0).getWebId() == 1;
+        assert node0.findCapNode(node1).getWebId() == 1;
+        assert node0.findCapNode(node2).getWebId() == 1;
+        
+        //size 4
+        node0.setState(State.CAP);
+        node1.setState(State.STANDARD);
+        node2.setState(State.STANDARD);
+        node3.setState(State.STANDARD);
+        node0.setFold(node3);
+        node0.setSurrogateFold(Node.NULL_NODE);
+        node1.setInverseSurrogateFold(Node.NULL_NODE);
+        node1.addNeighbor(node3);
+        node2.addNeighbor(node3);
+        node2.setFold(node0);
+        
+        assert node0.findCapNode(node0).getWebId() == 0;
+        assert node0.findCapNode(node3).getWebId() == 0;
+        assert node0.findCapNode(node2).getWebId() == 0;
+        
+        //size 5
+        node0.setState(State.STANDARD);
+        node1.setState(State.CAP);
+        node4.setState(State.DOWN);
+        node0.addNeighbor(node4);
+        node0.setFold(Node.NULL_NODE);
+        node0.setSurrogateFold(node3);
+        node3.setInverseSurrogateFold(node0);
+        node3.setFold(node4);
+        node4.addNeighbor(node0);
+        node4.setFold(node3);
+        
+        
+        assert node0.findCapNode(node0).getWebId() == 1;
+        assert node0.findCapNode(node3).getWebId() == 1;
+        assert node0.findCapNode(node2).getWebId() == 1;
+        assert node0.findCapNode(node4).getWebId() == 1;
     }
     
     private Node findInsertionPoint(Node startNode)
