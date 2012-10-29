@@ -91,6 +91,7 @@ public class HyPeerWeb
 	 */
 	public Node getNode(final int i)
 	{
+	    assert i >= 0 && i < size();
 	    final Node temp = nodes.get(i);
 	    if(temp == null) return Node.NULL_NODE;
 	    else return temp;
@@ -167,25 +168,26 @@ public class HyPeerWeb
 	/** 
 	 * Remove a random node from the HypeerWeb
 	 * @pre HypeerWeb has at least 2 nodes
-	 * @post one node is removed from the HypeerWeb
+	 * @post one node is removed from the HypeerWeb and
+	 *     the HypeerWeb is valid
 	 */
 	public void removeFromHyPeerWeb()
 	{
-	    final int id = (new Random()).nextInt(nodes.size());
-	    final Node node = nodes.get(id);
-	    node.removeFromHyPeerWeb();
-	    nodes.remove(node);
+	    removeFromHyPeerWeb((new Random()).nextInt(nodes.size()));
 	}
 	
 	/** 
      * Remove a node from the HypeerWeb
-     * @pre HypeerWeb has at least 2 nodes
+     * @pre HypeerWeb has at least 2 nodes and 
+     *  id is the WebID of one of those nodes
      * @post one node is removed from the HypeerWeb
      * @param id the webId of the node you want to remove
      */
     public void removeFromHyPeerWeb(final int id)
     {
+        assert id >= 0 && id < size();
         final Node node = nodes.get(id);
         node.removeFromHyPeerWeb();
+        nodes.remove(size() - 1);
     }
 }

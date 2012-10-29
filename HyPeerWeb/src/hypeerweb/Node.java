@@ -67,7 +67,7 @@ public class Node implements Comparable<Node>
             @Override
             public Node findCapNode(final Node n)
             {
-                return n.getHighestNeighbor();//Or highest fold?
+                return n.getHighestNeighbor();
             }
             public State getInitialStateofChild()
             {
@@ -96,6 +96,11 @@ public class Node implements Comparable<Node>
     protected WebId webid;
     
     /**
+     * This node's contents.
+     */
+    protected Contents contents;
+    
+    /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
     protected Connections connections;
@@ -114,12 +119,26 @@ public class Node implements Comparable<Node>
 		webid = new WebId(i);
 		connections = new Connections();
 		connections.setFold(this);
+		contents = new Contents();
 		state = State.CAP;
+	}
+	
+	/**
+	 * Gets this node's contents
+	 * 
+	 * @pre None
+	 * @post See return
+	 * @return This node's contents.
+	 */
+	public Contents getContents()
+	{
+	    return contents;
 	}
 	
 	/**
 	 * @obvious
 	 * @return the neighboring node with the largest id
+	 *     or this node if no such neighbor exists.
 	 */
 	public Node getHighestNeighbor()
 	{
@@ -129,6 +148,7 @@ public class Node implements Comparable<Node>
 	/**
      * @obvious
      * @return the neighboring node with the smallest id
+     *     or this node if no such neighbor exists.
      */
     public Node getLowestNeighbor()
     {
@@ -382,14 +402,12 @@ public class Node implements Comparable<Node>
         // Parent Notify
         parent.connections.parentNotify(parent);
     }
-    
     /**
-     * findInsertionPoint
-     * @param startNode 
-     * @return The node which is the insertion point
+     * findCapNode
+     * @param startNode
+     * @return
      */
-    private Node findInsertionPoint(Node startNode)
-    {
+    public Node findCapNode(Node startNode){
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
         while(currentNode != startNode)
@@ -397,6 +415,18 @@ public class Node implements Comparable<Node>
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
         }//The cap node is now found (currentNode).
+        
+        return currentNode;
+    }
+    /**
+     * findInsertionPoint
+     * @param startNode 
+     * @return The node which is the insertion point
+     */
+    private Node findInsertionPoint(Node startNode)
+    {
+        Node currentNode = startNode.findCapNode(startNode);
+       //The cap node is now found (currentNode).
         
         do
         {
@@ -445,6 +475,7 @@ public class Node implements Comparable<Node>
         {
             startNode = currentNode;
             currentNode = currentNode.getHighestNeighbor();
+            if(currentNode == Node.NULL_NODE) currentNode = startNode;
         }
         while(currentNode.getWebId() > startNode.getWebId()); 
         return startNode;
@@ -498,11 +529,32 @@ public class Node implements Comparable<Node>
     {
         return connections.getInverseSurrogateFoldId();
     }
-
+    
+    /**
+     * The accept method for the visitor Pattern.
+     * 
+     * @param visitor 
+     * @param parameters 
+     * @pre visitor ≠ null AND parameters ≠ null AND visitor.visit(this, parameters).pre-condition
+     * @post visitor.visit(this, parameters).post-condition
+     */
+    public void accept(final Visitor visitor, final Parameters parameters)
+    {
+        // TODO Implement this. Who accepts? (Broadcast vs Send)
+        visitor.visit(this, parameters);
+    }
 
     @Override
     public int compareTo(final Node o)
     {
         return webid.compareTo(o.webid);
+    }
+    /**
+     * 
+     * @return
+     */
+    public Node getFold() {
+        Node fold = connections.getFold();
+        return fold;
     }
 }
