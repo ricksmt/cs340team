@@ -29,11 +29,16 @@ public class BroadcastTest {
         hypeerweb = HyPeerWeb.getSingleton();
         hypeerweb.clear();       
     }
+    
+   
+    
+    
+    
 
     @Test
-    public void testBroadcast() {
-              
-
+    public void testBroadcast() {        
+        
+        
         //create hyperweb with size=MAX_SIZE
         hypeerweb.clear();
         Node node0 = new Node(0);
@@ -70,6 +75,6 @@ public class BroadcastTest {
         }
         
         
+    
     }
-
 }
