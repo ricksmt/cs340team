@@ -10,7 +10,7 @@ package hypeerweb;
  *
  * @author Matthew
  */
-public abstract class SendVisitor implements Visitor
+public class SendVisitor implements Visitor
 {
     /** The key used in a key-value pair of the parameters to identify the target webId. */
     protected static String TARGET_KEY;
@@ -60,7 +60,9 @@ public abstract class SendVisitor implements Visitor
      * @pre node is not null and parameters is not null.
      * @post True
      */
-    protected abstract void targetOperation(Node node, Parameters parameters);
+    protected void targetOperation(Node node, Parameters parameters){
+        
+    }
     
     /**
      * The intermediate operation to be performed on a
