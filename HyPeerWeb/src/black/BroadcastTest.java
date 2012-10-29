@@ -16,7 +16,7 @@ import testing.ExpectedResult;
 
 public class BroadcastTest {
 
-    private static final int MAX_SIZE = 30;
+    private static final int MAX_SIZE = 32;
     HyPeerWeb hypeerweb;
     @Before
     public void setUp() throws Exception {
