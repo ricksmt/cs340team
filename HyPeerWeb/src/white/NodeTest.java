@@ -1,6 +1,7 @@
 package white;
 
 import hypeerweb.Node;
+import hypeerweb.Node.State;
 import junit.framework.TestCase;
 
 /**
@@ -67,10 +68,7 @@ public class NodeTest extends TestCase
         node0.state=
     }*/
     
-    public void testFindCapNode()
-    {
-        
-    }
+    
     
     public void testRemoveFromHyPeerWeb()
     {
