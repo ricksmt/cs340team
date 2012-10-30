@@ -765,13 +765,6 @@ public class Exp {
                 error = true;
                 errorCount++;
             }
-            // if (simpleDomain.getFold() != -1) {// TODO: Invalid test
-            // int fold = simpleDomain.getFold();
-            // System.err.println("After reloading the original database, node 0 should have a null fold but, node "
-            // + Integer.toString(fold) + " was found instead.");
-            // error = true;
-            // errorCount++;
-            // }
             if (simpleDomain.getSurrogateFold() != 1) {
                 int surrogateFold = simpleDomain.getSurrogateFold();
                 System.err.println("After reloading the original database, node 0 should have node 1 as a surrogateFold but, "
