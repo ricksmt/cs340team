@@ -18,7 +18,7 @@ public abstract class BroadcastVisitor implements Visitor
      * The default constructor
      * 
      * @pre None
-     * @post startFromZero=true
+     * @post True
      */
     public BroadcastVisitor()
     {

@@ -49,9 +49,9 @@ public class BroadcastTest extends TestCase {
         for(int i=0; i<MAX_SIZE; i++){
             broadcastNode = hypeerweb.getNode(i);
             bv = new BroadcastTestVisitor();
-            String curKey = "message"+i;
-            String curMessage = "test"+i;
-            params = BroadcastVisitor.createInitialParameters();
+            String curKey = "message" + i;
+            String curMessage = "test" + i;
+            params = BroadcastTestVisitor.createInitialParameters();
             params.set(curKey, curMessage);
             
             broadcastNode.accept(bv, params);

@@ -15,6 +15,7 @@ public class SendTest extends TestCase {
 
     private static final int MAX_SIZE = 32;
     HyPeerWeb hypeerweb;
+    
     @Before
     public void setUp() throws Exception {
         hypeerweb = HyPeerWeb.getSingleton();
@@ -25,10 +26,7 @@ public class SendTest extends TestCase {
     public void tearDown() throws Exception {
         hypeerweb = HyPeerWeb.getSingleton();
         hypeerweb.clear();       
-    }   
-    
-    
-    
+    }
 
     @Test
     public void testBroadcast() {        
@@ -50,13 +48,13 @@ public class SendTest extends TestCase {
         Parameters params;
         String key = "message";
         
-        for(int i=0; i<MAX_SIZE; i++){
-            
+        for(int i = 0; i < MAX_SIZE; i++)
+        {
             
             //send to node zero
             sendNode = hypeerweb.getNode(i);
-            sv = new SendVisitor();
-            String curMessage = "from node "+i + " to node 0";
+            sv = new SendTestVisitor();
+            String curMessage = "from node " + i + " to node 0";
             params = SendVisitor.createInitialParameters(0);
             params.set(key, curMessage);            
             sendNode.accept(sv, params);
@@ -66,42 +64,42 @@ public class SendTest extends TestCase {
             assertTrue(message.equals(curMessage));    
             
             //send to node(current+1)
-            if(i+1<MAX_SIZE){
+            if(i + 1 < MAX_SIZE){
                 sendNode = hypeerweb.getNode(i);
-                sv = new SendVisitor();
-                curMessage = "from node "+i + " to node "+ (i+1);
-                params = SendVisitor.createInitialParameters(i+1);
+                sv = new SendTestVisitor();
+                curMessage = "from node " + i + " to node " + (i + 1);
+                params = SendVisitor.createInitialParameters(i + 1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
-                curContents = hypeerweb.getNode(i+1).getContents();
+                curContents = hypeerweb.getNode(i + 1).getContents();
                 assertTrue(curContents.containsKey(key));
                 message = (String) curContents.get(key);
                 assertTrue(message.equals(curMessage));    
             }
             
           //send to node(current-1)
-            if(i>0){
+            if(i > 0){
                 sendNode = hypeerweb.getNode(i);
-                sv = new SendVisitor();
-                curMessage = "from node "+i + " to node "+ (i-1);
-                params = SendVisitor.createInitialParameters(i-1);
+                sv = new SendTestVisitor();
+                curMessage = "from node "+i + " to node " + (i - 1);
+                params = SendVisitor.createInitialParameters(i - 1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
-                curContents = hypeerweb.getNode(i-1).getContents();
+                curContents = hypeerweb.getNode(i - 1).getContents();
                 assertTrue(curContents.containsKey(key));
                 message = (String) curContents.get(key);
                 assertTrue(message.equals(curMessage));    
             }
             
           //send to the middle
-            if(i != MAX_SIZE/2){
+            if(i != MAX_SIZE / 2){
                 sendNode = hypeerweb.getNode(i);
-                sv = new SendVisitor();
-                curMessage = "from node "+i + " to node "+ (MAX_SIZE/2);
-                params = SendVisitor.createInitialParameters(MAX_SIZE/2);
+                sv = new SendTestVisitor();
+                curMessage = "from node " + i + " to node " + (MAX_SIZE / 2);
+                params = SendVisitor.createInitialParameters(MAX_SIZE / 2);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
-                curContents = hypeerweb.getNode(MAX_SIZE/2).getContents();
+                curContents = hypeerweb.getNode(MAX_SIZE / 2).getContents();
                 assertTrue(curContents.containsKey(key));
                 message = (String) curContents.get(key);
                 assertTrue(message.equals(curMessage));    
@@ -110,12 +108,12 @@ public class SendTest extends TestCase {
           //send before the middle
             if(i != MAX_SIZE/2-1){
                 sendNode = hypeerweb.getNode(i);
-                sv = new SendVisitor();
-                curMessage = "from node "+i + " to node "+ (MAX_SIZE/2-1);
-                params = SendVisitor.createInitialParameters(MAX_SIZE/2-1);
+                sv = new SendTestVisitor();
+                curMessage = "from node " + i + " to node " + (MAX_SIZE / 2 - 1);
+                params = SendVisitor.createInitialParameters(MAX_SIZE / 2 - 1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
-                curContents = hypeerweb.getNode(MAX_SIZE/2-1).getContents();
+                curContents = hypeerweb.getNode(MAX_SIZE / 2 - 1).getContents();
                 assertTrue(curContents.containsKey(key));
                 message = (String) curContents.get(key);
                 assertTrue(message.equals(curMessage));    
@@ -124,24 +122,16 @@ public class SendTest extends TestCase {
           //send to the last
             if(i != MAX_SIZE-1){
                 sendNode = hypeerweb.getNode(i);
-                sv = new SendVisitor();
-                curMessage = "from node "+i + " to node "+ (MAX_SIZE-1);
-                params = SendVisitor.createInitialParameters(MAX_SIZE-1);
+                sv = new SendTestVisitor();
+                curMessage = "from node " + i + " to node " + (MAX_SIZE - 1);
+                params = SendVisitor.createInitialParameters(MAX_SIZE - 1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
-                curContents = hypeerweb.getNode(MAX_SIZE-1).getContents();
+                curContents = hypeerweb.getNode(MAX_SIZE - 1).getContents();
                 assertTrue(curContents.containsKey(key));
                 message = (String) curContents.get(key);
                 assertTrue(message.equals(curMessage));    
             }
-            
-                  
-            
-            
         }
-        
-        
-    
     }
-
 }
