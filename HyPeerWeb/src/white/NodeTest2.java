@@ -227,7 +227,6 @@ public class NodeTest2 extends TestCase
      */
     public void accept(final Visitor visitor, final Parameters parameters)
     {
-        // TODO Implement this. Who accepts? (Broadcast vs Send)
         visitor.visit(this, parameters);
     }
 

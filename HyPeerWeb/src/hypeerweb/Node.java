@@ -458,8 +458,7 @@ public class Node implements Comparable<Node>
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        if(getWebId() != deletionPoint.getWebId())
-            Connections.replace(this, deletionPoint);
+        if(getWebId() != deletionPoint.getWebId()) Connections.replace(this, deletionPoint);
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
     
@@ -565,15 +564,21 @@ public class Node implements Comparable<Node>
     {
         return webid.compareTo(o.webid);
     }
+    
     /**
      * 
-     * @return
+     * @return 
      */
-    public Node getFold() {
-        Node fold = connections.getFold();
+    public Node getFold()
+    {
+        final Node fold = connections.getFold();
         return fold;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Connections getConnections()
     {
         return connections;

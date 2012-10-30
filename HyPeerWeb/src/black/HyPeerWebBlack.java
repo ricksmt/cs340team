@@ -5,7 +5,7 @@ import java.util.Random;
 import junit.framework.TestCase;
 
 import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import hypeerweb.HyPeerWeb;
@@ -14,19 +14,28 @@ import hypeerweb.Node;
 public class HyPeerWebBlack extends TestCase{
 
     private static final int MAX_SIZE = 32;
-
-    @Before
-    public void setUp() throws Exception {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        web.clear();
-        web.saveToDatabase();
+    
+    private static final String DATABASE_ONE = "HyPeerWebBlack1.db";
+    private static final String DATABASE_TWO = "HyPeerWebBlack2.db";
+    
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        HyPeerWeb.getSingleton().reload(DATABASE_TWO);
+        HyPeerWeb.getSingleton().clear();
+        HyPeerWeb.getSingleton().saveToDatabase();
+        HyPeerWeb.getSingleton().reload(DATABASE_ONE);
+        HyPeerWeb.getSingleton().clear();
+        HyPeerWeb.getSingleton().saveToDatabase();
     }
 
     @After
     public void tearDown() throws Exception {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        web.clear();
-        web.saveToDatabase();
+        HyPeerWeb.getSingleton().reload(DATABASE_TWO);
+        HyPeerWeb.getSingleton().clear();
+        HyPeerWeb.getSingleton().saveToDatabase();
+        HyPeerWeb.getSingleton().reload(DATABASE_ONE);
+        HyPeerWeb.getSingleton().clear();
+        HyPeerWeb.getSingleton().saveToDatabase();
     }
 
     @Test
@@ -38,11 +47,11 @@ public class HyPeerWebBlack extends TestCase{
         assertTrue(web.size() == 1);
         web.removeFromHyPeerWeb();
         web = HyPeerWeb.getSingleton();
-        assertTrue(web.size() == 1);
+        assertTrue(web.size() == 0);
         web.addNode(new Node(1));
         web.clear();
         web = HyPeerWeb.getSingleton();
-        assertTrue(web.size() == 1);
+        assertTrue(web.size() == 0);
     }
 
     @Test
@@ -112,7 +121,39 @@ public class HyPeerWebBlack extends TestCase{
 
     @Test
     public void testReloadString() {
-        fail("Not yet implemented"); // TODO
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        web.reload(DATABASE_ONE);
+        web.saveToDatabase();
+        web.addNode(new Node(0));
+        web.reload(DATABASE_ONE);
+        assertTrue(web.size() == 0);
+        web.addNode(new Node(0));
+        web.saveToDatabase();
+        web.reload(DATABASE_ONE);
+        for(int i = 1; i < MAX_SIZE; i++){
+            assertTrue(web.size() == i);
+            web.addToHyPeerWeb(new Node(0), web.getNode(0));
+            web.saveToDatabase();
+            web.reload(DATABASE_ONE);
+        }
+        assertTrue(web.size() == MAX_SIZE);
+        web.reload(DATABASE_TWO);
+        web.saveToDatabase();
+        web.addNode(new Node(0));
+        web.reload(DATABASE_TWO);
+        assertTrue(web.size() == 0);
+        web.addNode(new Node(0));
+        web.saveToDatabase();
+        web.reload(DATABASE_TWO);
+        for(int i = 1; i < MAX_SIZE; i++){
+            assertTrue(web.size() == i);
+            web.addToHyPeerWeb(new Node(0), web.getNode(0));
+            web.saveToDatabase();
+            web.reload(DATABASE_TWO);
+        }
+        assertTrue(web.size() == MAX_SIZE);
+        web.reload(DATABASE_ONE);
+        assertTrue(web.size() == MAX_SIZE);
     }
 
     @Test
@@ -133,12 +174,44 @@ public class HyPeerWebBlack extends TestCase{
 
     @Test
     public void testReload() {
-        fail("Not yet implemented"); // TODO
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        web.clear();
+        web.saveToDatabase();
+        web.addNode(new Node(0));
+        web.reload();
+        System.out.println("Reload size: " + web.size());
+        assertTrue(web.size() == 0);
+        web.addNode(new Node(0));
+        web.saveToDatabase();
+        web.reload();
+        for(int i = 1; i < MAX_SIZE; i++){
+            assertTrue(web.size() == i);
+            web.addToHyPeerWeb(new Node(0), web.getNode(0));
+            web.saveToDatabase();
+            web.reload();
+        }
+        assertTrue(web.size() == MAX_SIZE);
     }
 
     @Test
     public void testSaveToDatabase() {
-        fail("Not yet implemented"); // TODO
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        web.clear();
+        web.saveToDatabase();
+        web.addNode(new Node(0));
+        web.reload();
+        System.out.println("Save size: " + web.size());
+        assertTrue(web.size() == 0);
+        web.addNode(new Node(0));
+        web.saveToDatabase();
+        web.reload();
+        for(int i = 1; i < MAX_SIZE; i++){
+            assertTrue(web.size() == i);
+            web.addToHyPeerWeb(new Node(0), web.getNode(0));
+            web.saveToDatabase();
+            web.reload();
+        }
+        assertTrue(web.size() == MAX_SIZE);
     }
 
     @Test
@@ -180,6 +253,7 @@ public class HyPeerWebBlack extends TestCase{
 
     @Test
     public void testRemoveFromHyPeerWeb() {
+        fail("Not working.");
         HyPeerWeb web = HyPeerWeb.getSingleton();
         Random rand = new Random();
         web.addNode(new Node(0));
@@ -197,7 +271,23 @@ public class HyPeerWebBlack extends TestCase{
 
     @Test
     public void testRemoveFromHyPeerWebInt() {
-        fail("Not yet implemented"); // TODO
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        Random rand = new Random();
+        web.addNode(new Node(0));
+        for(int i = 1; i < MAX_SIZE; i++){
+            assertTrue(web.size() == i);
+            web.addToHyPeerWeb(new Node(rand.nextInt()), 
+                    web.getNode(rand.nextInt(web.size())));
+        }
+        assertTrue(web.size() == MAX_SIZE);
+        for(int i = web.size() - 1; web.size() >= 2; i--){
+            for(int j = 0; j < web.size(); j++){
+                web.removeFromHyPeerWeb(j);
+                assertTrue(web.size() == i);
+                web.addToHyPeerWeb(new Node(0), web.getNode(0));
+            }
+            web.removeFromHyPeerWeb(web.size() - 1);
+        }
     }
 
 }

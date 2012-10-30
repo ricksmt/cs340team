@@ -1,7 +1,6 @@
 package white;
 
 import hypeerweb.Node;
-import hypeerweb.Node.State;
 import junit.framework.TestCase;
 
 /**
