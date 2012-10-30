@@ -483,6 +483,7 @@ public class Node implements Comparable<Node>
         
         // Node 0 
         currentNode = currentNode.connections.getFold();
+        if(currentNode.getLowestNeighbor() != Node.NULL_NODE) currentNode = currentNode.getLowestNeighbor();
         
         // Loop till you get to the deletionPoint - currentNode will then be set to its highest
         // neighbor which will have a WebID less than the deletion point's WebID.

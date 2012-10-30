@@ -596,6 +596,7 @@ public class Connections
         
         // if deletion node is Cap Node set parent node to be the Cap Node
         if(deletionPoint.state == Node.State.CAP) parent.setState(Node.State.CAP);
+        else parent.setState(Node.State.DOWN);
     }
     
     /**
