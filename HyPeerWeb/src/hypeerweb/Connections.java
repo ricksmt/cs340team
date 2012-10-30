@@ -111,7 +111,6 @@ public class Connections
         };
         
         /**
-         * 
          * @param actionNode - node that does the action
          * @param node1 - node to be added or removed (removed in replace methods)
          * @param node2 - node that should be added (Only used in replace methods)
@@ -440,8 +439,16 @@ public class Connections
      * Returns the smallest neighbor who doesn't have a child
      * 
      * @pre lists of neighbors exists
-     * @post smallest neighbor without a child is found and returned
-     * @return smallest neighbor without a child
+     * @post 
+     * Option 1) Smallest neighbor without a child is found and returned 
+     * Option 2) If there are only smaller neighbors and there are no neighbors without a child - the lowest neighbor is returned
+     * Option 3) If there are no smaller neighbors without child, and there are neighbors greater - the smallest of the larger neighbors is returned
+     * Option 4) NULL_NODE is returned if no neighbors exist
+     * @return 
+     * Option 1) Smallest neighbor without a child
+     * Option 2) First neighbor 
+     * Option 3) Smallest larger neighbor
+     * Option 4) NULL_NODE 
      */
     public Node getLowestNeighborWithoutChild()
     {
@@ -463,7 +470,7 @@ public class Connections
      * @param parent 
      * @pre method is called by Parent Node
      * @post childConnections = 
-     *      - neighbors = parent's inverse surrogate neighbors
+     *      - neighbors = parent's inverse surrogate neighbors and neighbor
      *      - surrogate neighbors = parent's neighbors that are bigger than it
      *      - fold = parent's fold or inverse surrogate fold
      * @return child's connections
