@@ -572,4 +572,9 @@ public class Node implements Comparable<Node>
         Node fold = connections.getFold();
         return fold;
     }
+    
+    public Connections getConnections()
+    {
+        return connections;
+    }
 }
