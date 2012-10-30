@@ -1,20 +1,20 @@
 package black;
 
-import static org.junit.Assert.*;
 
 import hypeerweb.Connections;
 import hypeerweb.Node;
 import hypeerweb.HyPeerWeb;
 import hypeerweb.SimplifiedNodeDomain;
 import java.util.ArrayList;
-import java.util.Set;
+
+import junit.framework.TestCase;
 
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConnectionsBlackTest {
+public class ConnectionsBlackTest extends TestCase {
 
     Connections testSet;
     ArrayList<Node> nodes;

@@ -1,23 +1,21 @@
 package black;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 import hypeerweb.BroadcastVisitor;
 import hypeerweb.Contents;
 import hypeerweb.HyPeerWeb;
 import hypeerweb.Node;
 import hypeerweb.Parameters;
-import hypeerweb.SimplifiedNodeDomain;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import testing.ExpectedResult;
-
-public class BroadcastTest {
+public class BroadcastTest extends TestCase {
 
     private static final int MAX_SIZE = 32;
     HyPeerWeb hypeerweb;
+    
     @Before
     public void setUp() throws Exception {
         hypeerweb = HyPeerWeb.getSingleton();
@@ -29,11 +27,6 @@ public class BroadcastTest {
         hypeerweb = HyPeerWeb.getSingleton();
         hypeerweb.clear();       
     }
-    
-   
-    
-    
-    
 
     @Test
     public void testBroadcast() {        
@@ -58,7 +51,7 @@ public class BroadcastTest {
             bv = new BroadcastVisitor();
             String curKey = "message"+i;
             String curMessage = "test"+i;
-            params = bv.createInitialParameters();
+            params = BroadcastVisitor.createInitialParameters();
             params.set(curKey, curMessage);
             
             broadcastNode.accept(bv, params);
@@ -69,12 +62,6 @@ public class BroadcastTest {
                 String message = (String) curContents.get(curKey);
                 assertTrue(message.equals(curMessage));                
             }
-            
-            
-            
         }
-        
-        
-    
     }
 }

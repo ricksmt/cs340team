@@ -1,7 +1,6 @@
 package black;
 
-import static org.junit.Assert.*;
-import hypeerweb.BroadcastVisitor;
+import junit.framework.TestCase;
 import hypeerweb.Contents;
 import hypeerweb.HyPeerWeb;
 import hypeerweb.Node;
@@ -12,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SendTest {
+public class SendTest extends TestCase {
 
     private static final int MAX_SIZE = 32;
     HyPeerWeb hypeerweb;
@@ -58,7 +57,7 @@ public class SendTest {
             sendNode = hypeerweb.getNode(i);
             sv = new SendVisitor();
             String curMessage = "from node "+i + " to node 0";
-            params = sv.createInitialParameters(0);
+            params = SendVisitor.createInitialParameters(0);
             params.set(key, curMessage);            
             sendNode.accept(sv, params);
             Contents curContents = hypeerweb.getNode(0).getContents();
@@ -71,7 +70,7 @@ public class SendTest {
                 sendNode = hypeerweb.getNode(i);
                 sv = new SendVisitor();
                 curMessage = "from node "+i + " to node "+ (i+1);
-                params = sv.createInitialParameters(i+1);
+                params = SendVisitor.createInitialParameters(i+1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
                 curContents = hypeerweb.getNode(i+1).getContents();
@@ -85,7 +84,7 @@ public class SendTest {
                 sendNode = hypeerweb.getNode(i);
                 sv = new SendVisitor();
                 curMessage = "from node "+i + " to node "+ (i-1);
-                params = sv.createInitialParameters(i-1);
+                params = SendVisitor.createInitialParameters(i-1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
                 curContents = hypeerweb.getNode(i-1).getContents();
@@ -99,7 +98,7 @@ public class SendTest {
                 sendNode = hypeerweb.getNode(i);
                 sv = new SendVisitor();
                 curMessage = "from node "+i + " to node "+ (MAX_SIZE/2);
-                params = sv.createInitialParameters(MAX_SIZE/2);
+                params = SendVisitor.createInitialParameters(MAX_SIZE/2);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
                 curContents = hypeerweb.getNode(MAX_SIZE/2).getContents();
@@ -113,7 +112,7 @@ public class SendTest {
                 sendNode = hypeerweb.getNode(i);
                 sv = new SendVisitor();
                 curMessage = "from node "+i + " to node "+ (MAX_SIZE/2-1);
-                params = sv.createInitialParameters(MAX_SIZE/2-1);
+                params = SendVisitor.createInitialParameters(MAX_SIZE/2-1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
                 curContents = hypeerweb.getNode(MAX_SIZE/2-1).getContents();
@@ -127,7 +126,7 @@ public class SendTest {
                 sendNode = hypeerweb.getNode(i);
                 sv = new SendVisitor();
                 curMessage = "from node "+i + " to node "+ (MAX_SIZE-1);
-                params = sv.createInitialParameters(MAX_SIZE-1);
+                params = SendVisitor.createInitialParameters(MAX_SIZE-1);
                 params.set(key, curMessage);            
                 sendNode.accept(sv, params);
                 curContents = hypeerweb.getNode(MAX_SIZE-1).getContents();

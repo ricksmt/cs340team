@@ -1,8 +1,8 @@
 package black;
 
-import static org.junit.Assert.*;
-
 import java.util.Random;
+
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import hypeerweb.HyPeerWeb;
 import hypeerweb.Node;
 
-public class HyPeerWebBlack {
+public class HyPeerWebBlack extends TestCase{
 
     private static final int MAX_SIZE = 32;
 
