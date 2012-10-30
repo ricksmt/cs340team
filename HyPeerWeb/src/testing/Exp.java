@@ -1073,7 +1073,7 @@ public class Exp {
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
                 int sizeMax = size;
                 if (sizeMax > 32) sizeMax = 32;
-                for(createHyPeerWebWith(sizeMax--); hypeerweb.size() > 0; sizeMax--){
+                for(createHyPeerWebWith(sizeMax--); hypeerweb.size() > 1; sizeMax--){
                        
                     // Remove random node - too hard to permutate.
                     hypeerweb.removeFromHyPeerWeb();
