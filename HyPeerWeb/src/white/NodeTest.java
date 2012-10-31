@@ -10,112 +10,74 @@ import junit.framework.TestCase;
  */
 
 public class NodeTest extends TestCase
-{
+{   
+    //Most tests are covered in BB. Justification given throughout code.
     
-    public void testAddNeighbor()
+    //addNeighbor, addUpPointer, addDownPointer:  relational condition testing covered in BB
+    
+    public void testRemoveNeighbor()
     {
+        //conditional testing
         Node node0 = new Node(0);
         Node node1 = new Node(1);
+        node0.removeNeighbor(null);
+        assert node0.getNeighborsIds().isEmpty();
+        node0.removeNeighbor(node1);
+        assert node0.getNeighborsIds().isEmpty();
+        
         node0.addNeighbor(node1);
-        node0.addNeighbor(node0);
+        node0.removeNeighbor(null);
         assert node0.getNeighborsIds().size() == 1;
+        node0.removeNeighbor(node1);
+        assert node0.getNeighborsIds().size() == 0;
     }
     
-    public void testAddUpPointer()
-    {
-        Node node0 = new Node(0);
-        Node node1 = new Node(1);
-        node0.addUpPointer(node1);
-        node0.addUpPointer(node0);
-        assert node0.getInvSurNeighborsIds().size() == 1;
-    }
+    //findCapNode, findInsertionPoint: The exhaustive testing in BB covers all needed loop conditions
     
-    public void testAddDownPointer()
-    {
-        Node node0 = new Node(0);
-        Node node1 = new Node(1);
-        node0.addDownPointer(node1);
-        node0.addDownPointer(node0);
-        assert node0.getSurNeighborsIds().size() == 1;
-    }
+    //removeFromHyPeerWeb: The exhaustive testing in BB covers all needed logic conditions
     
-    public void testGetHeight()
+    //findDeletionPoint: The exhaustive testing in BB covers all needed loop and logic conditions
+    
+    public void testGetLowestNeighborWithoutChild()
     {
-        Node node0 = new Node(0);
-        Node node1 = new Node(1);
-        Node node2 = new Node(2);
-        Node node3 = new Node(3);
+        //relational condition testing
         
-        assert node0.getHeight() == 0;
+        //null case
+        Node node0 = new Node(0);
+        assert node0.getLowestNeighborWithoutChild() == node0;
+        
+        //temp less than this (0<1), temp height less than this height (0<1)
+        Node node1 = new Node(1);
+        node1.addNeighbor(node0);
+        assert node1.getLowestNeighborWithoutChild() == node0;
+        
+        //temp greater than this (1>0), temp height less than this height (1<2)
+        Node node8 = new Node(8);
         node0.addNeighbor(node1);
-        assert node0.getHeight() == 1;
+        node0.addNeighbor(node8);
+        assert node0.getLowestNeighborWithoutChild() == node1;
         
-        node2.addUpPointer(node0);
-        assert node2.getHeight() == 0;
-        node2.addDownPointer(node3);
-        assert node2.getHeight() == 1;
+        //temp less than this(0<1), temp height greater than this height (2>1)
+        Node node11 = new Node(11);
+        node0.removeNeighbor(node1);
+        node0.addNeighbor(node11);
+        assert node1.getLowestNeighborWithoutChild() == node0;
         
-        node0.addUpPointer(node1);
-        assert node0.getHeight() == 1;
-        node0.addDownPointer(node3);
-        assert node0.getHeight() == 2;
+        //temp greater than this(1>0), temp height greater than this height (3>1)
+        node1.addNeighbor(node8);
+        node1.addNeighbor(node11);
+        assert node0.getLowestNeighborWithoutChild() == node1;
+        
+        //temp less than this (0<8), temp height equal this height (1=1)
+        Node node0b = new Node(0);
+        Node node8b = new Node(8);
+        node8b.addNeighbor(node0b);
+        node0b.addNeighbor(node8b);
+        assert node8b.getLowestNeighborWithoutChild() == node0b;
+        
+        //temp greater than this (8>0), temp height equal to this height (1<2)
+        assert node0.getLowestNeighborWithoutChild() == node8;
+        
+        //temp equal to this is unreachable
     }
-    
-    /*public void testStateFindCapNode()
-    {
-        Node node0 = new Node(0);
-        node0.state=
-    }*/
-    
-    
-    
-    public void testRemoveFromHyPeerWeb()
-    {
-        
-    }
-    
-   //specifically tests that it is being inserted at the right spot. The connections class is assumed to be working.
-    public void testInsertSelf()
-    {
-        //Test findInsertionPoint
-        
-        Node firstNode = new Node(0);
-        Node newNode = new Node(-1);
-        newNode.insertSelf(firstNode);
-        assert newNode.getWebId() == 1;
-        
-        Node newNode2 = new Node(-1);
-        newNode2.insertSelf(firstNode);
-        assert newNode.getWebId() == 2;
-        
-        Node newNode3 = new Node(-1);
-        newNode3.insertSelf(newNode2);
-        assert newNode3.getWebId() == 3;
-        
-        Node newNode4 = new Node(-1);
-        newNode3.insertSelf(firstNode);
-        assert newNode4.getWebId() == 4;
-        
-        Node newNode5 = new Node(-1);
-        newNode3.insertSelf(newNode4);
-        assert newNode5.getWebId() == 5;
-        
-        Node newNode6 = new Node(-1);
-        newNode3.insertSelf(newNode3);
-        assert newNode6.getWebId() == 6;
-        
-        Node newNode7 = new Node(-1);
-        newNode3.insertSelf(newNode2);
-        assert newNode7.getWebId() == 7;
-        
-        Node newNode8 = new Node(-1);
-        newNode3.insertSelf(newNode6);
-        assert newNode8.getWebId() == 8;
-        
-        Node newNode9 = new Node(-1);
-        newNode9.insertSelf(firstNode);
-        assert newNode9.getWebId() == 9;
-    }
-    
-    
 }
