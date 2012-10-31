@@ -1,18 +1,7 @@
 package black;
 
-import hypeerweb.Connections;
-import hypeerweb.Contents;
 import hypeerweb.Node;
-import hypeerweb.Parameters;
-import hypeerweb.SimplifiedNodeDomain;
-import hypeerweb.Visitor;
-import hypeerweb.WebId;
-import hypeerweb.Node.State;
-import hypeerweb.HyPeerWeb;
-
 import java.util.HashSet;
-import java.util.Iterator;
-
 import org.junit.After;
 import org.junit.Before;
 
@@ -93,15 +82,25 @@ public class Node2 extends TestCase
             Node node = new Node(i);
             node.insertSelf(node0);
         }
-        assert(node0.getHighestNeighbor().getWebId() == 8);
-        assert(node0.getSurrogateFoldId() == 8);
+        assert(node0.getHighestNeighbor().getWebId() == 7);
+        assert(node0.getSurrogateFoldId() == 7);
     } 
     
     public void testFindCapNode()
     {
         
+        for (int i = 2; i < 15; i++)
+        { 
+            Node node = new Node(i);
+            node.insertSelf(node0);
+        }
+        
+        for (int i = 2; i < 15; i++)
+        { 
+            node0.removeFromHyPeerWeb();
+        }
+        assert (node0.getHighestNeighbor().getWebId() == 1);
     }
-    
    
     public void testRemoveFromHyPeerWeb()
     {
