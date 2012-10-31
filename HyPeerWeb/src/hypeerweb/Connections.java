@@ -569,6 +569,7 @@ public class Connections
     
     /**
      * Disconnect Deletion Point from HypeerWeb - Called from the deletionPoint node
+     * Notifies all connections of Deletion Point to remove Deletion Point as one of their connections
      * 
      * @param deletionPoint - node to disconnect
      * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
@@ -605,6 +606,7 @@ public class Connections
     
     /**
      * Replace selfNode with deletionPoint in the HypeerWeb
+     * - deletionPoint node gets all information from selfNode 
      * 
      * @param selfNode - node to be replaced
      * @param deletionPoint - node to be replaced with
@@ -621,6 +623,17 @@ public class Connections
         selfNode.connections.iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
         selfNode.connections.iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
         selfNode.connections.iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
+        
+        // Replace as Fold
+        if(deletionPoint.getFold() != Node.NULL_NODE)
+            deletionPoint.getFold().setFold(deletionPoint);
+        // Replace as Inverse Surrogate Fold
+        if(deletionPoint.connections.getSurrogateFold() != Node.NULL_NODE)
+            deletionPoint.connections.getSurrogateFold().setInverseSurrogateFold(deletionPoint);
+        // Replace as Surrogate Fold of Inverse Surrogate Fold
+        if(deletionPoint.connections.getInverseSurrogateFold() != Node.NULL_NODE)
+            deletionPoint.connections.getInverseSurrogateFold().setSurrogateFold(deletionPoint);
+        
     }
 
     /**
