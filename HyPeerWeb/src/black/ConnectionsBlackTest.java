@@ -345,7 +345,6 @@ public class ConnectionsBlackTest extends TestCase {
         assert testSet.getFold() == nodes.get(0);
         assert testSet.getInverseSurrogateFold() == Node.NULL_NODE;
         assert testSet.getSurrogateFold() == Node.NULL_NODE;
-        
     }
     
     @Test
