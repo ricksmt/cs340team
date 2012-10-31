@@ -88,7 +88,25 @@ public class Node2 extends TestCase
     
     public void testFindCapNode()
     {
+<<<<<<< OURS
         
+=======
+        node1.insertSelf(node0);
+        
+        for (int i = 2; i < 15; i++)
+        { 
+            Node node = new Node(i);
+            node.insertSelf(node0);
+        }
+        
+        assert (node0.findCapNode(node0).getWebId() == 7);
+    }
+    
+    public void testRemoveFromHyPeerWeb()
+    {
+        node1.insertSelf(node0);
+        
+>>>>>>> THEIRS
         for (int i = 2; i < 15; i++)
         { 
             Node node = new Node(i);
@@ -99,11 +117,19 @@ public class Node2 extends TestCase
         { 
             node0.removeFromHyPeerWeb();
         }
+<<<<<<< OURS
         assert (node0.getHighestNeighbor().getWebId() == 1);
     }
    
     public void testRemoveFromHyPeerWeb()
+=======
+        assert (node0.getHighestNeighbor().getWebId() == 1);
+    }
+    
+    public void testCompareTo()
+>>>>>>> THEIRS
     {
+<<<<<<< OURS
         
     }
      
@@ -111,5 +137,8 @@ public class Node2 extends TestCase
     public void testGetLowestNeighborWithoutChild()
     {
         
+=======
+        assert(node0.compareTo(node0) == 0);    
+>>>>>>> THEIRS
     }
 }

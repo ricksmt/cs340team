@@ -1,18 +1,6 @@
 package white;
 
-import hypeerweb.Connections;
-import hypeerweb.Contents;
 import hypeerweb.Node;
-import hypeerweb.Parameters;
-import hypeerweb.SimplifiedNodeDomain;
-import hypeerweb.Visitor;
-import hypeerweb.WebId;
-import hypeerweb.Node.State;
-import hypeerweb.HyPeerWeb;
-
-import java.util.HashSet;
-import java.util.Iterator;
-
 import org.junit.After;
 import org.junit.Before;
 
@@ -38,5 +26,4 @@ public class NodeTest2 extends TestCase
         node0 = new Node(0);
         node1 = new Node(0);
     }
-    
 }
