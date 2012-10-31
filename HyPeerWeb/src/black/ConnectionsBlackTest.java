@@ -366,7 +366,7 @@ public class ConnectionsBlackTest extends TestCase {
     @Test
     public void testparentNotify()
     {
-        // Small 
+        // Small HyPeerWeb
         web.addNode(nodes.get(0));
         for(int i=1; i<3; i++)
         {
@@ -374,18 +374,33 @@ public class ConnectionsBlackTest extends TestCase {
         }
         testSet = nodes.get(1).getConnections();
         assert(!testSet.getInverseSurrogateNeighbors().isEmpty());
+        
         testSet.parentNotify(nodes.get(1));
         assert(testSet.getInverseSurrogateNeighbors().isEmpty());
         
-        // Medium
-        for(int i=3; i<6; i++)
+        // Reset HyPeerWeb
+        web.clear();
+        for(int i=0; i<3; i++)
+        {
+            nodes.set(i, new Node(i));
+        }
+        
+        // Medium HyPeerWeb
+        web.addNode(nodes.get(0));
+        for(int i=1; i<6; i++)
         {
             web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
         }
+        
+        testSet = nodes.get(2).getConnections();
+        assert(!testSet.getInverseSurrogateNeighbors().isEmpty());
+        testSet.parentNotify(nodes.get(2));
+        assert(testSet.getInverseSurrogateNeighbors().isEmpty());
+        
         testSet = nodes.get(3).getConnections();
-        assert testSet.getInverseSurrogateNeighbors().size() == 2;
+        assert(!testSet.getInverseSurrogateNeighbors().isEmpty());
         testSet.parentNotify(nodes.get(3));
-        assert testSet.getInverseSurrogateNeighbors().isEmpty();
+        assert(testSet.getInverseSurrogateNeighbors().isEmpty());
     }
     
     /** 
@@ -405,7 +420,54 @@ public class ConnectionsBlackTest extends TestCase {
     @Test
     public void testchildNotify()
     {
+        web.addNode(nodes.get(0));
+        for(int i=1; i<6; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        nodes.get(6).setConnections(nodes.get(2).getConnections().getChildConnections(nodes.get(2)));
+        testSet = nodes.get(6).getConnections();
+        testSet.childNotify(nodes.get(6), nodes.get(2));
+        // Fold has child as its fold
+        assert(testSet.getFold().getFold() == nodes.get(6));
+        // Neighbors have child as a neighbor
+        for(Node neighbor: testSet.getNeighbors())
+        {
+            assert(neighbor.getNeighborsIds().contains(6));
+        }
+        // Surrogate Neighbors have child as Inverse Surrogate Neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            assert(surrogate.getInvSurNeighborsIds().contains(6));
+        }
         
+        web.clear();
+        for(int i=0; i<6; i++)
+        {
+            nodes.set(i, new Node(i));
+        }
+        
+        web.addNode(nodes.get(0));
+        // Larger HyPeerWeb
+        for(int i=1; i<12; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        nodes.get(12).setConnections(nodes.get(4).getConnections().getChildConnections(nodes.get(4)));
+        testSet = nodes.get(12).getConnections();
+        testSet.childNotify(nodes.get(12), nodes.get(4));
+        // Fold has child as its fold
+        assert(testSet.getFold().getFold() == nodes.get(12));
+        // Neighbors have child as a neighbor
+        for(Node neighbor: testSet.getNeighbors())
+        {
+            assert(neighbor.getNeighborsIds().contains(12));
+        }
+        // Surrogate Neighbors have child as Inverse Surrogate Neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            assert(surrogate.getInvSurNeighborsIds().contains(12));
+        }
     }
     
     /**
@@ -418,7 +480,53 @@ public class ConnectionsBlackTest extends TestCase {
     @Test
     public void testdisconnect()
     {
+        web.addNode(nodes.get(0));
+        for(int i=1; i<7; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        testSet = nodes.get(6).getConnections();
+        Connections.disconnect(nodes.get(6));
+        //Neighbors
+        for(Node neighbor : testSet.getNeighbors())
+        {
+            assert(!neighbor.getNeighborsIds().contains(6));
+        }
+        // Surrogate neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            assert(!surrogate.getInvSurNeighborsIds().contains(6));
+        }
+        // Fold
+        assert(testSet.getFold().getFold() != nodes.get(6));
         
+        
+        web.clear();
+        for(int i=0; i<6; i++)
+        {
+            nodes.set(i, new Node(i));
+        }
+        
+        web.addNode(nodes.get(0));
+        // Larger HyPeerWeb
+        for(int i=1; i<27; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        testSet = nodes.get(26).getConnections();
+        Connections.disconnect(nodes.get(26));
+        //Neighbors
+        for(Node neighbor : testSet.getNeighbors())
+        {
+            assert(!neighbor.getNeighborsIds().contains(26));
+        }
+        // Surrogate neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            assert(!surrogate.getInvSurNeighborsIds().contains(26));
+        }
+        // Fold
+        assert(testSet.getFold().getFold() != nodes.get(26));
     }
     
     /**
@@ -430,17 +538,99 @@ public class ConnectionsBlackTest extends TestCase {
     @Test
     public void testreplace()
     {
+        web.addNode(nodes.get(0));
+        for(int i=1; i<7; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
         
-    }
-    
-    /**
-     *  Find parent node
-     * @param node - child node
-     * @return parent node
-     */
-    @Test
-    public void testgetParent()
-    {
+        Connections.replace(nodes.get(1),nodes.get(7));
+        testSet = nodes.get(7).getConnections();
+        assert(nodes.get(7).getWebId() == 1);
+        //Neighbors
+        for(Node neighbor : testSet.getNeighbors())
+        {
+            Connections temp = neighbor.getConnections();
+            assert(temp.getNeighbors().contains(nodes.get(7)));
+            // .contains method says that nodes.get(1) is in the set when it's not
+            // Alternative checking method proves this
+            for(Node neighbort : temp.getNeighbors())
+                assert(neighbort != nodes.get(1));
+        }
+        // Surrogate neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            Connections temp = surrogate.getConnections();
+            assert(temp.getInverseSurrogateNeighbors().contains(nodes.get(7)));
+            for(Node invsurrogate : temp.getInverseSurrogateNeighbors())
+                assert (invsurrogate != nodes.get(1));
+        }
+        // Fold
+        assert(testSet.getFold().getFold() == nodes.get(7));
         
+        web.clear();
+        for(int i=0; i<7; i++)
+        {
+            nodes.set(i, new Node(i));
+        }
+        
+        web.addNode(nodes.get(0));
+        
+        // Test 2 - replace node that has fold and inverse surrogate fold
+        for(int i=1; i<6; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        Connections.replace(nodes.get(2),nodes.get(6));
+        testSet = nodes.get(6).getConnections();
+        assert(nodes.get(6).getWebId() == 2);
+        //Neighbors
+        for(Node neighbor : testSet.getNeighbors())
+        {
+            Connections temp = neighbor.getConnections();
+            assert(temp.getNeighbors().contains(nodes.get(6)));
+            // .contains method says that nodes.get(1) is in the set when it's not
+            // Alternative checking method proves this
+            for(Node neighbort : temp.getNeighbors())
+                assert(neighbort != nodes.get(2));
+        }
+        // Surrogate neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            Connections temp = surrogate.getConnections();
+            assert(temp.getInverseSurrogateNeighbors().contains(nodes.get(6)));
+            for(Node invsurrogate : temp.getInverseSurrogateNeighbors())
+                assert (invsurrogate != nodes.get(2));
+        }
+        // Fold
+        assert(testSet.getFold().getFold() == nodes.get(6));
+        assert(testSet.getInverseSurrogateFold().getConnections().getSurrogateFold() == nodes.get(6));
+        
+        // Test 3
+        // Replace node with only surrogate fold
+        Connections.replace(nodes.get(1),nodes.get(7));
+        testSet = nodes.get(7).getConnections();
+        assert(nodes.get(7).getWebId() == 1);
+        //Neighbors
+        for(Node neighbor : testSet.getNeighbors())
+        {
+            Connections temp = neighbor.getConnections();
+            assert(temp.getNeighbors().contains(nodes.get(7)));
+            // .contains method says that nodes.get(1) is in the set when it's not
+            // Alternative checking method proves this
+            for(Node neighbort : temp.getNeighbors())
+                assert(neighbort != nodes.get(1));
+        }
+        // Surrogate neighbors
+        for(Node surrogate : testSet.getSurrogateNeighbors())
+        {
+            Connections temp = surrogate.getConnections();
+            assert(temp.getInverseSurrogateNeighbors().contains(nodes.get(7)));
+            for(Node invsurrogate : temp.getInverseSurrogateNeighbors())
+                assert (invsurrogate != nodes.get(1));
+        }
+        // Fold
+        //assert(testSet.getFold().getFold() == nodes.get(7));
+        assert(testSet.getSurrogateFold().getConnections().getInverseSurrogateFold() == nodes.get(7));
     }
 }
