@@ -113,6 +113,4 @@ public class Node2 extends TestCase
     {
         
     }
-    
-
 }
