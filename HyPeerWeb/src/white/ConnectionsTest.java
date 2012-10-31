@@ -58,7 +58,7 @@ public class ConnectionsTest extends TestCase {
     public void testRemoveInverseSurrogateNeighbor() {
         testconnections.addInverseSurrogateNeighbor(a);
         testconnections.removeInverseSurrogateNeighbor(a);
-        assert(testconnections.getInverseSurrogateNeighbors().size() == 10);
+        assert(testconnections.getInverseSurrogateNeighbors().size() == 0);
     }
 
     public void testGetNeighbors() {

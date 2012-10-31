@@ -3,6 +3,7 @@ package white;
 import hypeerweb.Node;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 
 import junit.framework.TestCase;
@@ -25,5 +26,10 @@ public class NodeTest2 extends TestCase
     {
         node0 = new Node(0);
         node1 = new Node(0);
+    }
+    
+    @Test
+    public void testPass(){
+        
     }
 }

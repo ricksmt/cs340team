@@ -45,16 +45,10 @@ public class Connections
             {
                 actionNode.removeNeighbor(node1);
                 
-                // used for adding surrogate neighbors and inverse surrogate neighbors
-                // node2 will be the parent node
-                if(node2 != Node.NULL_NODE && actionNode != node2)
-                {
-                    //if(neighbor != parent) - if it's the parent it will say it's itself 
-                    // and won't let it all the neighbors
-                    actionNode.addDownPointer(node2);
-                    node2.addUpPointer(actionNode);
-                }
-                   
+                //if(neighbor != parent) - if it's the parent it will say it's itself 
+                // and won't let it all the neighbors
+                actionNode.addDownPointer(node2);
+                node2.addUpPointer(actionNode);
             }
         },
         REPLACE_NEIGHBOR
@@ -63,13 +57,6 @@ public class Connections
             {
                 actionNode.removeNeighbor(node1);
                 actionNode.addNeighbor(node2);
-            }
-        },
-        ADD_SURR_NEIGHBOR
-        {
-            public void notify(final Node actionNode, final Node node1, final Node node2)
-            {
-                actionNode.addDownPointer(node1);
             }
         },
         REMOVE_SURR_NEIGHBOR
@@ -454,11 +441,10 @@ public class Connections
     {
         try
         {
-            final int size = neighbors.first().getHeight();
+            final int size = neighbors.size();
             for(Node neighbor: neighbors)
             {
-                if(neighbor.getHeight() != size)
-                    return neighbor;
+                if(neighbor.getHeight() != size) return neighbor;
             }
             return neighbors.first();
         }

@@ -501,8 +501,8 @@ public class NodeBlackTest extends TestCase {
         
         //size 2
         
-        assert node0b.findCapNode(node0b).getWebId() == 0;
-        assert node0b.findCapNode(node1b).getWebId() == 0;
+        assert node0b.findCapNode(node0b).getWebId() == 1;
+        assert node0b.findCapNode(node1b).getWebId() == 1;
         
         //size 3
         
@@ -512,16 +512,16 @@ public class NodeBlackTest extends TestCase {
         
         //size 4
         
-        assert node0d.findCapNode(node0d).getWebId() == 0;
-        assert node0d.findCapNode(node3d).getWebId() == 0;
-        assert node0d.findCapNode(node2d).getWebId() == 0;
+        assert node0d.findCapNode(node0d).getWebId() == 3;
+        assert node0d.findCapNode(node3d).getWebId() == 3;
+        assert node0d.findCapNode(node2d).getWebId() == 3;
         
         //size 5
         
-        assert node0e.findCapNode(node0e).getWebId() == 1;
-        assert node0e.findCapNode(node3e).getWebId() == 1;
-        assert node0e.findCapNode(node2e).getWebId() == 1;
-        assert node0e.findCapNode(node4e).getWebId() == 1;
+        assert node0e.findCapNode(node0e).getWebId() == 3;
+        assert node0e.findCapNode(node3e).getWebId() == 3;
+        assert node0e.findCapNode(node2e).getWebId() == 3;
+        assert node0e.findCapNode(node4e).getWebId() == 3;
     }
     
    
