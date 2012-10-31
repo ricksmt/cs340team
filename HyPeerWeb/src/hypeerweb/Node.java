@@ -410,7 +410,8 @@ public class Node implements Comparable<Node>
      * @post No change to HyPeerWeb
      * @return The cap node of the HyPeerWeb
      */
-    public Node findCapNode(Node startNode){
+    public Node findCapNode(Node startNode)
+    {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
         while(currentNode != startNode)
