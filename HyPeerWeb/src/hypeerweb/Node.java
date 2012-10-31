@@ -90,6 +90,7 @@ public class Node implements Comparable<Node>
      */
     protected State state;
     
+    
     /**
      * This node's webId
      */
