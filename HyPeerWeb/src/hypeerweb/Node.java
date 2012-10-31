@@ -616,4 +616,9 @@ public class Node implements Comparable<Node>
     {
         return connections;
     }
+    
+    public void setConnections(Connections newconnections)
+    {
+        connections = newconnections;
+    }
 }
