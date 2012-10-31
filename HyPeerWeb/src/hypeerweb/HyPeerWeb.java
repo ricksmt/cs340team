@@ -188,6 +188,7 @@ public class HyPeerWeb
         assert id >= 0 && id < size();
         final Node node = nodes.get(id);
         node.removeFromHyPeerWeb();
+        nodes.put(id, nodes.get(size() - 1));
         nodes.remove(size() - 1);
     }
 }
