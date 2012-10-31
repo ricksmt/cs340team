@@ -159,7 +159,7 @@ public class HyPeerWeb
 	    assert newNode != null && newNode != Node.NULL_NODE;
 	    if ( nodes.size() > 0)
 	    {
-	        assert startNode != null;
+	        assert startNode != null && startNode != Node.NULL_NODE;
 	        newNode.insertSelf(startNode);
 	    }
         addNode(newNode);
