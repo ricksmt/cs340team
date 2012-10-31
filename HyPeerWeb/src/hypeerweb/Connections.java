@@ -455,7 +455,11 @@ public class Connections
         try
         {
             final int size = neighbors.first().getHeight();
-            for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
+            for(Node neighbor: neighbors)
+            {
+                if(neighbor.getHeight() != size)
+                    return neighbor;
+            }
             return neighbors.first();
         }
         catch(final NoSuchElementException e)
@@ -639,7 +643,8 @@ public class Connections
      */
     public void iterateNeighbors(final Node node1, final Node node2, final Action action)
     {
-        for (Node neighbor : neighbors) action.notify(neighbor,node1,node2);
+        for (Node neighbor : neighbors)
+            action.notify(neighbor,node1,node2);
     }
     
     /** 

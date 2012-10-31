@@ -49,8 +49,14 @@ public class Node implements Comparable<Node>
             @Override
             public Node findCapNode(final Node n)
             {
-                if(n.connections.getSurrogateNeighbors().size() > 0) return n.getHighestSurrogateNeighbor();
-                else return n.getHighestNeighbor();
+                if(n.connections.getSurrogateNeighbors().size() > 0)
+                {
+                    return n.getHighestSurrogateNeighbor();
+                }
+                else
+                {
+                    return n.getHighestNeighbor();
+                }
             }
             public State getInitialStateofChild()
             {
@@ -208,9 +214,14 @@ public class Node implements Comparable<Node>
         final Node surrogateFold = connections.getSurrogateFold();
         final Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
-        if(fold != NULL_NODE) tempFold = fold.webid.getValue();
-        if(surrogateFold != NULL_NODE) tempSurrogateFold = surrogateFold.webid.getValue();
-        if(inverseSurrogateFold != NULL_NODE) tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
+        if(fold != NULL_NODE) 
+            tempFold = fold.webid.getValue();
+        
+        if(surrogateFold != NULL_NODE)
+            tempSurrogateFold = surrogateFold.webid.getValue();
+        
+        if(inverseSurrogateFold != NULL_NODE) 
+            tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
         
         final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
                                                                         getHeight(),
@@ -271,13 +282,15 @@ public class Node implements Comparable<Node>
     }
     
     /**
-     * @obvious
+     *
      * @param node 
+     * @pre none
+     * @post If node is not this or null, it is added as a neighbor
      */
     public void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
-        if(node != this)
+        if(node != this && node != null)
             connections.addNeighbor(node);
     }
     
@@ -287,7 +300,8 @@ public class Node implements Comparable<Node>
      */
     public void removeNeighbor(final Node node) 
     {
-        connections.removeNeighbor(node);
+        if (node != null)
+            connections.removeNeighbor(node);
     }
     
     /**
@@ -310,12 +324,15 @@ public class Node implements Comparable<Node>
     
     
     /**
-     * @obvious
+     * 
      * @param node0 
+     * @pre none
+     * @post If node is not this or null, it is added as a inverse surrogate neighbor
      */
     public void addUpPointer(final Node node0)
     {
-        if(node0 != this) connections.addInverseSurrogateNeighbor(node0);
+        if(node0 != this && node0 != null)
+            connections.addInverseSurrogateNeighbor(node0);
     }
     
     /**
@@ -328,13 +345,15 @@ public class Node implements Comparable<Node>
     }
     
     /**
-     * @obvious
-     * @param node 
+     * 
+     * @param node
+     * @pre none
+     * @post If node is not this or null, it is added as a surrogate neighbor 
      */
     public void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
-        if(node != this)
+        if(node != this && node != null)
             connections.addSurrogateNeighbor(node);
     }
     
@@ -460,7 +479,8 @@ public class Node implements Comparable<Node>
         // Disconnect deletionPont
         deletionPoint.disconnectDeletionPoint();
         // Replace deleted node with deletionPoint node 
-        if(getWebId() != deletionPoint.getWebId()) Connections.replace(this, deletionPoint);
+        if(getWebId() != deletionPoint.getWebId())
+            Connections.replace(this, deletionPoint);
         // Delete node from HyPeerWeb - Garbage collection should take care of it
     }
     
@@ -484,7 +504,8 @@ public class Node implements Comparable<Node>
         
         // Node 0 
         currentNode = currentNode.connections.getFold();
-        if(currentNode.getLowestNeighbor() != Node.NULL_NODE) currentNode = currentNode.getLowestNeighbor();
+        if(currentNode.getLowestNeighbor() != Node.NULL_NODE)
+            currentNode = currentNode.getLowestNeighbor();
         
         // Loop till you get to the deletionPoint - currentNode will then be set to its highest
         // neighbor which will have a WebID less than the deletion point's WebID.
@@ -492,7 +513,8 @@ public class Node implements Comparable<Node>
         {
             startNode = currentNode;
             currentNode = currentNode.getHighestNeighbor();
-            if(currentNode == Node.NULL_NODE) currentNode = startNode;
+            if(currentNode == Node.NULL_NODE)
+                currentNode = startNode;
         }
         while(currentNode.getWebId() > startNode.getWebId()); 
         return startNode;
@@ -510,14 +532,24 @@ public class Node implements Comparable<Node>
     
     /**
      * @obviousNR
-     * @return The lowest neighbor that does not have a child.
+     * @return Smallest neighbor without a child if found is returned.
+     *          If not found, this is returned.
      */
     public Node getLowestNeighborWithoutChild()
     {
         final Node temp = connections.getLowestNeighborWithoutChild();
-        if(temp == NULL_NODE) return this;
-        else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight()) return temp;
-        else return this;
+        if(temp == NULL_NODE)
+        {
+            return this;
+        }
+        else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight())
+        {
+            return temp;
+        }
+        else
+        {
+            return this;
+        }
     }
     
     /**
