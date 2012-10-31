@@ -347,30 +347,97 @@ public class ConnectionsBlackTest extends TestCase {
         assert testSet.getSurrogateFold() == Node.NULL_NODE;
     }
     
+    /** Parent Notify */
+    /**
+     * Notify all of parent Node's inverse surrogate neighbors that it is no longer their 
+     * surrogate neighbor. 
+     * 
+     * Clears all of parent's inverse surrogate neighbors 
+     * 
+     * Sets parent's fold
+     * 
+     * @param selfNode 
+     * 
+     * @pre parent Node calls parentNotify
+     * @post all inverse surrogate neighbors are notified that parentNode is no longer their 
+     * surrogate neighbor
+     * 
+     */
     @Test
     public void testparentNotify()
     {
+        // Small 
+        web.addNode(nodes.get(0));
+        for(int i=1; i<3; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        testSet = nodes.get(1).getConnections();
+        assert(!testSet.getInverseSurrogateNeighbors().isEmpty());
+        testSet.parentNotify(nodes.get(1));
+        assert(testSet.getInverseSurrogateNeighbors().isEmpty());
         
+        // Medium
+        for(int i=3; i<6; i++)
+        {
+            web.addToHyPeerWeb(nodes.get(i), nodes.get(0));
+        }
+        testSet = nodes.get(3).getConnections();
+        assert testSet.getInverseSurrogateNeighbors().size() == 2;
+        testSet.parentNotify(nodes.get(3));
+        assert testSet.getInverseSurrogateNeighbors().isEmpty();
     }
     
+    /** 
+     * Child node notifies all of it's new connections how it is now
+     * connected to them:
+     *      - Fold
+     *      - Neighbors
+     *      - Surrogate Neighbors 
+     *      
+     * @param childNode 
+     * @param parentNode 
+     * 
+     * @pre childNode has all of its Connections.
+     * @post all Connections of childNode are notified of new Connection between childNode
+     * and Node.
+     */
     @Test
     public void testchildNotify()
     {
         
     }
     
+    /**
+     * Disconnect Deletion Point from HypeerWeb - Called from the deletionPoint node
+     * 
+     * @param deletionPoint - node to disconnect
+     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
+     * @post deletionPoint will be disconnected from the HyPeer web
+     */
     @Test
     public void testdisconnect()
     {
         
     }
     
+    /**
+     * Replace selfNode with deletionPoint in the HypeerWeb
+     * 
+     * @param selfNode - node to be replaced
+     * @param deletionPoint - node to be replaced with
+     */
     @Test
     public void testreplace()
     {
         
     }
     
+    /**
+     *  Find parent node
+     * @param node - child node
+     * @return parent node
+     */
     @Test
     public void testgetParent()
     {
