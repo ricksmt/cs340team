@@ -13,7 +13,7 @@ import hypeerweb.Node;
 
 public class HyPeerWebBlack extends TestCase{
 
-    private static final int MAX_SIZE = 32;
+    private static final int MAX_SIZE = 3;
     
     private static final String DATABASE_ONE = "HyPeerWebBlack1.db";
     private static final String DATABASE_TWO = "HyPeerWebBlack2.db";
@@ -60,16 +60,18 @@ public class HyPeerWebBlack extends TestCase{
         assertTrue(web.size() == 0);
         web.clear();
         assertTrue(web.size() == 0);
-        for(int i = 0; i < MAX_SIZE; i++){
+        web.addNode(new Node(0));
+        for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addNode(new Node(i));
+            web.addToHyPeerWeb(new Node(i), web.getNode(0));
         }
         assertTrue(web.size() == MAX_SIZE);
         web.clear();
         assertTrue(web.size() == 0);
-        for(int i = 0; i < MAX_SIZE; i++){
+        web.addNode(new Node(0));
+        for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addNode(new Node(i));
+            web.addToHyPeerWeb(new Node(i), web.getNode(0));
         }
         assertTrue(web.size() == MAX_SIZE);
         for(int i = MAX_SIZE; web.size() >= 2; i--){// Two comes from the precondition
@@ -78,10 +80,12 @@ public class HyPeerWebBlack extends TestCase{
         }
         web.clear();
         assertTrue(web.size() == 0);
-        for(Random rand = new Random(); web.size() < MAX_SIZE; web.addNode(new Node(0))){
+        web.addNode(new Node(0));
+        for(Random rand = new Random(); web.size() < MAX_SIZE;
+                web.addToHyPeerWeb(new Node(0), web.getNode(0))){
             int size = web.size();
             if(rand.nextBoolean()){
-                web.addNode(new Node(0));
+                web.addToHyPeerWeb(new Node(0), web.getNode(0));
                 assertTrue(web.size() == size + 1);
             }
             else if(web.size() >= 2){// Two comes from the precondition.
@@ -96,9 +100,10 @@ public class HyPeerWebBlack extends TestCase{
     @Test
     public void testSize() {
         HyPeerWeb web = HyPeerWeb.getSingleton();
-        for(int i = 0; i < MAX_SIZE; i++){
+        web.addNode(new Node(0));
+        for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addNode(new Node(i));
+            web.addToHyPeerWeb(new Node(i), web.getNode(0));
         }
         assertTrue(web.size() == MAX_SIZE);
         for(int i = MAX_SIZE - 1; web.size() >= 2; i--){// Two comes from the precondition
@@ -106,10 +111,11 @@ public class HyPeerWebBlack extends TestCase{
             assertTrue(web.size() == i);
         }
         assertTrue(web.size() == 1);
-        for(Random rand = new Random(); web.size() < MAX_SIZE; web.addNode(new Node(0))){
+        for(Random rand = new Random(); web.size() < MAX_SIZE;
+                web.addToHyPeerWeb(new Node(0), web.getNode(0))){
             int size = web.size();
             if(rand.nextBoolean()){
-                web.addNode(new Node(0));
+                web.addToHyPeerWeb(new Node(0), web.getNode(0));
                 assertTrue(web.size() == size + 1);
             }
             else if(web.size() >= 2){// Two comes from the precondition.
@@ -165,11 +171,44 @@ public class HyPeerWebBlack extends TestCase{
         assertTrue(node == web.getNode(0));
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            node = new Node(rand.nextInt());
+            node = new Node(Math.abs(rand.nextInt()));
             web.addToHyPeerWeb(node, web.getNode(rand.nextInt(web.size())));
             assertTrue(node == web.getNode(i));
         }
         assertTrue(web.size() == MAX_SIZE);
+    }
+
+    @Test
+    public void testGetNodeAsserts() {
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        try{
+            web.getNode(-1);
+            fail("HyPeerWeb.getNode accepted -1 on size 0.");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.getNode(0);
+            fail("HyPeerWeb.getNode accepted 0 on size 0.");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.getNode(1);
+            fail("HyPeerWeb.getNode accepted 1 on size 0.");
+        }
+        catch(AssertionError e) { }
+        Node node = new Node(0);
+        web.addNode(node);
+        assertTrue(node == web.getNode(0));
+        try{
+            web.getNode(-1);
+            fail("HyPeerWeb.getNode accepted -1 on size 1.");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.getNode(1);
+            fail("HyPeerWeb.getNode accepted 1 on size 1.");
+        }
+        catch(AssertionError e) { }
     }
 
     @Test
@@ -179,7 +218,6 @@ public class HyPeerWebBlack extends TestCase{
         web.saveToDatabase();
         web.addNode(new Node(0));
         web.reload();
-        System.out.println("Reload size: " + web.size());
         assertTrue(web.size() == 0);
         web.addNode(new Node(0));
         web.saveToDatabase();
@@ -198,6 +236,7 @@ public class HyPeerWebBlack extends TestCase{
         HyPeerWeb web = HyPeerWeb.getSingleton();
         web.clear();
         web.saveToDatabase();
+        assertTrue(web.size() == 0);
         web.addNode(new Node(0));
         web.reload();
         System.out.println("Save size: " + web.size());
@@ -220,9 +259,20 @@ public class HyPeerWebBlack extends TestCase{
         Random rand = new Random();
         for(int i = 0; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addNode(new Node(rand.nextInt()));
+            web.addNode(new Node(Math.abs(rand.nextInt())));
         }
         assertTrue(web.size() == MAX_SIZE);
+    }
+
+    @Test
+    public void testAddNodeAsserts() {
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        web.addNode(new Node(0));
+        try{
+            web.addNode(new Node(0));
+            fail("HyPeerWeb.addNode accepted 0 when 0 is in the HyPeerWeb.");
+        }
+        catch(AssertionError e) { }
     }
 
     @Test
@@ -231,7 +281,7 @@ public class HyPeerWebBlack extends TestCase{
         Random rand = new Random();
         for(int i = 0; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            Node node = new Node(rand.nextInt());
+            Node node = new Node(Math.abs(rand.nextInt()));
             web.addNode(node);
             assertTrue(web.contains(node));
         }
@@ -245,21 +295,56 @@ public class HyPeerWebBlack extends TestCase{
         web.addNode(new Node(0));
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addToHyPeerWeb(new Node(rand.nextInt()), 
+            web.addToHyPeerWeb(new Node(Math.abs(rand.nextInt())), 
                     web.getNode(rand.nextInt(web.size())));
         }
         assertTrue(web.size() == MAX_SIZE);
     }
 
     @Test
+    public void testAddToHyPeerWebAsserts() {
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        try{
+            web.addToHyPeerWeb(null, new Node(0));
+            fail("HyPeerWeb.addToHyPeerWeb accepted null for newNode. Size = 0");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.addToHyPeerWeb(Node.NULL_NODE, new Node(0));
+            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for newNode. Size = 0");
+        }
+        catch(AssertionError e) { }
+        web.addNode(new Node(0));
+        try{
+            web.addToHyPeerWeb(null, web.getNode(0));
+            fail("HyPeerWeb.addToHyPeerWeb accepted null for newNode. Size = 1");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.addToHyPeerWeb(Node.NULL_NODE, web.getNode(0));
+            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for newNode. Size = 1");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.addToHyPeerWeb(new Node(-1), null);
+            fail("HyPeerWeb.addToHyPeerWeb accepted null for startNode.");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.addToHyPeerWeb(new Node(-1), Node.NULL_NODE);
+            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for startNode.");
+        }
+        catch(AssertionError e) { }
+    }
+
+    @Test
     public void testRemoveFromHyPeerWeb() {
-        fail("Not working.");
         HyPeerWeb web = HyPeerWeb.getSingleton();
         Random rand = new Random();
         web.addNode(new Node(0));
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addToHyPeerWeb(new Node(rand.nextInt()), 
+            web.addToHyPeerWeb(new Node(Math.abs(rand.nextInt())), 
                     web.getNode(rand.nextInt(web.size())));
         }
         assertTrue(web.size() == MAX_SIZE);
@@ -276,7 +361,7 @@ public class HyPeerWebBlack extends TestCase{
         web.addNode(new Node(0));
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
-            web.addToHyPeerWeb(new Node(rand.nextInt()), 
+            web.addToHyPeerWeb(new Node(Math.abs(rand.nextInt())), 
                     web.getNode(rand.nextInt(web.size())));
         }
         assertTrue(web.size() == MAX_SIZE);
@@ -290,4 +375,18 @@ public class HyPeerWebBlack extends TestCase{
         }
     }
 
+    @Test
+    public void testRemoveFromHyPeerWebIntAsserts() {
+        HyPeerWeb web = HyPeerWeb.getSingleton();
+        try{
+            web.removeFromHyPeerWeb(-1);
+            fail("HyPeerWeb.removeFromHyPeerWeb accepted -1 for id.");
+        }
+        catch(AssertionError e) { }
+        try{
+            web.removeFromHyPeerWeb(-1);
+            fail("HyPeerWeb.removeFromHyPeerWeb accepted 0 for id. Size = 0");
+        }
+        catch(AssertionError e) { }
+    }
 }

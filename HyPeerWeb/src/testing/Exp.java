@@ -969,7 +969,7 @@ public class Exp {
         errorCount = 0;
 
         boolean insertionError = false;
-        System.out.print("Random\t\t");
+        /*System.out.print("Random\t\t");
 
         for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
             if (VERBOSE) System.out.println("Testing Node Insertion on HyPeerWeb of size " + size + "/" + HYPEERWEB_SIZE * 3);
@@ -1051,7 +1051,7 @@ public class Exp {
             if (insertionError) return;
         }
         
-        System.out.print(System.getProperty("line.separator"));
+        System.out.print(System.getProperty("line.separator"));*/
         System.out.print("Repeated\t");
 
         for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
@@ -1073,7 +1073,7 @@ public class Exp {
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
                 int sizeMax = size;
                 if (sizeMax > 32) sizeMax = 32;
-                for(createHyPeerWebWith(sizeMax--); hypeerweb.size() > 0; sizeMax--){
+                for(createHyPeerWebWith(sizeMax--); hypeerweb.size() > 1; sizeMax--){
                        
                     // Remove random node - too hard to permutate.
                     hypeerweb.removeFromHyPeerWeb();
