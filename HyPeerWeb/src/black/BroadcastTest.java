@@ -46,7 +46,7 @@ public class BroadcastTest extends TestCase {
         Node broadcastNode;
         BroadcastVisitor bv;
         Parameters params;
-        for(int i=0; i<MAX_SIZE; i++){
+        for(int i = 0; i < MAX_SIZE; i++){
             broadcastNode = hypeerweb.getNode(i);
             bv = new BroadcastTestVisitor();
             String curKey = "message" + i;
@@ -56,7 +56,7 @@ public class BroadcastTest extends TestCase {
             
             broadcastNode.accept(bv, params);
             
-            for(int j=0;j<MAX_SIZE; j++){
+            for(int j = 0; j < MAX_SIZE; j++){
                 Contents curContents = hypeerweb.getNode(j).getContents();
                 assertTrue(curContents.containsKey(curKey));
                 String message = (String) curContents.get(curKey);

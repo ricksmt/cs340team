@@ -29,7 +29,7 @@ public class SendTest extends TestCase {
     }
 
     @Test
-    public void testBroadcast() {        
+    public void testSend() {        
         
         
         //create hyperweb with size=MAX_SIZE
@@ -56,7 +56,10 @@ public class SendTest extends TestCase {
             sv = new SendTestVisitor();
             String curMessage = "from node " + i + " to node 0";
             params = SendVisitor.createInitialParameters(0);
-            params.set(key, curMessage);            
+            params.set(key, curMessage);
+            assertTrue(params.containsKey(key));
+            params.set(null, curMessage);
+            assertFalse(params.containsKey(null));
             sendNode.accept(sv, params);
             Contents curContents = hypeerweb.getNode(0).getContents();
             assertTrue(curContents.containsKey(key));

@@ -130,7 +130,7 @@ public class Node2 extends TestCase
             node0.removeFromHyPeerWeb();
         }
         
-        assert (node0.getHighestNeighbor().getWebId() == 1);
+        assert (node0.getHighestNeighbor() == Node.NULL_NODE);
     }
      
     

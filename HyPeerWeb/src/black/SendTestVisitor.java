@@ -54,6 +54,7 @@ public class SendTestVisitor extends SendVisitor {
             if (contents.containsKey(key)) System.err.println("Node " + node.getWebId() + " has already been visited ");
             contents.set(key, parameters.get(key));
         }
+        contents.set(null, TARGET_KEY);
     }
 
     private Node getIntermediateNode(Node node, int targetId) {

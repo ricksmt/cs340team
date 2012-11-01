@@ -145,8 +145,8 @@ public class Connections
     public Connections() 
     {
         neighbors = new TreeSet<Node>();
-        surrogateNeighbors = new HashSet<Node>();
-        inverseSurrogateNeighbors = new HashSet<Node>();
+        surrogateNeighbors = new TreeSet<Node>();
+        inverseSurrogateNeighbors = new TreeSet<Node>();
         fold = Node.NULL_NODE;
         surrogateFold = Node.NULL_NODE;
         inverseSurrogateFold = Node.NULL_NODE;
@@ -203,7 +203,7 @@ public class Connections
      */
     public void removeNeighbor(final Node node) 
     {
-        neighbors.remove(node);
+        if(node != null) neighbors.remove(node);
     }
 
     /**
@@ -224,7 +224,7 @@ public class Connections
      */
     public void removeSurrogateNeighbor(final Node node) 
     {
-        surrogateNeighbors.remove(node);
+        if(node != null) surrogateNeighbors.remove(node);
     }
     
     /**
@@ -245,7 +245,7 @@ public class Connections
      */
     public void removeInverseSurrogateNeighbor(final Node node) 
     {
-        inverseSurrogateNeighbors.remove(node);
+        if(node != null) inverseSurrogateNeighbors.remove(node);
     }
     
     /**
@@ -439,8 +439,8 @@ public class Connections
     {
         try
         {
-            final int size = Math.min(neighbors.size(), neighbors.first().getNeighborsIds().size());
-            for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
+            final int size = Math.max(neighbors.size(), neighbors.first().getNeighborsIds().size());
+            for(Node neighbor: neighbors) if(neighbor.getHeight() < size) return neighbor;
             return neighbors.first();
         }
         catch(final NoSuchElementException e)

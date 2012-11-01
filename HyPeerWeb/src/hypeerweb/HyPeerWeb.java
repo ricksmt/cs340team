@@ -92,9 +92,7 @@ public class HyPeerWeb
 	public Node getNode(final int i)
 	{
 //	    assert i >= 0 && i < size();
-	    final Node temp = nodes.get(i);
-	    if(temp == null) return Node.NULL_NODE;
-	    else return temp;
+	    return nodes.get(i);
 	}
 
 	/**

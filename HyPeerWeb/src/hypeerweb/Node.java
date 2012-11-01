@@ -453,7 +453,7 @@ public class Node implements Comparable<Node>
     private Node findInsertionPoint(Node startNode)
     {
         Node currentNode = startNode.findCapNode(startNode);
-       //The cap node is now found (currentNode).
+        //The cap node is now found (currentNode).
         
         do
         {
@@ -539,7 +539,8 @@ public class Node implements Comparable<Node>
     {
         final Node temp = connections.getLowestNeighborWithoutChild();
         if(temp == NULL_NODE) return this;
-        else if(temp.compareTo(this) < 0 && temp.getHeight() <= getHeight()) return temp;
+        else if(temp.getHeight() < getHeight()) return temp;
+        else if(temp.compareTo(this) < 0 && temp.getHeight() == getHeight()) return temp;
         else return this;
     }
     

@@ -10,10 +10,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-
 import testing.ExpectedResult;
 
 /* Black Box test for Node class
@@ -23,31 +20,6 @@ import testing.ExpectedResult;
  */
 
 public class NodeBlackTest extends TestCase {
-
-    @Test
-    public void test() {
-        testCompareTo();
-        
-        testGetNeighborsIds();
-        testGetSurNeighborsIds();
-        testGetInvSurNeighborsIds();
-        testAddNeighbor();
-        testRemoveNeighbor();
-        testAddUpPointer();
-        testRemoveUpPointer();
-        testAddDownPointer();
-        testRemoveDownPointer();
-        
-        testGetLowestNeighborWithoutChild();
-        testFindCapNode();
-        testInsertSelf();
-        testRemoveFromHyPeerWeb();
-    }
-    
-    public void testCompareTo() {
-        assert node0e.compareTo(node1e) < 0;
-        assert node1e.compareTo(node0e) > 0;
-    }
 
     Node node0a;
     Node node0b;
@@ -88,7 +60,7 @@ public class NodeBlackTest extends TestCase {
         node0a.setState(State.CAP);
         node0a.setFold(node0a);
         
-      //size 2
+        //size 2
         node1b.setState(State.CAP);
         node0b.setState(State.STANDARD);
         node0b.addNeighbor(node1b);
@@ -96,7 +68,7 @@ public class NodeBlackTest extends TestCase {
         node0b.setFold(node1b);
         node1b.setFold(node0b);
         
-      //size 3
+        //size 3
         node2c.setState(State.DOWN);
         node1c.setState(State.CAP);
         node0c.setState(State.STANDARD);
@@ -112,7 +84,7 @@ public class NodeBlackTest extends TestCase {
         node2c.addDownPointer(node1c);
         node1c.addUpPointer(node2c);
         
-      //size 4
+        //size 4
         node0d.setState(State.STANDARD);
         node1d.setState(State.STANDARD);
         node2d.setState(State.DOWN);
@@ -130,7 +102,7 @@ public class NodeBlackTest extends TestCase {
         node1d.setFold(node2d);
         node2d.setFold(node1d);
         
-      //size 5
+        //size 5
         node0e.setState(State.STANDARD);
         node1e.setState(State.STANDARD);
         node2e.setState(State.DOWN);
@@ -158,11 +130,10 @@ public class NodeBlackTest extends TestCase {
         node1e.addUpPointer(node4e);
         node2e.addUpPointer(node4e);
     }
-
-    @After
-    public void tearDown() throws Exception 
-    {
-        
+    
+    public void testCompareTo() {
+        assertTrue(node0e.compareTo(node1e) < 0);
+        assertTrue(node1e.compareTo(node0e) > 0);
     }
     
     public void testGetNeighborsIds()
@@ -179,7 +150,7 @@ public class NodeBlackTest extends TestCase {
         {
             sum = sum - id;
         }
-        assert sum == 0;
+        assertTrue(sum == 0);
     }
     public void testGetSurNeighborsIds()
     {
@@ -195,7 +166,7 @@ public class NodeBlackTest extends TestCase {
         {
             sum = sum - id;
         }
-        assert sum == 0;
+        assertTrue(sum == 0);
     }
     public void testGetInvSurNeighborsIds()
     {
@@ -211,26 +182,26 @@ public class NodeBlackTest extends TestCase {
         {
             sum = sum - id;
         }
-        assert sum == 0;
+        assertTrue(sum == 0);
     }
     
     public void testAddNeighbor()
     {
         Node node0 = new Node(0);
         node0.addNeighbor(null);
-        assert(node0.getNeighborsIds().isEmpty());
+        assertTrue(node0.getNeighborsIds().isEmpty());
         node0.addNeighbor(node0);
-        assert(node0.getNeighborsIds().isEmpty());
+        assertTrue(node0.getNeighborsIds().isEmpty());
         
         Node node1 = new Node(1);
         node0.addNeighbor(node1);
-        assert(node0.getNeighborsIds().size() == 1);
+        assertTrue(node0.getNeighborsIds().size() == 1);
         
         //Try a large number
         for (int i = 2; i < 500; i++)
         {
             node0.addNeighbor(new Node(i));
-            assert(node0.getNeighborsIds().size() == i);
+            assertTrue(node0.getNeighborsIds().size() == i);
         }
     }
     
@@ -239,12 +210,12 @@ public class NodeBlackTest extends TestCase {
         Node node0 = new Node(0);
         Node node1 = new Node(1);
         node0.removeNeighbor(null);
-        assert(node0.getNeighborsIds().isEmpty());
+        assertTrue(node0.getNeighborsIds().isEmpty());
         node0.removeNeighbor(node1);
-        assert(node0.getNeighborsIds().isEmpty());
+        assertTrue(node0.getNeighborsIds().isEmpty());
         node0.addNeighbor(node1);
         node0.removeNeighbor(node1);
-        assert(node0.getNeighborsIds().isEmpty());
+        assertTrue(node0.getNeighborsIds().isEmpty());
         
         
         //Try a large number
@@ -255,7 +226,7 @@ public class NodeBlackTest extends TestCase {
         for (int i = 499; i < 0; i++)
         {
             node0.removeNeighbor(new Node(i));
-            assert(node0.getNeighborsIds().size() == i-1);
+            assertTrue(node0.getNeighborsIds().size() == i-1);
         }
         
      }
@@ -264,19 +235,19 @@ public class NodeBlackTest extends TestCase {
     {
         Node node0 = new Node(0);
         node0.addUpPointer(null);
-        assert(node0.getInvSurNeighborsIds().isEmpty());
+        assertTrue(node0.getInvSurNeighborsIds().isEmpty());
         node0.addUpPointer(node0);
-        assert(node0.getInvSurNeighborsIds().isEmpty());
+        assertTrue(node0.getInvSurNeighborsIds().isEmpty());
         
         Node node1 = new Node(1);
         node0.addUpPointer(node1);
-        assert(node0.getInvSurNeighborsIds().size() == 1);
+        assertTrue(node0.getInvSurNeighborsIds().size() == 1);
         
         //Try a large number
         for (int i = 2; i < 500; i++)
         {
             node0.addUpPointer(new Node(i));
-            assert(node0.getInvSurNeighborsIds().size() == i);
+            assertTrue(node0.getInvSurNeighborsIds().size() == i);
         }
     }
     
@@ -285,12 +256,12 @@ public class NodeBlackTest extends TestCase {
         Node node0 = new Node(0);
         Node node1 = new Node(1);
         node0.removeUpPointer(null);
-        assert(node0.getInvSurNeighborsIds().isEmpty());
+        assertTrue(node0.getInvSurNeighborsIds().isEmpty());
         node0.removeUpPointer(node1);
-        assert(node0.getInvSurNeighborsIds().isEmpty());
+        assertTrue(node0.getInvSurNeighborsIds().isEmpty());
         node0.addUpPointer(node1);
         node0.removeUpPointer(node1);
-        assert(node0.getInvSurNeighborsIds().isEmpty());
+        assertTrue(node0.getInvSurNeighborsIds().isEmpty());
         
         
         //Try a large number
@@ -301,7 +272,7 @@ public class NodeBlackTest extends TestCase {
         for (int i = 499; i < 0; i++)
         {
             node0.removeUpPointer(new Node(i));
-            assert(node0.getInvSurNeighborsIds().size() == i-1);
+            assertTrue(node0.getInvSurNeighborsIds().size() == i-1);
         }
      }
     
@@ -309,19 +280,19 @@ public class NodeBlackTest extends TestCase {
     {
         Node node0 = new Node(0);
         node0.addDownPointer(null);
-        assert(node0.getSurNeighborsIds().isEmpty());
+        assertTrue(node0.getSurNeighborsIds().isEmpty());
         node0.addDownPointer(node0);
-        assert(node0.getSurNeighborsIds().isEmpty());
+        assertTrue(node0.getSurNeighborsIds().isEmpty());
         
         Node node1 = new Node(1);
         node0.addDownPointer(node1);
-        assert(node0.getSurNeighborsIds().size() == 1);
+        assertTrue(node0.getSurNeighborsIds().size() == 1);
         
         //Try a large number
         for (int i = 2; i < 500; i++)
         {
             node0.addDownPointer(new Node(i));
-            assert(node0.getSurNeighborsIds().size() == i);
+            assertTrue(node0.getSurNeighborsIds().size() == i);
         }
      }
      
@@ -330,12 +301,12 @@ public class NodeBlackTest extends TestCase {
          Node node0 = new Node(0);
          Node node1 = new Node(1);
          node0.removeDownPointer(null);
-         assert(node0.getSurNeighborsIds().isEmpty());
+         assertTrue(node0.getSurNeighborsIds().isEmpty());
          node0.removeDownPointer(node1);
-         assert(node0.getSurNeighborsIds().isEmpty());
+         assertTrue(node0.getSurNeighborsIds().isEmpty());
          node0.addDownPointer(node1);
          node0.removeDownPointer(node1);
-         assert(node0.getSurNeighborsIds().isEmpty());
+         assertTrue(node0.getSurNeighborsIds().isEmpty());
          
          
          //Try a large number
@@ -346,7 +317,7 @@ public class NodeBlackTest extends TestCase {
          for (int i = 499; i < 0; i++)
          {
              node0.removeDownPointer(new Node(i));
-             assert(node0.getSurNeighborsIds().size() == i-1);
+             assertTrue(node0.getSurNeighborsIds().size() == i-1);
          }
       }
     
@@ -355,100 +326,55 @@ public class NodeBlackTest extends TestCase {
     {
         SimplifiedNodeDomain snd = node0a.constructSimplifiedNodeDomain();
         ExpectedResult expectedResult = new ExpectedResult(1, 0);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         
         snd = node0b.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(2, 0);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node1b.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(2, 1);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         
         snd = node0c.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(3,0);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node1c.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(3,1);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node2c.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(3,2);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         
         snd = node0d.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(4,0);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node2d.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(4,2);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node3d.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(4,3);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         
         snd = node0e.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(5,0);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node2e.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(5,2);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node3e.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(5,3);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
         snd = node4e.constructSimplifiedNodeDomain();
         expectedResult = new ExpectedResult(5,4);
-        assert snd.equals(expectedResult);
+        assertTrue(snd.equals(expectedResult));
     }
     
     
     
     public void testInsertSelf()
     {
-        /*
-         * 
-         * A hypeerweb is boundless, and so has no upper bound.
-         * It's lower bound is one node and this is the lowest we can test.
-         * The constriuction of a very large hypeerweb is infeasible, so we simply look to cover the bounds of the equivalence classes by going to size 5
-         * These being:
-         * -A complete hypeerweb
-         * -One node short of a complete hypeerweb
-         * -One node over a complete hypeerweb
-         * 
-         * There are four equivalence classes for the starting locations
-         * -The start point is node 0
-         * -The start point is the cap node
-         * -The start point is inbetween the node 0 and cap node
-         * -(for incomplete) The start node is above the cap node (on the edge)
-         * 
-         * But since, the codes already written, we'll brute force to size 32
-         */
-        
-        /*//size 1
-        Node testNode1 = new Node(0);
-        testNode1.insertSelf(node0a);
-        
-        assert node0a.getFold() == testNode1;
-        assert testNode1.getFold() == node0a;
-        assert node0e.getSurrogateFoldId() == -1;
-        assert testNode1.getSurrogateFoldId() == -1;
-        assert node0e.getInverseSurrogateFoldId() == -1;
-        assert testNode1.getInverseSurrogateFoldId() == -1;
-        for (Integer id : testNode1.getNeighborsIds())
-        {
-            assert id == 0;
-        }
-        for (Integer id : node0a.getNeighborsIds())
-        {
-            assert id == 1;
-        }
-        assert node0e.getSurNeighborsIds().isEmpty();
-        assert testNode1.getInvSurNeighborsIds().isEmpty();
-        assert node0e.getSurNeighborsIds().isEmpty();
-        assert testNode1.getInvSurNeighborsIds().isEmpty();*/
-        
-        //copied mostly from Exp.java
         for (int size = 1; size <= 32; size++)
         {
-            
-            
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++)
             {
                 Map<Integer, Node> nodeById = new HashMap<Integer, Node>();
@@ -458,7 +384,6 @@ public class NodeBlackTest extends TestCase {
                 createHyPeerWebWith(node0, nodeById, size - 1);
 
                 Node node = new Node(0);
-                
                 Node startNode = nodeById.get(startNodeId);
                 
                 node.insertSelf(startNode);
@@ -466,11 +391,11 @@ public class NodeBlackTest extends TestCase {
                 
                 for (int i = 0; i < size; i++)
                 {
-                    Node nodei =nodeById.get(i);
+                    Node nodei = nodeById.get(i);
                     SimplifiedNodeDomain simplifiedNodeDomain = nodei.constructSimplifiedNodeDomain();
                     ExpectedResult expectedResult = new ExpectedResult(size, i);
 
-                    assert simplifiedNodeDomain.equals(expectedResult);
+                    assertTrue(simplifiedNodeDomain.equals(expectedResult));
                 }
             }
         }
@@ -496,31 +421,31 @@ public class NodeBlackTest extends TestCase {
          */
         
         //size 1
-        assert node0a.findCapNode(node0a).getWebId() == 0;
+        assertTrue(node0a.findCapNode(node0a).getWebId() == 0);
         
         //size 2
         
-        assert node0b.findCapNode(node0b).getWebId() == 1;
-        assert node0b.findCapNode(node1b).getWebId() == 1;
+        assertTrue(node0b.findCapNode(node0b).getWebId() == 1);
+        assertTrue(node0b.findCapNode(node1b).getWebId() == 1);
         
         //size 3
         
-        assert node0c.findCapNode(node0c).getWebId() == 1;
-        assert node0c.findCapNode(node1c).getWebId() == 1;
-        assert node0c.findCapNode(node2c).getWebId() == 1;
+        assertTrue(node0c.findCapNode(node0c).getWebId() == 1);
+        assertTrue(node0c.findCapNode(node1c).getWebId() == 1);
+        assertTrue(node0c.findCapNode(node2c).getWebId() == 1);
         
         //size 4
         
-        assert node0d.findCapNode(node0d).getWebId() == 3;
-        assert node0d.findCapNode(node3d).getWebId() == 3;
-        assert node0d.findCapNode(node2d).getWebId() == 3;
+        assertTrue(node0d.findCapNode(node0d).getWebId() == 3);
+        assertTrue(node0d.findCapNode(node3d).getWebId() == 3);
+        assertTrue(node0d.findCapNode(node2d).getWebId() == 3);
         
         //size 5
         
-        assert node0e.findCapNode(node0e).getWebId() == 3;
-        assert node0e.findCapNode(node3e).getWebId() == 3;
-        assert node0e.findCapNode(node2e).getWebId() == 3;
-        assert node0e.findCapNode(node4e).getWebId() == 3;
+        assertTrue(node0e.findCapNode(node0e).getWebId() == 3);
+        assertTrue(node0e.findCapNode(node3e).getWebId() == 3);
+        assertTrue(node0e.findCapNode(node2e).getWebId() == 3);
+        assertTrue(node0e.findCapNode(node4e).getWebId() == 3);
     }
     
    
@@ -548,7 +473,7 @@ public class NodeBlackTest extends TestCase {
                     SimplifiedNodeDomain simplifiedNodeDomain = nodei.constructSimplifiedNodeDomain();
                     ExpectedResult expectedResult = new ExpectedResult(size-1, i);
 
-                    assert simplifiedNodeDomain.equals(expectedResult);
+                    assertTrue(simplifiedNodeDomain.equals(expectedResult));
                 }
             }
         }
@@ -574,13 +499,13 @@ public class NodeBlackTest extends TestCase {
         
         //No children
       //number of neighbors 1 (boundary)
-        assert node0a.getLowestNeighborWithoutChild() == node0a;
+        assertTrue(node0a.getLowestNeighborWithoutChild() == node0a);
         
         //number of neighbors 2 (boundary + 1)
-        assert node1b.getLowestNeighborWithoutChild() == node0b;
+        assertTrue(node1b.getLowestNeighborWithoutChild() == node0b);
         
         //number of neighbors 3 (beyond boundary)
-        assert node0e.getLowestNeighborWithoutChild() == node1e; 
+        assertTrue(node0e.getLowestNeighborWithoutChild() == node1e); 
         
         //All with child
         //num of neighbors 1 doesn't apply to this eq class
@@ -595,34 +520,31 @@ public class NodeBlackTest extends TestCase {
         node0.addNeighbor(node2);
         node1.addNeighbor(node3);
         node2.addNeighbor(node5);
-        assert node0.getLowestNeighborWithoutChild() == node0;
+        assertTrue(node0.getLowestNeighborWithoutChild() == node0);
         
         //number of neighbors 3 (beyond boundary)
         Node node4 = new Node(4);
         Node node12 = new Node(12);
         node0.addNeighbor(node4);
         node4.addNeighbor(node12);
-        assert node0.getLowestNeighborWithoutChild() == node0;
+        assertTrue(node0.getLowestNeighborWithoutChild() == node0);
         
         //Mixed (real hypeerweb)
         
         //number of neighbors 1 (boundary)
-        assert node0a.getLowestNeighborWithoutChild() == node0a;
+        assertTrue(node0a.getLowestNeighborWithoutChild() == node0a);
         
         //number of neighbors 2 (boundary + 1)
-        //assert node1b.getLowestNeighborWithoutChild() == node0b;
-        assert node0b.getLowestNeighborWithoutChild() == node1b;
+        //assertTrue(node1b.getLowestNeighborWithoutChild() == node0b;
+        assertTrue(node0b.getLowestNeighborWithoutChild() == node1b);
         
         //number of neighbors 3 (beyond boundary)
-        assert node1e.getLowestNeighborWithoutChild() == node3e; 
+        assertTrue(node1e.getLowestNeighborWithoutChild() == node3e); 
         
         //I will now test a very large case
         Node nodeX = new Node(0);
-        for (int i = 1; i < 500; i ++)
-        {
-            nodeX.addNeighbor(new Node(i));
-        }
-        assert nodeX.getLowestNeighborWithoutChild().getWebId()==1;
+        for (int i = 1; i < 500; i ++) nodeX.addNeighbor(new Node(i));
+        assertTrue(nodeX.getLowestNeighborWithoutChild().getWebId()==1);
     }
     
     //mostly copied from Exp.java

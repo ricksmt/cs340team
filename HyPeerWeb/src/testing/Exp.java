@@ -912,13 +912,8 @@ public class Exp {
         System.out.print("    ");
 
         for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
-            if (VERBOSE) {
-                System.out.println("Testing Node Insertion on HyPeerWeb of size "
-                                + size + "/" + HYPEERWEB_SIZE);
-            }
-            else {
-                System.out.print(size + " ");
-            }
+            if (VERBOSE)System.out.println("Testing Node Insertion on HyPeerWeb of size " + size + "/" + HYPEERWEB_SIZE);
+            else System.out.print(size + " ");
 
             hypeerweb.clear();
             Node node0 = new Node(0);
