@@ -1,6 +1,5 @@
 package black;
 
-import static org.junit.Assert.*;
 import hypeerweb.Node;
 import hypeerweb.SimplifiedNodeDomain;
 import hypeerweb.Node.State;
