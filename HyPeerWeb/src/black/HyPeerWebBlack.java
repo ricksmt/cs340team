@@ -291,7 +291,7 @@ public class HyPeerWebBlack extends TestCase{
     public void testAddToHyPeerWeb() {
         HyPeerWeb web = HyPeerWeb.getSingleton();
         Random rand = new Random();
-        web.addNode(new Node(0));
+        web.addToHyPeerWeb(new Node(0), null);
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
             web.addToHyPeerWeb(new Node(Math.abs(rand.nextInt())), 
