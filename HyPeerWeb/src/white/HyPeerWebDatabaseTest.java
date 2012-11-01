@@ -60,7 +60,7 @@ public class HyPeerWebDatabaseTest extends TestCase {
         
         nodes.put(a.getWebId(), a);
         nodes.put(b.getWebId(), b);
-        nodes.put(b.getWebId(), c);
+        nodes.put(c.getWebId(), c);
         
         db.save(nodes.values());
         
@@ -103,7 +103,7 @@ public class HyPeerWebDatabaseTest extends TestCase {
         
         nodes.put(a.getWebId(), a);
         nodes.put(b.getWebId(), b);
-        nodes.put(b.getWebId(), c);
+        nodes.put(c.getWebId(), c);
         
         db.save(nodes.values());
         
@@ -139,13 +139,20 @@ public class HyPeerWebDatabaseTest extends TestCase {
         Node c = new Node(3);
         
         a.addUpPointer(b);
+        b.addDownPointer(a);
+        
         b.addUpPointer(a);
+        a.addDownPointer(b);
+        
         a.addUpPointer(c);
+        c.addDownPointer(a);
+        
         c.addUpPointer(a);
+        a.addDownPointer(c);
         
         nodes.put(a.getWebId(), a);
         nodes.put(b.getWebId(), b);
-        nodes.put(b.getWebId(), c);
+        nodes.put(c.getWebId(), c);
         
         db.save(nodes.values());
         
