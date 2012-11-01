@@ -87,7 +87,7 @@ public class HyPeerWeb
 	 *
      * @obvious
 	 * @param i a whole number
-	 * @return the node
+	 * @return the node or Node.NULL_NODE if it doesn't exist.
 	 */
 	public Node getNode(final int i)
 	{
