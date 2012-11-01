@@ -428,24 +428,19 @@ public class Connections
      * @pre lists of neighbors exists
      * @post 
      * Option 1) Smallest neighbor without a child is found and returned 
-     * Option 2) If there are only smaller neighbors and there are no neighbors without a child - the lowest neighbor is returned
-     * Option 3) If there are no smaller neighbors without child, and there are neighbors greater - the smallest of the larger neighbors is returned
-     * Option 4) NULL_NODE is returned if no neighbors exist
+     * Option 2) The smallest neighbor is returned
+     * Option 3) NULL_NODE is returned if no neighbors exist
      * @return 
      * Option 1) Smallest neighbor without a child
-     * Option 2) First neighbor 
-     * Option 3) Smallest larger neighbor
-     * Option 4) NULL_NODE 
+     * Option 2) Smallest neighbor
+     * Option 3) NULL_NODE 
      */
     public Node getLowestNeighborWithoutChild()
     {
         try
         {
-            final int size = neighbors.size();
-            for(Node neighbor: neighbors)
-            {
-                if(neighbor.getHeight() != size) return neighbor;
-            }
+            final int size = Math.min(neighbors.size(), neighbors.first().getNeighborsIds().size());
+            for(Node neighbor: neighbors) if(neighbor.getHeight() != size) return neighbor;
             return neighbors.first();
         }
         catch(final NoSuchElementException e)

@@ -234,16 +234,11 @@ public class HyPeerWebBlack extends TestCase{
     @Test
     public void testSaveToDatabase() {
         HyPeerWeb web = HyPeerWeb.getSingleton();
-//        System.out.println("Save size: " + web.size());
         web.clear();
-//        System.out.println("Save size: " + web.size());
         web.saveToDatabase();
         assertTrue(web.size() == 0);
-//        System.out.println("Save size: " + web.size());
         web.addNode(new Node(0));
-//        System.out.println("Save size: " + web.size());
         web.reload();
-//        System.out.println("Save size: " + web.size());
         assertTrue(web.size() == 0);
         web.addNode(new Node(0));
         web.saveToDatabase();

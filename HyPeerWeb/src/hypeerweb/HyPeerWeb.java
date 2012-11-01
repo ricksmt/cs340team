@@ -91,7 +91,7 @@ public class HyPeerWeb
 	 */
 	public Node getNode(final int i)
 	{
-	    assert i >= 0 && i < size();
+//	    assert i >= 0 && i < size();
 	    final Node temp = nodes.get(i);
 	    if(temp == null) return Node.NULL_NODE;
 	    else return temp;
@@ -157,7 +157,7 @@ public class HyPeerWeb
 	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    assert newNode != null && newNode != Node.NULL_NODE;
-	    if ( nodes.size() > 0)
+	    if (nodes.size() > 0)
 	    {
 	        assert startNode != null && startNode != Node.NULL_NODE;
 	        newNode.insertSelf(startNode);
