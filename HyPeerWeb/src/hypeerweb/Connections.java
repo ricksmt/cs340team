@@ -441,7 +441,11 @@ public class Connections
         try
         {
             final int size = Math.max(neighbors.size(), neighbors.first().getNeighborsIds().size());
-            for(Node neighbor: neighbors) if(neighbor.getHeight() < size) return neighbor;
+            for(Node neighbor: neighbors)
+            {
+                if(neighbor.getHeight() < size) 
+                    return neighbor;
+            }
             return neighbors.first();
         }
         catch(final NoSuchElementException e)
