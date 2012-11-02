@@ -100,7 +100,7 @@ public class Node2 extends TestCase
             Node node = new Node(i);
             node.insertSelf(node0);
         }
-        assert(node0.getHighestNeighbor().getWebId() == 7);
+        assert(node0.getHighestNeighbor().getWebId() == 8);
         assert(node0.getSurrogateFoldId() == 7);
     } 
     
