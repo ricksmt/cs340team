@@ -531,17 +531,32 @@ public class Node implements Comparable<Node>
     }
     
     /**
-     * @obviousNR
-     * @return Smallest neighbor without a child if found is returned.
-     *          If not found, this is returned.
+     * @pre This is part of a valid hypeerweb.
+     * @post No change to hypeerweb
+     * @return
+     *  If this has no neighbors, it returns itself
+     *  If this has at least one neighbor without any children, it returns the lowest of them
+     *  If this has no neighbors without children, it returns itself
      */
     public Node getLowestNeighborWithoutChild()
     {
         final Node temp = connections.getLowestNeighborWithoutChild();
-        if(temp == NULL_NODE) return this;
-        else if(temp.getHeight() < getHeight()) return temp;
-        else if(temp.compareTo(this) < 0 && temp.getHeight() == getHeight()) return temp;
-        else return this;
+        if(temp == NULL_NODE)
+        {
+            return this;
+        }
+        else if(temp.getHeight() < getHeight())
+        {
+            return temp;
+        }
+        else if(temp.compareTo(this) < 0 && temp.getHeight() == getHeight())
+        {
+            return temp;
+        }
+        else
+        {
+            return this;
+        }
     }
     
     /**
