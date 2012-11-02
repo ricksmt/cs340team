@@ -419,7 +419,7 @@ public class Connections
      */
     public Node getHighestSurrogateNeighbor()
     {
-        SortedSet<Node> sorted = new TreeSet<Node>(surrogateNeighbors);
+        final SortedSet<Node> sorted = new TreeSet<Node>(surrogateNeighbors);
         return sorted.last();
     }
 
