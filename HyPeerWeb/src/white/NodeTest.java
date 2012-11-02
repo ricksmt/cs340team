@@ -55,7 +55,7 @@ public class NodeTest extends TestCase
         Node node8 = new Node(8);
         node0.addNeighbor(node1);
         node0.addNeighbor(node8);
-        assert node0.getLowestNeighborWithoutChild() == node0;
+        assert node0.getLowestNeighborWithoutChild() == node1;
         
         //temp less than this(0<1), temp height greater than this height (2>1)
         Node node11 = new Node(11);
@@ -66,7 +66,7 @@ public class NodeTest extends TestCase
         //temp greater than this(1>0), temp height greater than this height (3>1)
         node1.addNeighbor(node8);
         node1.addNeighbor(node11);
-        assert node0.getLowestNeighborWithoutChild() == node0;
+        assert node0.getLowestNeighborWithoutChild() == node8;
         
         //temp less than this (0<8), temp height equal this height (1=1)
         Node node0b = new Node(0);
@@ -76,7 +76,7 @@ public class NodeTest extends TestCase
         assert node8b.getLowestNeighborWithoutChild() == node0b;
         
         //temp greater than this (8>0), temp height equal to this height (1<2)
-        assert node0.getLowestNeighborWithoutChild() == node0;
+        assert node0.getLowestNeighborWithoutChild() == node8;
         
         //temp equal to this is unreachable
     }
