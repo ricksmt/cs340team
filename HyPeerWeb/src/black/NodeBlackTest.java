@@ -496,7 +496,7 @@ public class NodeBlackTest extends TestCase {
          * I cannot test size 0.
          * A hypeerweb will never have duplicate nodes, so we need not test that.
          */
-       /* 
+       
         //No children
       //number of neighbors 1 (boundary)
         assertTrue(node0a.getLowestNeighborWithoutChild() == node0a);
@@ -505,7 +505,7 @@ public class NodeBlackTest extends TestCase {
         assertTrue(node1b.getLowestNeighborWithoutChild() == node0b);
         
         //number of neighbors 3 (beyond boundary)
-        assertTrue(node0e.getLowestNeighborWithoutChild() == node0e);
+        assertTrue(node0e.getLowestNeighborWithoutChild() == node1e);
         
         //extra test
         assertTrue(node3e.getLowestNeighborWithoutChild() == node1e); 
@@ -523,14 +523,14 @@ public class NodeBlackTest extends TestCase {
         node0.addNeighbor(node2);
         node1.addNeighbor(node3);
         node2.addNeighbor(node5);
-        assertTrue(node0.getLowestNeighborWithoutChild() == node0);
+        assertTrue(node0.getLowestNeighborWithoutChild() == node1);
         
         //number of neighbors 3 (beyond boundary)
         Node node4 = new Node(4);
         Node node12 = new Node(12);
         node0.addNeighbor(node4);
         node4.addNeighbor(node12);
-        assertTrue(node0.getLowestNeighborWithoutChild() == node0);
+        assertTrue(node0.getLowestNeighborWithoutChild() == node1);
         
         //Mixed (real hypeerweb)
         
@@ -538,11 +538,14 @@ public class NodeBlackTest extends TestCase {
         assertTrue(node0a.getLowestNeighborWithoutChild() == node0a);
         
         //number of neighbors 2 (boundary + 1)
-        //assertTrue(node1b.getLowestNeighborWithoutChild() == node0b;
-        assertTrue(node0b.getLowestNeighborWithoutChild() == node1b);
+        assertTrue(node1b.getLowestNeighborWithoutChild() == node0b);
+        assertTrue(node0b.getLowestNeighborWithoutChild() == node0b);
         
         //number of neighbors 3 (beyond boundary)
         assertTrue(node1e.getLowestNeighborWithoutChild() == node1e); 
+        
+        //extra
+        assertTrue(node3e.getLowestNeighborWithoutChild() == node1e); 
         
         //I will now test a very large case
         Node nodeX = new Node(501);
@@ -551,7 +554,7 @@ public class NodeBlackTest extends TestCase {
         	nodeX.addNeighbor(new Node(i));
         }
         assertTrue(nodeX.getLowestNeighborWithoutChild().getWebId()==1);
-        */
+        
     }
     
     //mostly copied from Exp.java

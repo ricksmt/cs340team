@@ -533,8 +533,10 @@ public class Node implements Comparable<Node>
     /**
      * @pre This is part of a valid hypeerweb.
      * @post No change to hypeerweb
-     * @return Smallest neighbor without a child if found is returned.
-     *          If not found, this is returned.
+     * @return
+     *  If this has no neighbors, it returns itself
+     *  If this has at least one neighbor without any children, it returns the lowest of them
+     *  If this has no neighbors without children, it returns itself
      */
     public Node getLowestNeighborWithoutChild()
     {
