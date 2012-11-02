@@ -60,7 +60,7 @@ public class HyPeerWebBlack extends TestCase{
         web = HyPeerWeb.getSingleton();
         assertTrue(web.size() == 0);
     }
-/*
+
     @Test
     public void testClear() {
         HyPeerWeb web = HyPeerWeb.getSingleton();
@@ -217,44 +217,46 @@ public class HyPeerWebBlack extends TestCase{
         }
         catch(AssertionError e) { }
     }
-*/
+
     @Test
     public void testReload() {
+        HyPeerWebDatabase.initHyPeerWebDatabase();
         HyPeerWeb web = HyPeerWeb.getSingleton();
         web.clear();
         web.saveToDatabase();
         web.addNode(new Node(0));
-        web.reload(DATABASE_ONE);
+        web.reload();
         assertTrue(web.size() == 0);
         web.addNode(new Node(0));
         web.saveToDatabase();
-        web.reload(DATABASE_ONE);
+        web.reload();
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
             web.addToHyPeerWeb(new Node(0), web.getNode(0));
             web.saveToDatabase();
-            web.reload(DATABASE_ONE);
+            web.reload();
         }
         assertTrue(web.size() == MAX_SIZE);
     }
 
     @Test
     public void testSaveToDatabase() {
+        HyPeerWebDatabase.initHyPeerWebDatabase();
         HyPeerWeb web = HyPeerWeb.getSingleton();
         web.clear();
         web.saveToDatabase();
         assertTrue(web.size() == 0);
         web.addNode(new Node(0));
-        web.reload(DATABASE_ONE);
+        web.reload();
         assertTrue(web.size() == 0);
         web.addNode(new Node(0));
         web.saveToDatabase();
-        web.reload(DATABASE_ONE);
+        web.reload();
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
             web.addToHyPeerWeb(new Node(0), web.getNode(0));
             web.saveToDatabase();
-            web.reload(DATABASE_ONE);
+            web.reload();
         }
         assertTrue(web.size() == MAX_SIZE);
     }
