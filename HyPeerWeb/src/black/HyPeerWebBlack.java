@@ -184,40 +184,6 @@ public class HyPeerWebBlack extends TestCase{
         }
         assertTrue(web.size() == MAX_SIZE);
     }
-
-    @Test
-    public void testGetNodeAsserts() {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        try{
-            web.getNode(-1);
-            fail("HyPeerWeb.getNode accepted -1 on size 0.");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.getNode(0);
-            fail("HyPeerWeb.getNode accepted 0 on size 0.");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.getNode(1);
-            fail("HyPeerWeb.getNode accepted 1 on size 0.");
-        }
-        catch(AssertionError e) { }
-        Node node = new Node(0);
-        web.addNode(node);
-        assertTrue(node == web.getNode(0));
-        try{
-            web.getNode(-1);
-            fail("HyPeerWeb.getNode accepted -1 on size 1.");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.getNode(1);
-            fail("HyPeerWeb.getNode accepted 1 on size 1.");
-        }
-        catch(AssertionError e) { }
-    }
-
     @Test
     public void testReload() {
         HyPeerWebDatabase.initHyPeerWebDatabase();
@@ -271,18 +237,6 @@ public class HyPeerWebBlack extends TestCase{
         }
         assertTrue(web.size() == MAX_SIZE);
     }
-
-    @Test
-    public void testAddNodeAsserts() {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        web.addNode(new Node(0));
-        try{
-            web.addNode(new Node(0));
-            fail("HyPeerWeb.addNode accepted 0 when 0 is in the HyPeerWeb.");
-        }
-        catch(AssertionError e) { }
-    }
-
     @Test
     public void testContains() {
         HyPeerWeb web = HyPeerWeb.getSingleton();
@@ -307,42 +261,6 @@ public class HyPeerWebBlack extends TestCase{
                     web.getNode(rand.nextInt(web.size())));
         }
         assertTrue(web.size() == MAX_SIZE);
-    }
-
-    @Test
-    public void testAddToHyPeerWebAsserts() {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        try{
-            web.addToHyPeerWeb(null, new Node(0));
-            fail("HyPeerWeb.addToHyPeerWeb accepted null for newNode. Size = 0");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.addToHyPeerWeb(Node.NULL_NODE, new Node(0));
-            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for newNode. Size = 0");
-        }
-        catch(AssertionError e) { }
-        web.addNode(new Node(0));
-        try{
-            web.addToHyPeerWeb(null, web.getNode(0));
-            fail("HyPeerWeb.addToHyPeerWeb accepted null for newNode. Size = 1");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.addToHyPeerWeb(Node.NULL_NODE, web.getNode(0));
-            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for newNode. Size = 1");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.addToHyPeerWeb(new Node(-1), null);
-            fail("HyPeerWeb.addToHyPeerWeb accepted null for startNode.");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.addToHyPeerWeb(new Node(-1), Node.NULL_NODE);
-            fail("HyPeerWeb.addToHyPeerWeb accepted NULL_NODE for startNode.");
-        }
-        catch(AssertionError e) { }
     }
 
     @Test
@@ -381,20 +299,5 @@ public class HyPeerWebBlack extends TestCase{
             }
             web.removeFromHyPeerWeb(web.size() - 1);
         }
-    }
-
-    @Test
-    public void testRemoveFromHyPeerWebIntAsserts() {
-        HyPeerWeb web = HyPeerWeb.getSingleton();
-        try{
-            web.removeFromHyPeerWeb(-1);
-            fail("HyPeerWeb.removeFromHyPeerWeb accepted -1 for id.");
-        }
-        catch(AssertionError e) { }
-        try{
-            web.removeFromHyPeerWeb(-1);
-            fail("HyPeerWeb.removeFromHyPeerWeb accepted 0 for id. Size = 0");
-        }
-        catch(AssertionError e) { }
     }
 }
