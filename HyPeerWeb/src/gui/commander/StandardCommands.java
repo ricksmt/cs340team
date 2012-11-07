@@ -15,6 +15,7 @@ import gui.Main.GUI;
 import gui.mapper.NodeListing;
 import gui.newWindows.BroadcastWindow;
 import gui.newWindows.SendWindow;
+import hypeerweb.Node;
 /**
  * Standard Commands are a basic set of commands that are needed to test a HyPeerWeb.  A open command line is available which may allow for more specific commands as is appropriate.
  * @author Matthew Smith
@@ -155,6 +156,26 @@ public class StandardCommands extends JPanel
 		//      D. If a node is found it is the start node.  If so then
 		//              1. invoke your "addToHyPeerWeb" command on the startNode passing in the new node created previously.
 		//				2. Increase the nodeListing size (See the NodeListing class for details).
+	    int size = main.getHyPeerWebDebugger().getMapper().getNodeListing().listSize();
+	    if(size >= NodeListing.MAX_NUMBER_OF_NODES) main.getHyPeerWebDebugger().getStatus().
+	        setContent("Maximum number of nodes reached. Node not added.");
+	    else{
+	        Node node = new Node(0);
+	        final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
+	        final Node start = main.getHyPeerWeb().getNode(id);
+            if(size == 0){
+                main.getHyPeerWeb().addToHyPeerWeb(node, start);
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
+            }
+            else if(start == Node.NULL_NODE){
+	            main.getHyPeerWebDebugger().getStatus().
+	                setContent("No start node selected. Node not added.");
+	        }
+	        else{
+	            main.getHyPeerWeb().addToHyPeerWeb(node, start);
+	            main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
+	        }
+	    }
 	}
 	
 	/**
@@ -170,6 +191,21 @@ public class StandardCommands extends JPanel
 		//      C. Otherwise:
 		//      	1. invoke your "removeFromHyPeerWeb" command on the node to be deleted.
 		//			2. Decrease the nodeListing size (See the NodeListing class for details).
+        int size = main.getHyPeerWebDebugger().getMapper().getNodeListing().listSize();
+        if(size == 1) main.getHyPeerWebDebugger().getStatus().
+            setContent("Minimum number of nodes reached. Node not removed.");
+        else{
+            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
+            final Node start = main.getHyPeerWeb().getNode(id);
+            if(start == Node.NULL_NODE){
+                main.getHyPeerWebDebugger().getStatus().
+                    setContent("No start node selected. Node not removed.");
+            }
+            else{
+                main.getHyPeerWeb().removeFromHyPeerWeb(id);
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().decreaseListSize();
+            }
+        }
 	}
 	
 	/**

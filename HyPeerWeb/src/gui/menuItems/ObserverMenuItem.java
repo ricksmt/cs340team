@@ -3,14 +3,9 @@ package gui.menuItems;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
-import gui.remote.RemoteViewer;
-
 import gui.Main.GUI;
-import gui.Node;
 
 /**
  * Represents the Observe menu item presented in the Help menu

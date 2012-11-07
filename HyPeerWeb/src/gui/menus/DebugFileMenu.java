@@ -51,7 +51,8 @@ public class DebugFileMenu extends JMenu{
 
 			public void actionPerformed(ActionEvent e) {
 				destroy();
-				main.getHyPeerWeb().close();
+				main.getHyPeerWeb().saveToDatabase();
+				main.getHyPeerWeb().clear();
 				System.exit(0);
 			}
 			
@@ -63,8 +64,8 @@ public class DebugFileMenu extends JMenu{
 	/**
 	 *  Called before the program exits
 	 */
-	public void destroy()	{
-		//TODO Phase 5 -- clean up before exiting the program
-		main.getHyPeerWeb().close();
+	public void destroy(){
+		main.getHyPeerWeb().saveToDatabase();
+		main.getHyPeerWeb().clear();
 	}
 }

@@ -35,7 +35,9 @@ public class GUISender extends SendVisitor {
 	 */
 	public static Parameters createInitialParameters(int target, String message){
 		//TODO Phase 5 -- replace the next line with one or more lines implementing the initialization of the parameters.
-		return null;
+		final Parameters params = new Parameters();
+		params.set(MESSAGE_KEY, message);
+		return params;
 	}
 
 	@Override
@@ -49,6 +51,8 @@ public class GUISender extends SendVisitor {
 	 */
 	protected void targetOperation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
+	    gui.Main.GUI.getSingleton(null).printToTracePanel(
+	            "Target node = " + node.getWebId() + ", message = '" + parameters.get(MESSAGE_KEY) + "'.\n");
 	}
 	
 	/**
@@ -61,6 +65,8 @@ public class GUISender extends SendVisitor {
 	 */	
 	protected void intermediateOperation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
+        gui.Main.GUI.getSingleton(null).printToTracePanel(
+                "Sending message to node = " + parameters.get(TARGET_KEY) + ", currently at node " + node.getWebId() + "'.\n");
 	}
 	
 	/**

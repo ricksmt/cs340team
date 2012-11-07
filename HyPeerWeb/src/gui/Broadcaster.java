@@ -34,7 +34,9 @@ public class Broadcaster extends BroadcastVisitor {
 	 */
 	public static Parameters createInitialParameters(String message) {
 		//TODO Phase 5 -- replace the next line with one or more lines implementing the initialization of the parameters.
-		return null;
+	    Parameters params = new Parameters();
+	    params.set(MESSAGE_KEY, message);
+		return params;
 	}
 	
 	@Override
@@ -48,6 +50,8 @@ public class Broadcaster extends BroadcastVisitor {
 	 */
 	protected void operation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
+	    gui.Main.GUI.getSingleton(null).printToTracePanel(
+	            "Broadcasting '" + parameters.get(MESSAGE_KEY) + "' to node " + node.getWebId() + ".\n");
 	}
 	
 	

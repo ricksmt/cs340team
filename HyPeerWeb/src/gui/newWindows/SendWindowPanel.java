@@ -1,6 +1,9 @@
 package gui.newWindows;
 
+import gui.GUISender;
 import gui.Main.GUI;
+import hypeerweb.Node;
+import hypeerweb.Visitor;
 
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -73,6 +76,18 @@ public class SendWindowPanel
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.
     	//			2. Otherwise, get the message from the "messageBox" component and send it from the start node to the target node
     	//				in the HyPeerWeb using the "GUISender" visitor.
+        final Node start = main.getHyPeerWeb().getNode(Integer.parseInt(startingNode.getText()));
+        final Node end = main.getHyPeerWeb().getNode(Integer.parseInt(endingNode.getText()));
+        if(start == Node.NULL_NODE){
+            main.getHyPeerWebDebugger().getPrinter().println("Could not find node " + startingNode.getText());
+        }
+        else if(end == Node.NULL_NODE){
+            main.getHyPeerWebDebugger().getPrinter().println("Could not find node " + endingNode.getText());
+        }
+        else{
+            final Visitor visitor = new GUISender();
+            visitor.visit(start, GUISender.createInitialParameters(end.getWebId(), messageBox.getText()));
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 package gui.Main;
 
-import gui.HyPeerWeb;
+import hypeerweb.HyPeerWeb;
 
 import gui.Main.HyPeerWebDebugger;
 
@@ -50,7 +50,8 @@ public class GUI extends JFrame
 	}
 	
 	private void shutdown(){
-		hypeerweb.close();
+		hypeerweb.saveToDatabase();
+		hypeerweb.clear();
 	}
 	
 	public static GUI getSingleton(HyPeerWeb hypeerweb){
@@ -63,7 +64,8 @@ public class GUI extends JFrame
 			catch(Exception e)	{
 				JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
-				hypeerweb.close();
+		        hypeerweb.saveToDatabase();
+		        hypeerweb.clear();
 				System.exit(1);
 			}
 		}
@@ -74,7 +76,7 @@ public class GUI extends JFrame
 	 * Start Point of the Program
 	 */
 	public static void main (String[] args){
-		HyPeerWeb.getHyPeerWeb();
+		getSingleton(HyPeerWeb.getSingleton());
 	}
 
 	/**
@@ -94,7 +96,8 @@ public class GUI extends JFrame
 	}
 	
 	public void finalize(){
-		hypeerweb.close();
+        hypeerweb.saveToDatabase();
+        hypeerweb.clear();
 	}
 
 }
