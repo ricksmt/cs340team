@@ -155,6 +155,14 @@ public class StandardCommands extends JPanel
 		//      D. If a node is found it is the start node.  If so then
 		//              1. invoke your "addToHyPeerWeb" command on the startNode passing in the new node created previously.
 		//				2. Increase the nodeListing size (See the NodeListing class for details).
+	    if(nodeList.length >= NodeListing.MAX_NUMBER_OF_NODES)
+	    {
+	        
+	    }
+	    else
+	    {
+	        
+	    }
 	}
 	
 	/**

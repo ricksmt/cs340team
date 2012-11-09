@@ -1,6 +1,6 @@
 package gui.Main;
 
-import gui.HyPeerWeb;
+import hypeerweb.HyPeerWeb;
 
 import gui.Main.HyPeerWebDebugger;
 
