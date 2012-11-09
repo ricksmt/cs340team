@@ -23,6 +23,7 @@ public abstract class SendVisitor implements Visitor
      */
     public SendVisitor()
     {
+        TARGET_KEY="target";
     }
     
     /**
