@@ -13,12 +13,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import gui.menus.NodeOptions;
 import gui.Main.GUI;
-import gui.HyPeerWeb;
 
 /**
  *  Gui component for listing nodes in a HyperPeerWeb 

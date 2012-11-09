@@ -1,6 +1,10 @@
 package gui.newWindows;
 
+import gui.Broadcaster;
+import gui.GUISender;
 import gui.Main.GUI;
+import hypeerweb.Node;
+import hypeerweb.Visitor;
 
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -64,5 +68,13 @@ public class BroadcastWindowPanel
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.
     	//		B. Otherwise, get the message from the "messageBox" component and broadcast it to all nodes in the HyPeerWeb,
     	//			starting at the indicated start node, using the Broadcaster visitor.
+        final Node start = main.getHyPeerWeb().getNode(Integer.parseInt(startingNode.getText()));
+        if(start == Node.NULL_NODE){
+            main.getHyPeerWebDebugger().getPrinter().println("Could not find node " + startingNode.getText());
+        }
+        else{
+            final Visitor visitor = new Broadcaster();
+            visitor.visit(start, Broadcaster.createInitialParameters(messageBox.getText()));
+        }
     }
 }
