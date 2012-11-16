@@ -1,4 +1,7 @@
 package command;
+
+import hypeerweb.HyPeerWeb;
+
 public class Server {	
 	public static void main(String[] args){
 		ObjectDB.setFileLocation("Database.db");
@@ -11,5 +14,8 @@ public class Server {
 			System.err.println(e.getMessage());
 			System.err.println(e.getStackTrace());
 		}
+		
+		HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+		System.out.println(hypeerweb.getId());
 	}
 }

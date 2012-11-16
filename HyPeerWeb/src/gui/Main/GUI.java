@@ -76,7 +76,15 @@ public class GUI extends JFrame
 	 * Start Point of the Program
 	 */
 	public static void main (String[] args){
-		getSingleton(HyPeerWeb.getSingleton());
+	   // GUI gui;
+	    if (args.length == 0)
+	        getSingleton(HyPeerWeb.getSingleton());
+	    else
+	    {
+	       //TODO init this id object with the args. These will be the values printed by Server.java
+	       GlobalObjectId id = new GlobalObjectId();
+	       getSingleton(new HyPeerWebProxy(id));
+	    }
 	}
 
 	/**

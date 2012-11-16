@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * The Class HyPeerWeb.
  */
-public class HyPeerWeb
+public class HyPeerWeb extends ProxyableObject
 {
     
     /** The nodes. */
@@ -25,8 +25,9 @@ public class HyPeerWeb
      * @pre None
      * @post A valid HyPeerWeb with height == 0
      */
-    HyPeerWeb()
+    protected HyPeerWeb()
     {
+        super();
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
     }
