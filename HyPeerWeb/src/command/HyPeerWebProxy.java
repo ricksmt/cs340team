@@ -4,7 +4,7 @@ package command;
 public class HyPeerWebProxy
     extends hypeerweb.HyPeerWeb
 {
-    private GlobalObjectId globalObjectId;
+    private static GlobalObjectId globalObjectId;
 
     public HyPeerWebProxy(GlobalObjectId globalObjectId){
         this.globalObjectId = globalObjectId;

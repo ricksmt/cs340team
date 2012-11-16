@@ -82,8 +82,10 @@ public class GUI extends JFrame
 	    else
 	    {
 	       //TODO init this id object with the args. These will be the values printed by Server.java
-	       GlobalObjectId id = new GlobalObjectId();
-	       getSingleton(new HyPeerWebProxy(id));
+	       command.PortNumber pn = new command.PortNumber(new Integer(args[2]));
+	       command.LocalObjectId loid = new command.LocalObjectId(new Integer(args[3]));
+	       command.GlobalObjectId id = new command.GlobalObjectId(args[1], pn, loid);
+	       getSingleton(new command.HyPeerWebProxy(id));
 	    }
 	}
 
