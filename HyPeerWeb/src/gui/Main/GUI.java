@@ -10,6 +10,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import command.PeerCommunicator;
+
 /**
  * The central GUI used to display information about the HyPeerWeb and debug information
  * 
@@ -78,13 +80,22 @@ public class GUI extends JFrame
 	public static void main (String[] args){
 	   // GUI gui;
 	    if (args.length == 0)
+	    {
 	        getSingleton(HyPeerWeb.getSingleton());
+	        System.out.println("ERROR, not getting args.");
+	    }
 	    else
 	    {
 	       //TODO init this id object with the args. These will be the values printed by Server.java
-	       command.PortNumber pn = new command.PortNumber(new Integer(args[2]));
-	       command.LocalObjectId loid = new command.LocalObjectId(new Integer(args[3]));
-	       command.GlobalObjectId id = new command.GlobalObjectId(args[1], pn, loid);
+	       command.PortNumber pn = new command.PortNumber(new Integer(args[1]));
+	       command.LocalObjectId loid = new command.LocalObjectId(new Integer(args[2]));
+	       command.GlobalObjectId id = new command.GlobalObjectId(args[0], pn, loid);
+	       try{
+	            PeerCommunicator.createPeerCommunicator();
+	        }catch(Exception e){
+	            System.err.println("ERROR:" + e.getMessage());
+	            System.err.println(e.getStackTrace());
+	        }
 	       getSingleton(new command.HyPeerWebProxy(id));
 	    }
 	}
