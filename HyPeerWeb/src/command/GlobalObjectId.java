@@ -16,7 +16,7 @@ import java.net.InetAddress;
  * 
  * @author Scott Woodfield
  */
-public class GlobalObjectId {
+public class GlobalObjectId implements java.io.Serializable {
 //Domain Implementation
 	/**
 	 * The machineAddr of the GlobalObjectId
@@ -215,6 +215,7 @@ public class GlobalObjectId {
 		}
 		return result;                 
 	}
+	
 	
 //Auxiliary Constants, Variables, and Methods
 	//private InetAddress getThisMachineAddress(){

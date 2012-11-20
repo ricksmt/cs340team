@@ -10,13 +10,13 @@ public class HyPeerWeb extends ProxyableObject
 {
     
     /** The nodes. */
-    private HashMap<Integer,Node> nodes;
+    private transient HashMap<Integer,Node> nodes;
     
     /** The singleton. */
-    private static HyPeerWeb singleton;
+    private transient static HyPeerWeb singleton;
     
     /** The database. */
-    private HyPeerWebDatabase database;
+    private transient HyPeerWebDatabase database;
 
     
     /**
@@ -155,6 +155,12 @@ public class HyPeerWeb extends ProxyableObject
 	 */
 	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
+	    if (nodes.size()==0 && newNode == null)
+	    {
+	        Node firstNode = new Node(0);
+	        firstNode.insertSelf(null);
+	    }
+	        
 	    assert newNode != null && newNode != Node.NULL_NODE;
 	    if (nodes.size() > 0)
 	    {

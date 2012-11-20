@@ -94,23 +94,23 @@ public class Node extends ProxyableObject implements Comparable<Node>
     /**
      * State represents this node's position (and next action) in the cap node locating algorithm
      */
-    protected State state;
+    protected transient State state;
     
     
     /**
      * This node's webId
      */
-    protected WebId webid;
+    protected transient WebId webid;
     
     /**
      * This node's contents.
      */
-    protected Contents contents;
+    protected transient Contents contents;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
-    protected Connections connections;
+    protected transient Connections connections;
     
     public static final Node NULL_NODE = null;
     

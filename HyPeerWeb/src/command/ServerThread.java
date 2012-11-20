@@ -82,7 +82,8 @@ public class ServerThread extends Thread {
 	            command.execute();
 	        }
 	    } catch(Exception e) {
-	    	  
+	        System.err.println("COMMAND ERROR:" + e.getMessage());
+            System.err.println(e.getStackTrace());
 	    }       
 	}
 }

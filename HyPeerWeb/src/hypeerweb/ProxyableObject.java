@@ -7,7 +7,7 @@ public abstract class ProxyableObject implements java.io.Serializable
      */
    //private static final long serialVersionUID = 1L;
 
-   private command.GlobalObjectId id;
+   private transient command.GlobalObjectId id;
    public ProxyableObject()
    {
        id = new command.GlobalObjectId();

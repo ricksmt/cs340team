@@ -669,5 +669,6 @@ public class Connections
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors) action.notify(inverseSurrogateNeighbor, node1, node2);
     }
+    
 }
 

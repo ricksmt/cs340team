@@ -317,11 +317,12 @@ public class NodeProxy
     }
 
     public command.GlobalObjectId getId(){
-        String[] parameterTypeNames = new String[0];
+        /*String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.ProxyableObject", "getId", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (command.GlobalObjectId)result;
+        return (command.GlobalObjectId)result;*/
+        return globalObjectId;
     }
 
     public boolean equals(java.lang.Object p0){
@@ -350,10 +351,15 @@ public class NodeProxy
         return (Integer)result;
     }
     
-    public Object readReplace()
+    public Object writeReplace()
     {
-        
-        if (globalObjectId.onSameMachineAs(new GlobalObjectId()))
+        return this;
+    }
+    
+    public Object readResolve()
+    {
+        GlobalObjectId newId = new GlobalObjectId();
+        if (globalObjectId.onSameMachineAs(newId))
         {
             HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
             return hypeerweb.getNode(getWebId());

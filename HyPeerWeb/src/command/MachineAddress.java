@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
  * </div>
  * @author Scott Woodfield
  */
-public class MachineAddress
+public class MachineAddress implements java.io.Serializable
 {
 //Class Domain
 	/**

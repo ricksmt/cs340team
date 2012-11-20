@@ -162,9 +162,9 @@ public class StandardCommands extends JPanel
 	    else{
 	        Node node = new Node(0);
 	        final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
-	        final Node start = main.getHyPeerWeb().getNode(id);
+	        final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
             if(size == 0){
-                main.getHyPeerWeb().addToHyPeerWeb(node, start);
+                main.getHyPeerWeb().addToHyPeerWeb(null, start);
                 main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
             }
             else if(start == Node.NULL_NODE){

@@ -18,7 +18,7 @@ package command;
  * </pre>
  * @author Scott Woodfield
  */
-public class PortNumber {
+public class PortNumber implements java.io.Serializable {
 //Class Domain Implementation
 	/**
 	 * The default port number that an application listens on.
