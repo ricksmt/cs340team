@@ -149,25 +149,25 @@ public class HyPeerWeb extends ProxyableObject
 	 *
 	 * @param newNode the new node
 	 * @param startNode the start node
-     * @pre newNode is a valid Node and startNode is contained with this valid HyPeerWeb
+     * @pre startNode is contained with this valid HyPeerWeb if the HyPeerWeb size is greater than 0
      * @post this HyPeerWeb is valid, no nodes previously within HyPeerWeb have changed IDs,
-     *  and HyPeerWeb contains newNode. 
+     *  and HyPeerWeb contains newNode or a newly created Node. 
 	 */
 	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
-	    if (nodes.size()==0 && newNode == null)
+	    Node toAdd = newNode;
+	    if (toAdd == null || toAdd == Node.NULL_NODE)
 	    {
-	        Node firstNode = new Node(0);
-	        firstNode.insertSelf(null);
+	        toAdd = new Node();
 	    }
-	        
-	    assert newNode != null && newNode != Node.NULL_NODE;
 	    if (nodes.size() > 0)
 	    {
 	        assert startNode != null && startNode != Node.NULL_NODE;
-	        newNode.insertSelf(startNode);
+	        toAdd.insertSelf(startNode);
 	    }
-        addNode(newNode);
+	    
+	    
+	    addNode(toAdd);
 	}
 	
 	/** 

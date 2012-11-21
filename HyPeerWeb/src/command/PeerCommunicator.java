@@ -79,7 +79,7 @@ public class PeerCommunicator
     private PeerCommunicator() {
     	try{
     		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
-       	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.DEFAULT_PORT_NUMBER, null);
+       	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.getApplicationsPortNumber(), null);
     	    serverSocket = new ServerSocket(myGlobalObjectId.getPortNumber().getValue());
         	this.start();
     	} catch(Exception e){
@@ -193,7 +193,7 @@ public class PeerCommunicator
 	public static void createPeerCommunicator(){
 		assert singleton == null;
 		
-		singleton = new PeerCommunicator(PortNumber.DEFAULT_PORT_NUMBER);
+		singleton = new PeerCommunicator(PortNumber.getApplicationsPortNumber());
 	}
 	
 	/**

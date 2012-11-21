@@ -39,7 +39,7 @@ public class HyPeerWebProxy
         parameterTypeNames[0] = "hypeerweb.Node";
         parameterTypeNames[1] = "hypeerweb.Node";
         Object[] actualParameters = new Object[2];
-        actualParameters[0] = p0;
+        actualParameters[0] = null;//we don't really need to pass p0
         actualParameters[1] = p1;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "addToHyPeerWeb", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
@@ -109,7 +109,10 @@ public class HyPeerWebProxy
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getNode", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (hypeerweb.Node)result;
+        if (result.getClass()==NodeProxy.class || result.getClass()==hypeerweb.Node.class)
+            return (hypeerweb.Node)result;
+        else
+            return null;
     }
 
     public boolean equals(java.lang.Object p0){
@@ -123,11 +126,12 @@ public class HyPeerWebProxy
     }
 
     public java.lang.String toString(){
-        String[] parameterTypeNames = new String[0];
+        /*String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "toString", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (java.lang.String)result;
+        return (java.lang.String)result;*/
+        return "I'm a proxy hypeerweb: " + globalObjectId.toString();
     }
 
     public int hashCode(){

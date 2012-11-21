@@ -17,7 +17,8 @@ import hypeerweb.Parameters;
  * 		<b>Domain:</b> <i>None</i>
  * </pre>
  */
-public class Broadcaster extends BroadcastVisitor {
+public class Broadcaster extends BroadcastVisitor  {
+    
 	/**
 	 * The default constructor. It does nothing but call the superclass's default constructor.
 	 * 

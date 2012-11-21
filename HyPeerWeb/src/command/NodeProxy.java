@@ -44,14 +44,15 @@ public class NodeProxy
     
 
     public void accept(hypeerweb.Visitor p0, hypeerweb.Parameters p1){
-        String[] parameterTypeNames = new String[2];
+        /*String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "interface hypeerweb.Visitor";
         parameterTypeNames[1] = "hypeerweb.Parameters";
         Object[] actualParameters = new Object[2];
         actualParameters[0] = p0;
         actualParameters[1] = p1;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "accept", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);*/
+        p0.visit(this, p1);
     }
 
     public void setState(hypeerweb.Node.State p0){
@@ -336,11 +337,12 @@ public class NodeProxy
     }
 
     public java.lang.String toString(){
-        String[] parameterTypeNames = new String[0];
+        /*String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "toString", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (java.lang.String)result;
+        return (java.lang.String)result;*/
+        return "I'm a proxy node: " + globalObjectId.toString();
     }
 
     public int hashCode(){
@@ -361,8 +363,9 @@ public class NodeProxy
         GlobalObjectId newId = new GlobalObjectId();
         if (globalObjectId.onSameMachineAs(newId))
         {
-            HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
-            return hypeerweb.getNode(getWebId());
+            //HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+            //return hypeerweb.getNode(getWebId());
+            return ObjectDB.getSingleton().getValue(globalObjectId.getLocalObjectId());
         }
         else
         {

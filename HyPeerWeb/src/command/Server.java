@@ -4,6 +4,7 @@ import hypeerweb.HyPeerWeb;
 
 public class Server {	
 	public static void main(String[] args){
+	    PortNumber.setApplicationsPortNumber(new PortNumber(new Integer(args[0])));
 		ObjectDB.setFileLocation("Database.db");
 		ObjectDB.getSingleton().restore(null);
 		HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();

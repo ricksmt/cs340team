@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  * @author Matthew
  */
-public class Parameters
+public class Parameters implements java.io.Serializable
 {
     Map<String, Object> map = new HashMap<String, Object>();
 

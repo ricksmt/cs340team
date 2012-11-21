@@ -54,7 +54,8 @@ public abstract class BroadcastVisitor implements Visitor
         {
             
             operation(node, parameters);
-            for(Node nodeToBroadcast: getNeighborsToBroadcast(node)) nodeToBroadcast.accept(this, parameters);
+            for(Node nodeToBroadcast: getNeighborsToBroadcast(node))
+                nodeToBroadcast.accept(this, parameters);
         }
         
         
