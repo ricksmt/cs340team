@@ -20,6 +20,9 @@ public class HyPeerWeb extends ProxyableObject
     
     /** The database. */
     private transient HyPeerWebDatabase database;
+    
+    private transient HyPeerWeb nextSegment;
+    private transient HyPeerWeb previousSegment;
 
     
     /**
@@ -33,6 +36,8 @@ public class HyPeerWeb extends ProxyableObject
         super();
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
+        nextSegment = null;
+        previousSegment = null;
     }
 	
     /**
@@ -205,18 +210,46 @@ public class HyPeerWeb extends ProxyableObject
     {
         HyPeerWeb segment = new HyPeerWebProxy(segmentId);
         Collection<Node> toInsert = segment.getNodesInHyPeerWeb();
+        
+        if (nextSegment != null)
+        {
+            segment.setNextSegment(nextSegment);
+        }
+            
+        nextSegment = segment;
+        segment.setPreviousSegment(this);
+        
         //Retrieve any node in this segment
-        Node startNode = nodes.values().iterator().next();
+        Node startNode = null;
+        
+        if (nodes.size() > 0)
+            startNode = nodes.values().iterator().next();
+        
         for (Node nodeToInsert : toInsert)
         {
             addToHyPeerWeb(startNode,nodeToInsert);
         }
     }
 
+    public void setNextSegment(HyPeerWeb nextSegment2)
+    {
+        nextSegment = nextSegment2;
+    }
+
+    public void setPreviousSegment(HyPeerWeb hyPeerWeb)
+    {
+        previousSegment = hyPeerWeb;
+    }
+
     public Collection<Node> getNodesInHyPeerWeb()
     {
-        // TODO Auto-generated method stub
-        // I envision this as using the broadcaster to gather the webs nodes.
-        return null;
+        if (nodes.size() > 0)
+        {
+            HyPeerWebVisitor visitor = new HyPeerWebVisitor();
+            Node startNode = nodes.values().iterator().next();
+            visitor.visit(startNode, BroadcastVisitor.createInitialParameters());
+            return visitor.getNodes();
+        }
+        return new HashSet<Node>(0);
     }
 }
