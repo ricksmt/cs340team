@@ -8,7 +8,7 @@ import java.util.Map;
  * 
  * @author Matthew
  */
-public final class Contents
+public final class Contents implements java.io.Serializable
 {
     
     Map<String, Object> map = new HashMap<String, Object>();

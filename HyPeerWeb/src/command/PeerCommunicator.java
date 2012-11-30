@@ -1,8 +1,10 @@
+package command;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 
 /**
  * The deamon used to both send and receive commands from other applications that may be on this or other machines.
@@ -74,10 +76,10 @@ public class PeerCommunicator
      * @post This single PeerCommunicator is created and listening on the default port number defined in <b>PortNumber</b>.  This starts the long running
      * process, see "run()" below.
      */
-    protected PeerCommunicator() {
+    private PeerCommunicator() {
     	try{
     		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
-       	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.DEFAULT_PORT_NUMBER, null);
+       	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.getApplicationsPortNumber(), null);
     	    serverSocket = new ServerSocket(myGlobalObjectId.getPortNumber().getValue());
         	this.start();
     	} catch(Exception e){
@@ -191,7 +193,7 @@ public class PeerCommunicator
 	public static void createPeerCommunicator(){
 		assert singleton == null;
 		
-		singleton = new PeerCommunicator(PortNumber.DEFAULT_PORT_NUMBER);
+		singleton = new PeerCommunicator(PortNumber.getApplicationsPortNumber());
 	}
 	
 	/**

@@ -28,7 +28,7 @@ import java.util.TreeSet;
  *      
  * @author Trevor Bentley
  */
-public class Connections
+public class Connections implements java.io.Serializable
 {
     public enum Action
     {   
@@ -669,5 +669,6 @@ public class Connections
     {
         for (Node inverseSurrogateNeighbor : inverseSurrogateNeighbors) action.notify(inverseSurrogateNeighbor, node1, node2);
     }
+    
 }
 

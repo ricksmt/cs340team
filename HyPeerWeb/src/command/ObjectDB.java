@@ -1,3 +1,4 @@
+package command;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -57,7 +58,7 @@ public class ObjectDB { //A Singleton
 	 * @post FILE_LOCATION = fileLocation
 	 */
 	public static void setFileLocation(String fileLocation){
-		assert fileLocation == null;
+		assert fileLocation != null;
 		
 		FILE_LOCATION = fileLocation;
 	}

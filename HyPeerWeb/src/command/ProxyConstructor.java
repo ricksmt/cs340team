@@ -1,3 +1,4 @@
+package command;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -282,6 +283,6 @@ public class ProxyConstructor {
     }
 	
 	public static void main(String[] args){
-		create("Significant");
+		create("hypeerweb.HyPeerWeb");
 	}
 }

@@ -1,4 +1,6 @@
+package command;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * The IP address of this machine on the internet.<br>
@@ -9,7 +11,8 @@ import java.net.InetAddress;
  * </div>
  * @author Scott Woodfield
  */
-public class MachineAddress {
+public class MachineAddress implements java.io.Serializable
+{
 //Class Domain
 	/**
 	 * The machineAddress.
@@ -19,15 +22,19 @@ public class MachineAddress {
 //Class Methods
 	/**
 	 * Sets the address of the current machine.
-	 * @param a string representing the name of the current machine.  Can be a URL or IP address.
+	 * @param machineName a string representing the name of the current machine.  Can be a URL or IP address.
 	 * @pre machineName &ne; null AND machineName is a valid IP address or URL
 	 * @post machineAddress = InetAddress.getByName(machineName)
 	 */
-	public static void setMachineAddress(String machineName){
+	public static void setMachineAddress(String machineName)
+	{
 		assert MachineAddress.machineAddress == null;
-		try{
+		try
+		{
 			MachineAddress.machineAddress = InetAddress.getByName(machineName);
-		}catch(Exception e){
+		}
+		catch(Exception e)
+		{
 			System.err.println("ERROR in MachineAddress::setMachineAddress(String):" +
 					           "    Machine name is not a valid machineName");
 			System.exit(1);
@@ -39,7 +46,23 @@ public class MachineAddress {
 	 * @pre None
 	 * @result = machineAddress
 	 */
-	public static InetAddress getThisMachinesInetAddress(){
-		return machineAddress;
+	public static InetAddress getThisMachinesInetAddress()
+	{
+	    if (machineAddress != null)
+	    {
+	        return machineAddress;
+	    }
+	    else
+	    {
+	        try
+	        {
+                machineAddress = InetAddress.getLocalHost();
+            }
+	        catch (UnknownHostException e)
+	        {
+                e.printStackTrace();
+            }
+	        return machineAddress;
+	    }
 	}
 }

@@ -18,7 +18,7 @@ package hypeerweb;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Node implements Comparable<Node>
+public class Node extends ProxyableObject implements Comparable<Node>
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
@@ -94,25 +94,33 @@ public class Node implements Comparable<Node>
     /**
      * State represents this node's position (and next action) in the cap node locating algorithm
      */
-    protected State state;
+    protected transient State state;
     
     
     /**
      * This node's webId
      */
-    protected WebId webid;
+    protected transient WebId webid;
     
     /**
      * This node's contents.
      */
-    protected Contents contents;
+    protected transient Contents contents;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
-    protected Connections connections;
+    protected transient Connections connections;
     
     public static final Node NULL_NODE = null;
+    
+    
+    public Object writeReplace()
+    {
+        command.NodeProxy myProx = new command.NodeProxy(getId());
+        return myProx;
+    }
+    
     
     /**
      * Constructor for a new node.
@@ -123,7 +131,23 @@ public class Node implements Comparable<Node>
      */
     public Node(final int i) //Wait, how would we even know what it's webId is supposed to be?
     {
+        super();
         webid = new WebId(i);
+        connections = new Connections();
+        connections.setFold(this);
+        contents = new Contents();
+        state = State.CAP;
+    }
+    
+    /**
+     * Constructor for a new node.
+     * @pre none
+     * @post This node has a webId of 0, is a CAP node, and is a fold of itself
+     */
+    public Node()
+    {
+        super();
+        webid = new WebId(0);
         connections = new Connections();
         connections.setFold(this);
         contents = new Contents();
@@ -599,10 +623,19 @@ public class Node implements Comparable<Node>
         visitor.visit(this, parameters);
     }
 
-    @Override
-    public int compareTo(final Node o)
+    /*@Override
+    public int compareTo(final Object o)
     {
-        return webid.compareTo(o.webid);
+        if (o.getClass() == this.getClass())
+            return webid.compareTo(((Node) o).webid);
+        return -1;
+    }*/
+    
+    public int compareTo(Node o)
+    {
+        if (o.getClass() == this.getClass())
+            return webid.compareTo(((Node) o).webid);
+        return -1;
     }
     
     /**

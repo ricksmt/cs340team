@@ -1,6 +1,8 @@
+package command;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
 
 /**
  * This thread executes a command that arrived at the PeerCommunicator.  
@@ -80,7 +82,8 @@ public class ServerThread extends Thread {
 	            command.execute();
 	        }
 	    } catch(Exception e) {
-	    	  
+	        System.err.println("COMMAND ERROR:" + e.getMessage());
+            System.err.println(e.getStackTrace());
 	    }       
 	}
 }

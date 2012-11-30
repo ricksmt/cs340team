@@ -17,18 +17,19 @@ import hypeerweb.Parameters;
  * 		<b>Domain:</b> <i>None</i>
  * </pre>
  */
-public class Broadcaster extends BroadcastVisitor {
+public class Broadcaster extends BroadcastVisitor  {
+    
 	/**
 	 * The default constructor. It does nothing but call the superclass's default constructor.
 	 * 
 	 * @pre <i>None</i>
 	 * @post super.post-condition
 	 */
-    private boolean startFromZero;
+   
     private static final String MESSAGE_KEY = "message";
     
 	public Broadcaster(){
-	    startFromZero=true;
+	   super();
 	}
 
 	
@@ -59,11 +60,7 @@ public class Broadcaster extends BroadcastVisitor {
 	protected void operation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
 	    
-	    if (node.getWebId() == 0) startFromZero = false;
 	    
-        if (startFromZero) broadcastFromZero(node, parameters);
-        else
-        {
             gui.Main.GUI.getSingleton(null).printToTracePanel(
                     "Broadcasting '" + parameters.get(MESSAGE_KEY) + "' to node " + node.getWebId() + ".\n");
             Contents contents = node.getContents();
@@ -72,58 +69,10 @@ public class Broadcaster extends BroadcastVisitor {
                 contents.set(MESSAGE_KEY, parameters.get(MESSAGE_KEY));
             }
             
-               
-            for(Node nodeToBroadcast: getNeighborsToBroadcast(node)) nodeToBroadcast.accept(this, parameters);
-        }
 	    
 	}
 	
-	private Set<Node> getNeighborsToBroadcast(Node node)
-    {
-        int nodeId = node.getWebId();
-        int height = node.getHeight();
-        Set<Node> neighborsToBroadcast = new TreeSet<Node>();
-        Set<Node> neighbors = node.getConnections().getNeighbors();
-        
-        double limit = Math.pow(2, height);
-        
-        for(int bit=1; bit<limit; bit*=2){
-            int idToBroadcast = nodeId | bit;
-            
-            if(idToBroadcast == nodeId) break; //reached the first '1'
-            else{
-                for(Node neighbor: neighbors){
-                    if(neighbor.getWebId()==idToBroadcast){
-                        neighborsToBroadcast.add(neighbor);
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return neighborsToBroadcast;
-        
-        
-    }
-    
-    /**
-     * broadcastFromZero
-     * @param node
-     * @param parameters
-     */
-    private void broadcastFromZero(Node node, Parameters parameters)
-    {
-        Node cap = node.findCapNode(node);
-        Node zero = cap.getFold();
-        if(zero.getWebId()!=0) zero = zero.getLowestNeighbor();
-        
-        zero.accept(this, parameters);
-    }
 	
-	
-	/**
-	 * The message parameter identifier to be used to add messages to the parameter list.
-	 */
 	
 
 

@@ -11,10 +11,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import command.GlobalObjectId;
+
 import gui.Main.GUI;
 import gui.mapper.NodeListing;
 import gui.newWindows.BroadcastWindow;
 import gui.newWindows.SendWindow;
+import hypeerweb.HyPeerWeb;
 import hypeerweb.Node;
 /**
  * Standard Commands are a basic set of commands that are needed to test a HyPeerWeb.  A open command line is available which may allow for more specific commands as is appropriate.
@@ -162,9 +165,9 @@ public class StandardCommands extends JPanel
 	    else{
 	        Node node = new Node(0);
 	        final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
-	        final Node start = main.getHyPeerWeb().getNode(id);
+	        final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
             if(size == 0){
-                main.getHyPeerWeb().addToHyPeerWeb(node, start);
+                main.getHyPeerWeb().addToHyPeerWeb(null, start);
                 main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
             }
             else if(start == Node.NULL_NODE){
@@ -220,6 +223,11 @@ public class StandardCommands extends JPanel
 	 */
 	public void broadcastButtonPressed() {
 		broadcastWindow = new BroadcastWindow(main, "Broadcast Message");
+	}
+	
+	private void connectToHyPeerWebSegment(GlobalObjectId segmentId)
+	{
+	   main.getHyPeerWeb().connectToSegment(segmentId); 
 	}
 
 }

@@ -1,3 +1,4 @@
+package command;
 /**
  * The defines a port number used for interprocess communication.  For any service such as the HyPeerWeb there may be one
  * or more application instances running on one or more machines.  A machine may have one or more instances running on the
@@ -17,7 +18,7 @@
  * </pre>
  * @author Scott Woodfield
  */
-public class PortNumber {
+public class PortNumber implements java.io.Serializable {
 //Class Domain Implementation
 	/**
 	 * The default port number that an application listens on.

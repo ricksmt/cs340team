@@ -2,21 +2,24 @@ package hypeerweb;
 
 import java.util.*;
 
+import command.GlobalObjectId;
+import command.HyPeerWebProxy;
+
 
 /**
  * The Class HyPeerWeb.
  */
-public class HyPeerWeb
+public class HyPeerWeb extends ProxyableObject
 {
     
     /** The nodes. */
-    private HashMap<Integer,Node> nodes;
+    private transient Map<Integer,Node> nodes;
     
     /** The singleton. */
-    private static HyPeerWeb singleton;
+    private transient static HyPeerWeb singleton;
     
     /** The database. */
-    private HyPeerWebDatabase database;
+    private transient HyPeerWebDatabase database;
 
     
     /**
@@ -25,8 +28,9 @@ public class HyPeerWeb
      * @pre None
      * @post A valid HyPeerWeb with height == 0
      */
-    HyPeerWeb()
+    protected HyPeerWeb()
     {
+        super();
         nodes = new HashMap<Integer,Node>();
         database = HyPeerWebDatabase.getSingleton();
     }
@@ -121,7 +125,7 @@ public class HyPeerWeb
 	/**
 	 * Adds the node.
 	 *
-	 * @param node0 the node to add to the HyPeerWeb
+	 * @param node0 the node to add to the HyPeerWeb's Map
      * @pre HyPeerWeb does not contain a node with node0's ID
      * @post HyPeerWeb contains node0
 	 */
@@ -132,10 +136,11 @@ public class HyPeerWeb
 	}
 
 	/**
-	 * Contains.
+	 * Returns whether this segment contains a node with the given id as specified by the parameter.
 	 *
-     * @obvious
 	 * @param node0 a Node
+	 * @pre none
+     * @post no change
 	 * @return true, if successful
 	 */
 	public boolean contains(final Node node0)
@@ -148,19 +153,25 @@ public class HyPeerWeb
 	 *
 	 * @param newNode the new node
 	 * @param startNode the start node
-     * @pre newNode is a valid Node and startNode is contained with this valid HyPeerWeb
+     * @pre startNode is contained with this valid HyPeerWeb if the HyPeerWeb size is greater than 0
      * @post this HyPeerWeb is valid, no nodes previously within HyPeerWeb have changed IDs,
-     *  and HyPeerWeb contains newNode. 
+     *  and HyPeerWeb contains newNode or a newly created Node. 
 	 */
 	public void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
-	    assert newNode != null && newNode != Node.NULL_NODE;
+	    Node toAdd = newNode;
+	    if (toAdd == null || toAdd == Node.NULL_NODE)
+	    {
+	        toAdd = new Node();
+	    }
 	    if (nodes.size() > 0)
 	    {
 	        assert startNode != null && startNode != Node.NULL_NODE;
-	        newNode.insertSelf(startNode);
+	        toAdd.insertSelf(startNode);
 	    }
-        addNode(newNode);
+	    
+	    
+	    addNode(toAdd);
 	}
 	
 	/** 
@@ -188,5 +199,24 @@ public class HyPeerWeb
         node.removeFromHyPeerWeb();
         nodes.put(id, nodes.get(size() - 1));
         nodes.remove(size() - 1);
+    }
+    
+    public void connectToSegment(GlobalObjectId segmentId)
+    {
+        HyPeerWeb segment = new HyPeerWebProxy(segmentId);
+        Collection<Node> toInsert = segment.getNodesInHyPeerWeb();
+        //Retrieve any node in this segment
+        Node startNode = nodes.values().iterator().next();
+        for (Node nodeToInsert : toInsert)
+        {
+            addToHyPeerWeb(startNode,nodeToInsert);
+        }
+    }
+
+    public Collection<Node> getNodesInHyPeerWeb()
+    {
+        // TODO Auto-generated method stub
+        // I envision this as using the broadcaster to gather the webs nodes.
+        return null;
     }
 }
