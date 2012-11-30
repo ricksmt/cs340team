@@ -2,6 +2,9 @@ package hypeerweb;
 
 import java.util.*;
 
+import command.GlobalObjectId;
+import command.HyPeerWebProxy;
+
 
 /**
  * The Class HyPeerWeb.
@@ -10,7 +13,7 @@ public class HyPeerWeb extends ProxyableObject
 {
     
     /** The nodes. */
-    private transient HashMap<Integer,Node> nodes;
+    private transient Map<Integer,Node> nodes;
     
     /** The singleton. */
     private transient static HyPeerWeb singleton;
@@ -122,7 +125,7 @@ public class HyPeerWeb extends ProxyableObject
 	/**
 	 * Adds the node.
 	 *
-	 * @param node0 the node to add to the HyPeerWeb
+	 * @param node0 the node to add to the HyPeerWeb's Map
      * @pre HyPeerWeb does not contain a node with node0's ID
      * @post HyPeerWeb contains node0
 	 */
@@ -133,10 +136,11 @@ public class HyPeerWeb extends ProxyableObject
 	}
 
 	/**
-	 * Contains.
+	 * Returns whether this segment contains a node with the given id as specified by the parameter.
 	 *
-     * @obvious
 	 * @param node0 a Node
+	 * @pre none
+     * @post no change
 	 * @return true, if successful
 	 */
 	public boolean contains(final Node node0)
@@ -195,5 +199,24 @@ public class HyPeerWeb extends ProxyableObject
         node.removeFromHyPeerWeb();
         nodes.put(id, nodes.get(size() - 1));
         nodes.remove(size() - 1);
+    }
+    
+    public void connectToSegment(GlobalObjectId segmentId)
+    {
+        HyPeerWeb segment = new HyPeerWebProxy(segmentId);
+        Collection<Node> toInsert = segment.getNodesInHyPeerWeb();
+        //Retrieve any node in this segment
+        Node startNode = nodes.values().iterator().next();
+        for (Node nodeToInsert : toInsert)
+        {
+            addToHyPeerWeb(startNode,nodeToInsert);
+        }
+    }
+
+    public Collection<Node> getNodesInHyPeerWeb()
+    {
+        // TODO Auto-generated method stub
+        // I envision this as using the broadcaster to gather the webs nodes.
+        return null;
     }
 }

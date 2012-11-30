@@ -1,5 +1,9 @@
 package command;
 
+import hypeerweb.Node;
+
+import java.util.Collection;
+
 //import GlobalObjectId;
 public class HyPeerWebProxy
     extends hypeerweb.HyPeerWeb
@@ -140,6 +144,23 @@ public class HyPeerWebProxy
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "hashCode", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Integer)result;
+    }
+    
+    public void connectToSegment(GlobalObjectId segmentId){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "command.GlobalObjectId";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = segmentId;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "connectToSegment", parameterTypeNames, actualParameters, true);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public Collection<Node> getNodesInHyPeerWeb(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getNodesInHyPeerWeb", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Collection<Node>)result;
     }
 
 }
