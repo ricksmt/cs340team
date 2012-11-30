@@ -1,15 +1,12 @@
 package gui.menus;
 
-import gui.GUISender;
 import gui.Main.GUI;
-import hypeerweb.Node;
-import hypeerweb.Visitor;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
+
 
 public class ConnectWindowPanel
     extends JPanel
@@ -71,13 +68,15 @@ public class ConnectWindowPanel
 
     }
     
-    private void setConnectWindowToNull(){
+    private void setConnectWindowToNull()
+    {
         //main.getHyPeerWebDebugger().getStandardCommands().setSendWindowToNull();
     }
     
     private void connectButtonPressed()
     {
-   
+        main.getHyPeerWeb().connectToSegment(globalObjectID.getText(),
+                Integer.parseInt(port.getText()), Integer.parseInt(localObjectID.getText())); 
     }
 }
 

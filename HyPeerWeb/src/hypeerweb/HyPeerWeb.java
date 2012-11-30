@@ -4,6 +4,8 @@ import java.util.*;
 
 import command.GlobalObjectId;
 import command.HyPeerWebProxy;
+import command.LocalObjectId;
+import command.PortNumber;
 
 
 /**
@@ -206,8 +208,11 @@ public class HyPeerWeb extends ProxyableObject
         nodes.remove(size() - 1);
     }
     
-    public void connectToSegment(GlobalObjectId segmentId)
+    public void connectToSegment(String ipAddress, int portNumber, int localObjectId)
     {
+        GlobalObjectId segmentId = new GlobalObjectId(ipAddress, new PortNumber(portNumber),
+                new LocalObjectId(localObjectId));
+        
         HyPeerWeb segment = new HyPeerWebProxy(segmentId);
         Collection<Node> toInsert = segment.getNodesInHyPeerWeb();
         
@@ -225,6 +230,7 @@ public class HyPeerWeb extends ProxyableObject
         if (nodes.size() > 0)
             startNode = nodes.values().iterator().next();
         
+        //Insert all the nodes from the other segment's hypeerweb into my hypeerweb
         for (Node nodeToInsert : toInsert)
         {
             addToHyPeerWeb(startNode,nodeToInsert);

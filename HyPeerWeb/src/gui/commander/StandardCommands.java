@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import command.GlobalObjectId;
-
 import gui.Main.GUI;
 import gui.mapper.NodeListing;
 import gui.newWindows.BroadcastWindow;
@@ -223,11 +221,6 @@ public class StandardCommands extends JPanel
 	 */
 	public void broadcastButtonPressed() {
 		broadcastWindow = new BroadcastWindow(main, "Broadcast Message");
-	}
-	
-	private void connectToHyPeerWebSegment(GlobalObjectId segmentId)
-	{
-	   main.getHyPeerWeb().connectToSegment(segmentId); 
 	}
 
 }
