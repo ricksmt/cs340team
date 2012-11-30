@@ -2,6 +2,7 @@ package gui.menus;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import gui.Main.GUI;
 
@@ -21,6 +22,9 @@ public class DebugMenu extends JMenuBar {
 	
 	/** Help Menu */
 	JMenu help;
+	
+	/**Connect */
+	JMenuItem connect;
 	
 	/**
 	 * Create a Debug Menu
@@ -43,5 +47,8 @@ public class DebugMenu extends JMenuBar {
 		
 		help = new DebugHelpMenu(main);
 		this.add(help);
+		
+		connect = new DebugConnectMenu(main);
+		this.add(connect);
 	}
 }

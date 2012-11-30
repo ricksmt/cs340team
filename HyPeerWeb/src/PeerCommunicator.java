@@ -74,7 +74,7 @@ public class PeerCommunicator
      * @post This single PeerCommunicator is created and listening on the default port number defined in <b>PortNumber</b>.  This starts the long running
      * process, see "run()" below.
      */
-    private PeerCommunicator() {
+    protected PeerCommunicator() {
     	try{
     		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
        	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.DEFAULT_PORT_NUMBER, null);
