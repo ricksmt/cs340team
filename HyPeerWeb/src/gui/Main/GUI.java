@@ -52,8 +52,8 @@ public class GUI extends JFrame
 	}
 	
 	private void shutdown(){
-		hypeerweb.saveToDatabase();
-		hypeerweb.clear();
+		//hypeerweb.saveToDatabase();
+		//ypeerweb.clear();
 	}
 	
 	public static GUI getSingleton(HyPeerWeb hypeerweb){
