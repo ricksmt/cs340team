@@ -258,4 +258,11 @@ public class HyPeerWeb extends ProxyableObject
         }
         return new HashSet<Node>(0);
     }
+    
+    
+    
+    public void migrateNodes()
+    {
+        
+    }
 }
