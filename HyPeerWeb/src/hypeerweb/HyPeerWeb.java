@@ -60,7 +60,7 @@ public class HyPeerWeb extends ProxyableObject
 	 * 
      * @obvious
 	 */
-	public void clear()
+	public synchronized void clear()
 	{
 	    nodes.clear();
 	}
@@ -84,7 +84,7 @@ public class HyPeerWeb extends ProxyableObject
      * @post This is now a valid HyPeerWeb based
      *  on the given database connection string
 	 */
-	public void reload(final String string)
+	public synchronized void reload(final String string)
 	{   
 	    HyPeerWebDatabase.initHyPeerWebDatabase(string);
         database = HyPeerWebDatabase.getSingleton();
@@ -113,7 +113,7 @@ public class HyPeerWeb extends ProxyableObject
      * @post This is now a valid HyPeerWeb based
      *  on the default database connection string
 	 */
-	public void reload()
+	public synchronized void reload()
 	{
 		reload(null);	
 	}
@@ -124,7 +124,7 @@ public class HyPeerWeb extends ProxyableObject
 	 * @pre None
 	 * @post the corresponding database reflects the current HyPeerWeb
 	 */
-	public void saveToDatabase()
+	public synchronized void saveToDatabase()
 	{
 	    database.save(nodes.values());
 	}
@@ -136,7 +136,7 @@ public class HyPeerWeb extends ProxyableObject
      * @pre HyPeerWeb does not contain a node with node0's ID
      * @post HyPeerWeb contains node0
 	 */
-	public void addNode(final Node node0)
+	public synchronized void addNode(final Node node0)
 	{
 	    assert !nodes.containsKey(node0.getWebId());
 	    nodes.put(node0.getWebId(), node0);
@@ -164,7 +164,7 @@ public class HyPeerWeb extends ProxyableObject
      * @post this HyPeerWeb is valid, no nodes previously within HyPeerWeb have changed IDs,
      *  and HyPeerWeb contains newNode or a newly created Node. 
 	 */
-	public void addToHyPeerWeb(final Node newNode, final Node startNode)
+	public synchronized void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    Node toAdd = newNode;
 	    if (toAdd == null || toAdd == Node.NULL_NODE)
@@ -187,7 +187,7 @@ public class HyPeerWeb extends ProxyableObject
 	 * @post one node is removed from the HypeerWeb and
 	 *     the HypeerWeb is valid
 	 */
-	public void removeFromHyPeerWeb()
+	public synchronized void removeFromHyPeerWeb()
 	{
 	    removeFromHyPeerWeb((new Random()).nextInt(nodes.size()));
 	}
@@ -199,7 +199,7 @@ public class HyPeerWeb extends ProxyableObject
      * @post one node is removed from the HypeerWeb
      * @param id the webId of the node you want to remove
      */
-    public void removeFromHyPeerWeb(final int id)
+    public synchronized void removeFromHyPeerWeb(final int id)
     {
         assert id >= 0 && id < size();
         final Node node = nodes.get(id);
@@ -208,7 +208,7 @@ public class HyPeerWeb extends ProxyableObject
         nodes.remove(size() - 1);
     }
     
-    public void connectToSegment(String ipAddress, int portNumber, int localObjectId)
+    public synchronized void connectToSegment(String ipAddress, int portNumber, int localObjectId)
     {
         GlobalObjectId segmentId = new GlobalObjectId(ipAddress, new PortNumber(portNumber),
                 new LocalObjectId(localObjectId));
@@ -237,12 +237,12 @@ public class HyPeerWeb extends ProxyableObject
         }
     }
 
-    public void setNextSegment(HyPeerWeb nextSegment2)
+    public synchronized void setNextSegment(HyPeerWeb nextSegment2)
     {
         nextSegment = nextSegment2;
     }
 
-    public void setPreviousSegment(HyPeerWeb hyPeerWeb)
+    public synchronized void setPreviousSegment(HyPeerWeb hyPeerWeb)
     {
         previousSegment = hyPeerWeb;
     }
