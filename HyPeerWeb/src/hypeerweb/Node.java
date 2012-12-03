@@ -154,6 +154,16 @@ public class Node extends ProxyableObject implements Comparable<Node>
         state = State.CAP;
     }
     
+    public Node(int i, command.GlobalObjectId id) //Wait, how would we even know what it's webId is supposed to be?
+    {
+        super(id);
+        webid = new WebId(i);
+        connections = new Connections();
+        connections.setFold(this);
+        contents = new Contents();
+        state = State.CAP;
+    }
+    
     /**
      * Gets this node's contents
      * 
