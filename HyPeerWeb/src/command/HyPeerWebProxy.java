@@ -1,5 +1,6 @@
 package command;
 
+import hypeerweb.Connections;
 import hypeerweb.Node;
 
 import java.util.Collection;
@@ -207,6 +208,23 @@ public class HyPeerWebProxy
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodeToThisSegment", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Node)result;
+    }
+    
+    public void parentNotify()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "parentNotify", parameterTypeNames, actualParameters, true);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    private Connections getChildConnections()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getChildConnections", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Connections)result;
     }
 
 }
