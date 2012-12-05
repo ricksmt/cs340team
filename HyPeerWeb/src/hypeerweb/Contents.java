@@ -21,6 +21,11 @@ public final class Contents implements java.io.Serializable
      */
     public Contents() {}
     
+    public Contents(Contents contents)
+    {
+        map = new HashMap<String, Object>(contents.map);
+    }
+
     /**
      * Returns true or false depending on whether or not
      * there exists a key-value pair with the given key.

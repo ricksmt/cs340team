@@ -263,6 +263,33 @@ public class HyPeerWeb extends ProxyableObject
     
     public void migrateNodes()
     {
+        HyPeerWeb destination;
+        if (nextSegment != null)
+        {
+            destination = nextSegment;
+        }
+        else if (previousSegment != null)
+        {
+            destination = previousSegment;
+        }
+        else
+        {
+            //We have no where to migrate to. Your nodes will become extinct.
+            return;
+        }
         
+        //String newMachineAddress = destination.getId().getMachineAddr();
+        //PortNumber newPortNumber = destination.getId().getPortNumber();
+        for (Node node : nodes.values())
+        {
+            node = destination.migrateNodeToSegment(node);
+        }
+    }
+
+    public Node migrateNodeToSegment(Node node)
+    {
+        Node newNode = new Node(node);
+        newNode.notifyAllConnectionsOfChangeInId();
+        return newNode;
     }
 }
