@@ -17,6 +17,7 @@ package hypeerweb;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Node extends ProxyableObject implements Comparable<Node>
 {
@@ -94,23 +95,23 @@ public class Node extends ProxyableObject implements Comparable<Node>
     /**
      * State represents this node's position (and next action) in the cap node locating algorithm
      */
-    protected transient State state;
+    private transient State state;
     
     
     /**
      * This node's webId
      */
-    protected transient WebId webid;
+    private transient WebId webid;
     
     /**
      * This node's contents.
      */
-    protected transient Contents contents;
+    private transient Contents contents;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
      */
-    protected transient Connections connections;
+    private transient Connections connections;
     
     public static final Node NULL_NODE = null;
     
@@ -164,6 +165,27 @@ public class Node extends ProxyableObject implements Comparable<Node>
         state = State.CAP;
     }
     
+    /**
+     * Copy constructor
+     * This is particularly used to create a local copy of a node proxy
+     * @param node
+     */
+    public Node(Node node)
+    {
+        super();
+        webid = new WebId(node.getWebId());
+        connections = new Connections(node.getConnections());
+        contents = new Contents(node.getContents());
+        state = node.getState();
+    }
+
+
+    protected State getState()
+    {
+        return state;
+    }
+
+
     /**
      * Gets this node's contents
      * 
@@ -648,6 +670,11 @@ public class Node extends ProxyableObject implements Comparable<Node>
         return -1;
     }
     
+    public boolean equals(final Object o)
+    {
+        return (o.getClass() == this.getClass()) && webid.equals(((Node) o).webid);
+    }
+    
     /**
      * 
      * @return 
@@ -659,6 +686,9 @@ public class Node extends ProxyableObject implements Comparable<Node>
     }
     
     /**
+     * This should only be called in the Node class and Connections class. If you use it somewhere else, 
+     * be sure there will be no serializing/proxy issues. You shouldn't need to though. 
+     * (other than test cases)
      * 
      * @return 
      */
@@ -667,8 +697,66 @@ public class Node extends ProxyableObject implements Comparable<Node>
         return connections;
     }
     
+    /**
+     * This should only be called in the Node class and Connections class. If you use it somewhere else, 
+     * be sure there will be no serializing/proxy issues. You shouldn't need to though.
+     * (other than test cases)
+     * 
+     * @param newconnections
+     */
     public synchronized void setConnections(final Connections newconnections)
     {
         connections = newconnections;
+    }
+    
+    public void notifyAllConnectionsOfChangeInId()
+    {
+        connections.notifyAllConnectionsOfChangeInId(this);
+    }
+
+    /**
+     * Returns the nieghbors of this node
+     * @obvious
+     * @return
+     */
+    public Set<Node> getNeighbors()
+    {
+        return connections.getNeighbors();
+    }
+
+    /**
+     * @obvious
+     * @return
+     */
+    public Node getSurrogateFold()
+    {
+        return connections.getSurrogateFold();
+    }
+
+    /**
+     * @obvious
+     * @return
+     */
+    public Node getInverseSurrogateFold()
+    {
+        return connections.getInverseSurrogateFold();
+    }
+
+    /**
+     * @obvious
+     * @return
+     */
+    public Set<Node> getSurrogateNeighbors()
+    {
+        return connections.getSurrogateNeighbors();
+    }
+
+    /**
+     * @obvious
+     * @return
+     */
+    public Set<Node> getInverseSurrogateNeighbors()
+    {
+        return connections.getInverseSurrogateNeighbors();
     }
 }

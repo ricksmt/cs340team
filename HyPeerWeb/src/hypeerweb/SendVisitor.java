@@ -59,7 +59,7 @@ public abstract class SendVisitor implements Visitor
     }
     
     private Node getIntermediateNode(Node node, int targetId) {
-        Set<Node> nodeSet = node.getConnections().getNeighbors();
+        Set<Node> nodeSet = node.getNeighbors();
         int distance = SimplifiedNodeDomain.distanceTo(node.getWebId(), targetId);
         Node closestNode = Node.NULL_NODE;
         int closestDistance = distance;
@@ -72,7 +72,7 @@ public abstract class SendVisitor implements Visitor
                 break;
             }
         }        
-        nodeSet = node.getConnections().getSurrogateNeighbors();
+        nodeSet = node.getSurrogateNeighbors();
         for(Node surNeighbor : nodeSet){
             int curDistance = SimplifiedNodeDomain.distanceTo(surNeighbor.getWebId(), targetId);
             
@@ -81,7 +81,7 @@ public abstract class SendVisitor implements Visitor
                 closestDistance = curDistance;
             }
         }        
-        nodeSet = node.getConnections().getInverseSurrogateNeighbors();
+        nodeSet = node.getInverseSurrogateNeighbors();
         for(Node invSurNeighbor : nodeSet){
             int curDistance = SimplifiedNodeDomain.distanceTo(invSurNeighbor.getWebId(), targetId);
             
@@ -90,7 +90,7 @@ public abstract class SendVisitor implements Visitor
                 closestDistance = curDistance;
             }
         }        
-        Node fold = node.getConnections().getFold();
+        Node fold = node.getFold();
         if(fold != Node.NULL_NODE){
             int curDistance = SimplifiedNodeDomain.distanceTo(fold.getWebId(), targetId);
             if(curDistance < closestDistance){
@@ -98,7 +98,7 @@ public abstract class SendVisitor implements Visitor
                 closestDistance = curDistance;
             }
         }        
-        Node surFold = node.getConnections().getSurrogateFold();
+        Node surFold = node.getSurrogateFold();
         if(surFold != Node.NULL_NODE){
             int curDistance = SimplifiedNodeDomain.distanceTo(surFold.getWebId(), targetId);
             if(curDistance < closestDistance){
@@ -106,7 +106,7 @@ public abstract class SendVisitor implements Visitor
                 closestDistance = curDistance;
             }
         }        
-        Node invSurFold = node.getConnections().getInverseSurrogateFold();
+        Node invSurFold = node.getInverseSurrogateFold();
         if(invSurFold != Node.NULL_NODE){
             int curDistance = SimplifiedNodeDomain.distanceTo(invSurFold.getWebId(), targetId);
             if(curDistance < closestDistance){

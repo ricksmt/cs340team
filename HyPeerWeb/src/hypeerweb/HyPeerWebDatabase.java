@@ -531,8 +531,8 @@ public class HyPeerWebDatabase
         
         saveGlobalObjectId(node);
         saveGlobalObjectId(node.getFold());
-        saveGlobalObjectId(node.getConnections().getSurrogateFold());
-        saveGlobalObjectId(node.getConnections().getInverseSurrogateFold());
+        saveGlobalObjectId(node.getSurrogateFold());
+        saveGlobalObjectId(node.getInverseSurrogateFold());
     }
     
     /**
@@ -581,7 +581,7 @@ public class HyPeerWebDatabase
             e.printStackTrace();
         }
         
-        for (Node neighbor : node.getConnections().getNeighbors()){
+        for (Node neighbor : node.getNeighbors()){
             saveGlobalObjectId(neighbor);
         }
     }
@@ -633,7 +633,7 @@ public class HyPeerWebDatabase
             e.printStackTrace();
         }  
         
-        for (Node surNeighbor : node.getConnections().getSurrogateNeighbors()){
+        for (Node surNeighbor : node.getSurrogateNeighbors()){
             saveGlobalObjectId(surNeighbor);
         }
     }

@@ -85,7 +85,7 @@ public abstract class BroadcastVisitor implements Visitor
         int nodeId = node.getWebId();
         int height = node.getHeight();
         Set<Node> neighborsToBroadcast = new TreeSet<Node>();
-        Set<Node> neighbors = node.getConnections().getNeighbors();
+        Set<Node> neighbors = node.getNeighbors();
         
         double limit = Math.pow(2, height);
         

@@ -152,6 +152,16 @@ public class Connections implements java.io.Serializable
         inverseSurrogateFold = Node.NULL_NODE;
     }
     
+    public Connections(Connections connections)
+    {
+        neighbors = new TreeSet<Node>(connections.getNeighbors());
+        surrogateNeighbors = new TreeSet<Node>(connections.getSurrogateNeighbors());
+        inverseSurrogateNeighbors = new TreeSet<Node>(connections.getInverseSurrogateNeighbors());
+        fold = connections.getFold();
+        surrogateFold = connections.getSurrogateFold();
+        inverseSurrogateFold = connections.getInverseSurrogateFold();
+    }
+
     /**
      * Set Fold
      * @obvious
@@ -383,7 +393,7 @@ public class Connections implements java.io.Serializable
      */
     private static SortedSet<Node> getLargerNeighbors(final Node owner)
     {
-        return new TreeSet<Node>(owner.connections.neighbors.tailSet(owner));
+        return new TreeSet<Node>(owner.getConnections().neighbors.tailSet(owner));
     }
 
     /**
@@ -529,9 +539,9 @@ public class Connections implements java.io.Serializable
     public void childNotify(final Node childNode, final Node parentNode)
 	{
         // Notify fold
-        if(fold.connections.fold != Node.NULL_NODE)
+        if(fold.getFold() != Node.NULL_NODE)
         {
-            fold.setInverseSurrogateFold(fold.connections.fold);
+            fold.setInverseSurrogateFold(fold.getFold());
             fold.setFold(childNode);
         }
         else
@@ -558,36 +568,75 @@ public class Connections implements java.io.Serializable
      * Notifies all connections of Deletion Point to remove Deletion Point as one of their connections
      * 
      * @param deletionPoint - node to disconnect
-     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
+     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point, deletionPoint is the calling instance
      * @post deletionPoint will be disconnected from the HyPeer web
      */
     public static void disconnect(final Node deletionPoint)
     { 
         final Node parent = getParent(deletionPoint);
-                       
-        // Remove me as a neighbor, set my parent as a surrogate neighbor and you as an inverse surrogate neighbor to parent
-        deletionPoint.connections.iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
-        // Remove me as an inverse surrogate neighbor
-        deletionPoint.connections.iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
         
-        if(deletionPoint.getFoldId() == parent.getWebId()) parent.connections.setFold(parent);
-        else if (parent.connections.getSurrogateFold() == Node.NULL_NODE)
+        //No serialization issues if precondition met
+        
+        // Remove me as a neighbor, set my parent as a surrogate neighbor and you as an inverse surrogate neighbor to parent
+        deletionPoint.getConnections().iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
+        // Remove me as an inverse surrogate neighbor
+        deletionPoint.getConnections().iterateSurrogateNeighbors(deletionPoint, Node.NULL_NODE, Action.REMOVE_INV_SURR_NEIGHBOR);
+        
+        if(deletionPoint.getFoldId() == parent.getWebId()) parent.setFold(parent);
+        else if (parent.getSurrogateFold() == Node.NULL_NODE)
         {
-            deletionPoint.connections.getFold().setSurrogateFold(parent);
-            deletionPoint.connections.getFold().setFold(Node.NULL_NODE);
-            parent.setInverseSurrogateFold(deletionPoint.connections.getFold());
+            deletionPoint.getFold().setSurrogateFold(parent);
+            deletionPoint.getFold().setFold(Node.NULL_NODE);
+            parent.setInverseSurrogateFold(deletionPoint.getFold());
         }
         else
         {
-            deletionPoint.connections.getFold().setFold(parent);
-            deletionPoint.connections.getFold().setInverseSurrogateFold(Node.NULL_NODE);
-            parent.setFold(parent.connections.getSurrogateFold());
+            deletionPoint.getFold().setFold(parent);
+            deletionPoint.getFold().setInverseSurrogateFold(Node.NULL_NODE);
+            parent.setFold(parent.getSurrogateFold());
             parent.setSurrogateFold(Node.NULL_NODE);
         }
         
         // if deletion node is Cap Node set parent node to be the Cap Node
-        if(deletionPoint.state == Node.State.CAP) parent.setState(Node.State.CAP);
-        else if(deletionPoint.getFoldId() < parent.getWebId()) parent.setState(Node.State.DOWN);
+        if(deletionPoint.getState() == Node.State.CAP)
+        {
+            parent.setState(Node.State.CAP);
+        }
+        else if(deletionPoint.getFoldId() < parent.getWebId())
+        {
+            parent.setState(Node.State.DOWN);
+        }
+    }
+    
+    /**
+     * Replaces the all references to what thisNode used to be with the current instance of thisNode.
+     * (NOTE: this relies on the new equals() method added to Node, so that a node is equal iff there webIds are "equal")
+     * 
+     * @param thisNode
+     * @pre The state of thisNode must be that it is in mid-migration. It has been copied onto the destination segment.
+     *          The HyPeerWeb must be valid in all other respects.
+     * @post All of the connections of the old node are now pointing to the new migrated node.
+     */
+    public void notifyAllConnectionsOfChangeInId(Node thisNode)
+    {
+        iterateNeighbors(thisNode,thisNode,Action.REPLACE_NEIGHBOR);
+        iterateSurrogateNeighbors(thisNode,thisNode,Action.REPLACE_INV_SURR_NEIGHBOR);
+        iterateInverseSurrogateNeighbors(thisNode,thisNode,Action.REPLACE_SURR_NEIGHBOR);
+        
+        if (fold != null)
+        {
+            fold.setFold(thisNode);
+        }
+        
+        if (surrogateFold != null)
+        {
+            surrogateFold.setInverseSurrogateFold(thisNode);
+        }
+        
+        if (inverseSurrogateFold != null)
+        {
+            inverseSurrogateFold.setSurrogateFold(thisNode);
+        }
     }
     
     /**
@@ -596,29 +645,32 @@ public class Connections implements java.io.Serializable
      * 
      * @param selfNode - node to be replaced
      * @param deletionPoint - node to be replaced with
+     * @pre selfNode and deletionPoint are nodes in a valid hypeerweb
+     *      deletionPoint is the highest node in the hypeerweb
+     *      selfNode is the instance calling this method, and the owner of this Connections instance
      */
     //called on a node to be deleted
     public static void replace(final Node selfNode, final Node deletionPoint)
     {
         // Give deletion Point all the selfNode's connections
-        deletionPoint.connections = selfNode.connections;
+        deletionPoint.setConnections(selfNode.getConnections());
         deletionPoint.setWebId(new WebId(selfNode.getWebId()));
-        deletionPoint.state = selfNode.state;
+        deletionPoint.setState(selfNode.getState());
         
         // Replace selfNode with deletionPoint node in all connections
-        selfNode.connections.iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
-        selfNode.connections.iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
-        selfNode.connections.iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
+        selfNode.getConnections().iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
+        selfNode.getConnections().iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);
+        selfNode.getConnections().iterateInverseSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_SURR_NEIGHBOR);
         
         // Replace as Fold
         if(deletionPoint.getFold() != Node.NULL_NODE)
             deletionPoint.getFold().setFold(deletionPoint);
         // Replace as Inverse Surrogate Fold
-        if(deletionPoint.connections.getSurrogateFold() != Node.NULL_NODE)
-            deletionPoint.connections.getSurrogateFold().setInverseSurrogateFold(deletionPoint);
+        if(deletionPoint.getSurrogateFold() != Node.NULL_NODE)
+            deletionPoint.getSurrogateFold().setInverseSurrogateFold(deletionPoint);
         // Replace as Surrogate Fold of Inverse Surrogate Fold
-        if(deletionPoint.connections.getInverseSurrogateFold() != Node.NULL_NODE)
-            deletionPoint.connections.getInverseSurrogateFold().setSurrogateFold(deletionPoint);
+        if(deletionPoint.getInverseSurrogateFold() != Node.NULL_NODE)
+            deletionPoint.getInverseSurrogateFold().setSurrogateFold(deletionPoint);
         
     }
 
