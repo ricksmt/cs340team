@@ -346,7 +346,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public synchronized void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
-        if(node != this && node != null)
+        if(!node.equals(this) && node != null)
             connections.addNeighbor(node);
     }
     
@@ -387,7 +387,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      */
     public synchronized void addUpPointer(final Node node0)
     {
-        if(node0 != this && node0 != null)
+        if(!node0.equals(this) && node0 != null)
             connections.addInverseSurrogateNeighbor(node0);
     }
     
@@ -409,7 +409,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public synchronized void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
-        if(node != this && node != null)
+        if(!node.equals(this) && node != null)
             connections.addSurrogateNeighbor(node);
     }
     
@@ -492,7 +492,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
-        while(currentNode != startNode)
+        while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
@@ -554,7 +554,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
-        while(currentNode != startNode)
+        while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
