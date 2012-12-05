@@ -175,12 +175,12 @@ public class HyPeerWebBlack extends TestCase{
         Random rand = new Random();
         Node node = new Node(0);
         web.addNode(node);
-        assertTrue(node == web.getNode(0));
+        assertTrue(node.equals(web.getNode(0)));
         for(int i = 1; i < MAX_SIZE; i++){
             assertTrue(web.size() == i);
             node = new Node(Math.abs(rand.nextInt()));
             web.addToHyPeerWeb(node, web.getNode(rand.nextInt(web.size())));
-            assertTrue(node == web.getNode(i));
+            assertTrue(node.equals(web.getNode(i)));
         }
         assertTrue(web.size() == MAX_SIZE);
     }

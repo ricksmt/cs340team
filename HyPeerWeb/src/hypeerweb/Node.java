@@ -265,21 +265,21 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intNeighbors.add(temp.webid.getValue());
+            intNeighbors.add(temp.getWebId());
         }
         
         iter = connections.getSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intSurrogateNeighbors.add(temp.webid.getValue());
+            intSurrogateNeighbors.add(temp.getWebId());
         }
         
         iter = connections.getInverseSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intInverseSurrogateNeighbors.add(temp.webid.getValue());
+            intInverseSurrogateNeighbors.add(temp.getWebId());
         }
         
         final Node fold = connections.getFold();
@@ -287,13 +287,13 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         final Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
         if(fold != NULL_NODE) 
-            tempFold = fold.webid.getValue();
+            tempFold = fold.getWebId();
         
         if(surrogateFold != NULL_NODE)
-            tempSurrogateFold = surrogateFold.webid.getValue();
+            tempSurrogateFold = surrogateFold.getWebId();
         
         if(inverseSurrogateFold != NULL_NODE) 
-            tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
+            tempInverseSurrogateFold = inverseSurrogateFold.getWebId();
         
         final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
                                                                         getHeight(),
@@ -362,7 +362,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     public synchronized void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
-        if(node != this && node != null)
+        if(!node.equals(this) && node != null)
             connections.addNeighbor(node);
     }
     
@@ -403,7 +403,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
      */
     public synchronized void addUpPointer(final Node node0)
     {
-        if(node0 != this && node0 != null)
+        if(!node0.equals(this) && node0 != null)
             connections.addInverseSurrogateNeighbor(node0);
     }
     
@@ -425,7 +425,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     public synchronized void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
-        if(node != this && node != null)
+        if(!node.equals(this) && node != null)
             connections.addSurrogateNeighbor(node);
     }
     
@@ -478,7 +478,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     public synchronized boolean insertSelf(final Node startNode)
     {
         final Node parent = findInsertionPoint(startNode);
-        webid = new WebId((int) (parent.webid.getValue() + 
+        webid = new WebId((int) (parent.getWebId() + 
                 Math.pow(2, parent.getHeight())));
         
         // Give child its' connections.
@@ -508,7 +508,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
-        while(currentNode != startNode)
+        while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
@@ -534,7 +534,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
             startNode = currentNode;
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
-        while(currentNode != startNode);
+        while(!currentNode.equals(startNode));
         return currentNode;
     }
     
@@ -570,7 +570,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
-        while(currentNode != startNode)
+        while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
             currentNode = currentNode.state.findCapNode(currentNode);
@@ -673,24 +673,17 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         visitor.visit(this, parameters);
     }
 
-    /*@Override
-    public int compareTo(final Object o)
-    {
-        if (o.getClass() == this.getClass())
-            return webid.compareTo(((Node) o).webid);
-        return -1;
-    }*/
     
     public int compareTo(Node o)
     {
         if (o.getClass() == this.getClass())
-            return webid.compareTo(((Node) o).webid);
+            return getWebId() - ((Node) o).getWebId();
         return -1;
     }
     
     public boolean equals(final Object o)
     {
-        return (o.getClass() == this.getClass()) && webid.equals(((Node) o).webid);
+        return (o.getClass() == this.getClass()) && getWebId() == ((Node) o).getWebId();
     }
     
     /**
