@@ -5,6 +5,7 @@ import java.util.*;
 import command.GlobalObjectId;
 import command.HyPeerWebProxy;
 import command.LocalObjectId;
+import command.NodeProxy;
 import command.PortNumber;
 
 
@@ -134,12 +135,14 @@ public class HyPeerWeb extends ProxyableObject
 	 *
 	 * @param node0 the node to add to the HyPeerWeb's Map
      * @pre HyPeerWeb does not contain a node with node0's ID
-     * @post HyPeerWeb contains node0
+     * @post HyPeerWeb contains node0, unless node0 is a proxy
 	 */
 	public synchronized void addNode(final Node node0)
 	{
 	    assert !nodes.containsKey(node0.getWebId());
-	    nodes.put(node0.getWebId(), node0);
+	    
+	    if (node0.getClass() != NodeProxy.class )
+	        nodes.put(node0.getWebId(), node0);
 	}
 
 	/**
@@ -167,6 +170,7 @@ public class HyPeerWeb extends ProxyableObject
 	public synchronized void addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    Node toAdd = newNode;
+	    boolean success = true;
 	    if (toAdd == null || toAdd == Node.NULL_NODE)
 	    {
 	        toAdd = new Node();
@@ -174,11 +178,17 @@ public class HyPeerWeb extends ProxyableObject
 	    if (nodes.size() > 0)
 	    {
 	        assert startNode != null && startNode != Node.NULL_NODE;
-	        toAdd.insertSelf(startNode);
+	        success = toAdd.insertSelf(startNode);
 	    }
 	    
-	    
-	    addNode(toAdd);
+	    if (success)
+	    {
+	        addNode(toAdd);
+	    }
+	    else
+	    {
+	        System.out.println("ERROR, unable to add node");
+	    }
 	}
 	
 	/** 
@@ -233,7 +243,7 @@ public class HyPeerWeb extends ProxyableObject
         //Insert all the nodes from the other segment's hypeerweb into my hypeerweb
         for (Node nodeToInsert : toInsert)
         {
-            addToHyPeerWeb(startNode,nodeToInsert);
+            addToHyPeerWeb(nodeToInsert,startNode);
         }
     }
 

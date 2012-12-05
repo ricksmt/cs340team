@@ -242,13 +242,14 @@ public class NodeProxy
         return (java.util.HashSet)result;
     }
 
-    public void insertSelf(hypeerweb.Node p0){
+    public boolean insertSelf(hypeerweb.Node p0){
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Node";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "insertSelf", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean) result;
     }
 
     public hypeerweb.Node findCapNode(hypeerweb.Node p0){

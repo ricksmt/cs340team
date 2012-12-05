@@ -457,8 +457,9 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @pre start node is part of a valid HyPeerWeb. This node is not part of the HyPeerWeb.
      * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
      * @param startNode 
+     * @return 
      */
-    public synchronized void insertSelf(final Node startNode)
+    public synchronized boolean insertSelf(final Node startNode)
     {
         final Node parent = findInsertionPoint(startNode);
         webid = new WebId((int) (parent.webid.getValue() + 
@@ -477,6 +478,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
         
         // Parent Notify
         parent.connections.parentNotify(parent);
+        return true;
     }
     /**
      * findCapNode
