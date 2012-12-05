@@ -323,17 +323,17 @@ public class NodeProxy
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "parentNotify", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "parentNotify", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
-    public Connections getChildConnections()
+    public hypeerweb.Connections getChildConnections()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getChildConnections", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getChildConnections", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Connections)result;
+        return (hypeerweb.Connections)result;
     }
 
     public command.GlobalObjectId getId(){
