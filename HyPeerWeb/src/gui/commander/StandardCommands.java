@@ -146,7 +146,7 @@ public class StandardCommands extends JPanel
 	 * Inserts a Node into the HyPeerWeb
 	 */
 	public void insertButtonPressed()	{
-		//TODO Phase 5 -- Add functionality for inserting a node.
+		//Phase 5 -- Add functionality for inserting a node.
 		//I. Get the size of the "nodeListing" component.
 		//II. If the size is greater than or equal to the max number of nodes allowed in a NodeListing
 		//		(see constant in class NodeListing) print an error in the the "debugStatus" component.
@@ -161,29 +161,39 @@ public class StandardCommands extends JPanel
 	    if(size >= NodeListing.MAX_NUMBER_OF_NODES) main.getHyPeerWebDebugger().getStatus().
 	        setContent("Maximum number of nodes reached. Node not added.");
 	    else{
-	        Node node = new Node(0);
-	        final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
-	        final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
+            // New Node
+            Node node = new Node(0);
+            
+            // Get which node is selected in the displayed nodes window
+            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
+            
+            // start is null if size is 0, or the node with id
+            final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
+            
+            // First node in HyPeerWeb - add it to HyPeerWeb
             if(size == 0){
                 main.getHyPeerWeb().addToHyPeerWeb(null, start);
                 main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
             }
+            // Start is null and HyPeerWeb has nodes in it, Error
             else if(start == Node.NULL_NODE){
-	            main.getHyPeerWebDebugger().getStatus().
-	                setContent("No start node selected. Node not added.");
-	        }
-	        else{
-	            main.getHyPeerWeb().addToHyPeerWeb(node, start);
-	            main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
-	        }
-	    }
+                main.getHyPeerWebDebugger().getStatus().
+                    setContent("No start node selected. Node not added.");
+            }
+            
+            // Add Node to HyPeerWeb
+            else{
+                main.getHyPeerWeb().addToHyPeerWeb(node, start);
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
+            }
+        }
 	}
 	
 	/**
 	 *  Removes a node from the HyPeerWeb
 	 */
 	public void removeButtonPressed() {
-		//TODO Phase 5 -- Add functionality for removing a node.
+		//Phase 5 -- Add functionality for removing a node.
 		//I. Get the size of the "nodeListing" component.
 		//II. If the size equals 1, print an error in the the "debugStatus" component.
 		//III. Otherwise
