@@ -3,6 +3,7 @@ package command;
 import hypeerweb.Connections;
 import hypeerweb.HyPeerWeb;
 import hypeerweb.Node;
+import hypeerweb.Node.State;
 //import GlobalObjectId;
 public class NodeProxy
     extends Node implements java.io.Serializable
@@ -337,6 +338,16 @@ public class NodeProxy
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (hypeerweb.Connections)result;
     }
+    
+    public hypeerweb.Node.State getState()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getState", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (hypeerweb.Node.State)result;
+    }
+    
 
     public command.GlobalObjectId getId(){
         /*String[] parameterTypeNames = new String[0];
