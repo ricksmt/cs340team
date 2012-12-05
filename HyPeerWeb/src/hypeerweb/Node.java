@@ -696,14 +696,12 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     
     public int compareTo(Node o)
     {
-        if (o.getClass() == this.getClass())
-            return getWebId() - ((Node) o).getWebId();
-        return -1;
+            return getWebId() - o.getWebId();
     }
     
     public boolean equals(final Object o)
     {
-        return (o.getClass() == this.getClass()) && getWebId() == ((Node) o).getWebId();
+        return getWebId() == ((Node) o).getWebId();
     }
     
     /**
