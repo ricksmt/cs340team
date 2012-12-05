@@ -12,7 +12,7 @@ import command.PortNumber;
 /**
  * The Class HyPeerWeb.
  */
-public class HyPeerWeb extends ProxyableObject
+public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializable
 {
     
     /** The nodes. */
@@ -27,6 +27,8 @@ public class HyPeerWeb extends ProxyableObject
     private transient HyPeerWeb nextSegment;
     private transient HyPeerWeb previousSegment;
 
+    // For Proxyable
+    private transient command.GlobalObjectId id;
     
     /**
      * Instantiates a new HyPeerWeb.
@@ -41,6 +43,10 @@ public class HyPeerWeb extends ProxyableObject
         database = HyPeerWebDatabase.getSingleton();
         nextSegment = null;
         previousSegment = null;
+        
+        //Proxyable object
+        id = new command.GlobalObjectId();
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
     }
 	
     /**
@@ -117,6 +123,9 @@ public class HyPeerWeb extends ProxyableObject
 	public synchronized void reload()
 	{
 		reload(null);	
+		
+		// Observer Pattern
+        notifyObservers(nodes);
 	}
 
 	/**
@@ -143,6 +152,9 @@ public class HyPeerWeb extends ProxyableObject
 	    
 	    if (node0.getClass() != NodeProxy.class )
 	        nodes.put(node0.getWebId(), node0);
+	    
+	    // Observer Pattern
+        notifyObservers(nodes);
 	}
 
 	/**
@@ -216,6 +228,9 @@ public class HyPeerWeb extends ProxyableObject
         node.removeFromHyPeerWeb();
         nodes.put(id, nodes.get(size() - 1));
         nodes.remove(size() - 1);
+        
+        // Observer Pattern
+        notifyObservers(nodes);
     }
     
     public synchronized void connectToSegment(String ipAddress, int portNumber, int localObjectId)
@@ -320,5 +335,11 @@ public class HyPeerWeb extends ProxyableObject
         newNode.notifyAllConnectionsOfChangeInId();
         
         return newNode;
+    }
+    
+    // Proxyable method
+    public command.GlobalObjectId getId()
+    {
+        return id;   
     }
 }

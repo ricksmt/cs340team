@@ -7,6 +7,7 @@ import gui.Main.HyPeerWebDebugger;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -18,7 +19,7 @@ import command.PeerCommunicator;
  * @author Matthew Smith
  *
  */
-public class GUI extends JFrame
+public class GUI extends JFrame implements Observer
 {
 	private static GUI singleton = null;
 	
@@ -34,6 +35,9 @@ public class GUI extends JFrame
 	public GUI(HyPeerWeb hypeerweb){
 		this.hypeerweb = hypeerweb;
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
+		
+		// Make GUI an observer of hypeerweb
+        hypeerweb.addObserver(this);
 
 		this.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent we) {
@@ -119,5 +123,19 @@ public class GUI extends JFrame
         hypeerweb.saveToDatabase();
         hypeerweb.clear();
 	}
+	
+	/**
+     * Observer pattern
+     */
+    public void update(Observable o, Object arg) {
+        // TODO update GUI with nodes from HyPeerWeb
+        System.out.println("Change observed.");
+        
+        /* Check the nodes
+         * Update the GUI representation of HyPeerWeb so that it is accurate
+         */
+        // arg = transient Map<Integer,Node> nodes;
+        
+    }
 
 }

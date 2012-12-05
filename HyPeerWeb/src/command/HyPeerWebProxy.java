@@ -126,8 +126,13 @@ public class HyPeerWebProxy
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getNode", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        if (result.getClass()==NodeProxy.class || result.getClass()==hypeerweb.Node.class)
-            return (hypeerweb.Node)result;
+        if(result != null )
+        {
+            if (result.getClass()==NodeProxy.class || result.getClass()==hypeerweb.Node.class)
+                return (hypeerweb.Node)result;
+            
+            return null;
+        }
         else
             return null;
     }
