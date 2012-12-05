@@ -15,11 +15,10 @@
 
 package hypeerweb;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
-public class Node extends ProxyableObject implements Comparable<Node>
+
+public class Node extends Observable implements Comparable<Node>, Proxyable, java.io.Serializable
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
@@ -113,6 +112,11 @@ public class Node extends ProxyableObject implements Comparable<Node>
      */
     private transient Connections connections;
     
+    /**
+     * Global object ID for proxyable object
+     */
+    private transient command.GlobalObjectId id;
+    
     public static final Node NULL_NODE = null;
     
     
@@ -138,6 +142,10 @@ public class Node extends ProxyableObject implements Comparable<Node>
         connections.setFold(this);
         contents = new Contents();
         state = State.CAP;
+        
+        //Proxyable object
+        id = new command.GlobalObjectId();
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
     }
     
     /**
@@ -153,16 +161,24 @@ public class Node extends ProxyableObject implements Comparable<Node>
         connections.setFold(this);
         contents = new Contents();
         state = State.CAP;
+        
+        //Proxyable object
+        id = new command.GlobalObjectId();
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
     }
     
     public Node(int i, command.GlobalObjectId id) //Wait, how would we even know what it's webId is supposed to be?
     {
-        super(id);
+        super();
         webid = new WebId(i);
         connections = new Connections();
         connections.setFold(this);
         contents = new Contents();
         state = State.CAP;
+        
+        //Proxyable object
+        this.id = id;
+        command.ObjectDB.getSingleton().store(this.id.getLocalObjectId(), this);
     }
     
     /**
@@ -760,5 +776,11 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public Set<Node> getInverseSurrogateNeighbors()
     {
         return connections.getInverseSurrogateNeighbors();
+    }
+    
+    // Proxyable Method
+    public command.GlobalObjectId getId()
+    {
+        return id;   
     }
 }
