@@ -302,7 +302,8 @@ public class NodeProxy
         return (Integer)result;
     }
 
-    public hypeerweb.Connections getConnections(){
+    public hypeerweb.Connections getConnections()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getConnections", parameterTypeNames, actualParameters, true);
@@ -310,7 +311,8 @@ public class NodeProxy
         return (hypeerweb.Connections)result;
     }
 
-    public void setConnections(hypeerweb.Connections p0){
+    public void setConnections(hypeerweb.Connections p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Connections";
         Object[] actualParameters = new Object[1];
