@@ -249,21 +249,21 @@ public class Node extends ProxyableObject implements Comparable<Node>
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intNeighbors.add(temp.webid.getValue());
+            intNeighbors.add(temp.getWebId());
         }
         
         iter = connections.getSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intSurrogateNeighbors.add(temp.webid.getValue());
+            intSurrogateNeighbors.add(temp.getWebId());
         }
         
         iter = connections.getInverseSurrogateNeighbors().iterator();
         while(iter.hasNext())
         {
             final Node temp = iter.next();
-            intInverseSurrogateNeighbors.add(temp.webid.getValue());
+            intInverseSurrogateNeighbors.add(temp.getWebId());
         }
         
         final Node fold = connections.getFold();
@@ -271,13 +271,13 @@ public class Node extends ProxyableObject implements Comparable<Node>
         final Node inverseSurrogateFold = connections.getInverseSurrogateFold();
         
         if(fold != NULL_NODE) 
-            tempFold = fold.webid.getValue();
+            tempFold = fold.getWebId();
         
         if(surrogateFold != NULL_NODE)
-            tempSurrogateFold = surrogateFold.webid.getValue();
+            tempSurrogateFold = surrogateFold.getWebId();
         
         if(inverseSurrogateFold != NULL_NODE) 
-            tempInverseSurrogateFold = inverseSurrogateFold.webid.getValue();
+            tempInverseSurrogateFold = inverseSurrogateFold.getWebId();
         
         final SimplifiedNodeDomain simpleNode = new SimplifiedNodeDomain( webid.getValue(),
                                                                         getHeight(),
@@ -462,7 +462,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public synchronized boolean insertSelf(final Node startNode)
     {
         final Node parent = findInsertionPoint(startNode);
-        webid = new WebId((int) (parent.webid.getValue() + 
+        webid = new WebId((int) (parent.getWebId() + 
                 Math.pow(2, parent.getHeight())));
         
         // Give child its' connections.
@@ -657,24 +657,17 @@ public class Node extends ProxyableObject implements Comparable<Node>
         visitor.visit(this, parameters);
     }
 
-    /*@Override
-    public int compareTo(final Object o)
-    {
-        if (o.getClass() == this.getClass())
-            return webid.compareTo(((Node) o).webid);
-        return -1;
-    }*/
     
     public int compareTo(Node o)
     {
         if (o.getClass() == this.getClass())
-            return webid.compareTo(((Node) o).webid);
+            return getWebId() - ((Node) o).getWebId();
         return -1;
     }
     
     public boolean equals(final Object o)
     {
-        return (o.getClass() == this.getClass()) && webid.equals(((Node) o).webid);
+        return (o.getClass() == this.getClass()) && getWebId() == ((Node) o).getWebId();
     }
     
     /**
