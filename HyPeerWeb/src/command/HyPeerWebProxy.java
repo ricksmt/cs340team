@@ -10,11 +10,13 @@ public class HyPeerWebProxy
 {
     private static GlobalObjectId globalObjectId;
 
-    public HyPeerWebProxy(GlobalObjectId globalObjectId){
+    public HyPeerWebProxy(GlobalObjectId globalObjectId)
+    {
         this.globalObjectId = globalObjectId;
     }
 
-    public static hypeerweb.HyPeerWeb getSingleton(){
+    public static hypeerweb.HyPeerWeb getSingleton()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getSingleton", parameterTypeNames, actualParameters, true);
@@ -22,14 +24,16 @@ public class HyPeerWebProxy
         return (hypeerweb.HyPeerWeb)result;
     }
 
-    public void saveToDatabase(){
+    public void saveToDatabase()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "saveToDatabase", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void addNode(hypeerweb.Node p0){
+    public void addNode(hypeerweb.Node p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Node";
         Object[] actualParameters = new Object[1];
@@ -38,7 +42,8 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1){
+    public void addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1)
+    {
         String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "hypeerweb.Node";
         parameterTypeNames[1] = "hypeerweb.Node";
@@ -49,14 +54,16 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void removeFromHyPeerWeb(){
+    public void removeFromHyPeerWeb()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "removeFromHyPeerWeb", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void removeFromHyPeerWeb(int p0){
+    public void removeFromHyPeerWeb(int p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "int";
         Object[] actualParameters = new Object[1];
@@ -65,14 +72,16 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void clear(){
+    public void clear()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "clear", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public boolean contains(hypeerweb.Node p0){
+    public boolean contains(hypeerweb.Node p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Node";
         Object[] actualParameters = new Object[1];
@@ -82,7 +91,8 @@ public class HyPeerWebProxy
         return (Boolean)result;
     }
 
-    public int size(){
+    public int size()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "size", parameterTypeNames, actualParameters, true);
@@ -90,7 +100,8 @@ public class HyPeerWebProxy
         return (Integer)result;
     }
 
-    public void reload(java.lang.String p0){
+    public void reload(java.lang.String p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "java.lang.String";
         Object[] actualParameters = new Object[1];
@@ -99,14 +110,16 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void reload(){
+    public void reload()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "reload", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public hypeerweb.Node getNode(int p0){
+    public hypeerweb.Node getNode(int p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "int";
         Object[] actualParameters = new Object[1];
@@ -119,7 +132,8 @@ public class HyPeerWebProxy
             return null;
     }
 
-    public boolean equals(java.lang.Object p0){
+    public boolean equals(java.lang.Object p0)
+    {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "java.lang.Object";
         Object[] actualParameters = new Object[1];
@@ -129,7 +143,8 @@ public class HyPeerWebProxy
         return (Boolean)result;
     }
 
-    public java.lang.String toString(){
+    public java.lang.String toString()
+    {
         /*String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "toString", parameterTypeNames, actualParameters, true);
@@ -138,7 +153,8 @@ public class HyPeerWebProxy
         return "I'm a proxy hypeerweb: " + globalObjectId.toString();
     }
 
-    public int hashCode(){
+    public int hashCode()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "hashCode", parameterTypeNames, actualParameters, true);
@@ -146,9 +162,10 @@ public class HyPeerWebProxy
         return (Integer)result;
     }
     
-    public void connectToSegment(String ipAddress, int portNumber, int localObjectId){
+    public void connectToSegment(String ipAddress, int portNumber, int localObjectId)
+    {
         String[] parameterTypeNames = new String[3];
-        parameterTypeNames[0] = "command.String";
+        parameterTypeNames[0] = "java.lang.String";
         parameterTypeNames[1] = "int";
         parameterTypeNames[2] = "int";
         Object[] actualParameters = new Object[3];
@@ -159,12 +176,32 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
-    public Collection<Node> getNodesInHyPeerWeb(){
+    public Collection<Node> getNodesInHyPeerWeb()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getNodesInHyPeerWeb", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Collection<Node>)result;
+    }
+    
+    public void migrateNodes()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodes", parameterTypeNames, actualParameters, true);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public Node migrateNodeToSegment(Node node)
+    {
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.Node";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = node;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodeToSegment", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Node)result;
     }
 
 }
