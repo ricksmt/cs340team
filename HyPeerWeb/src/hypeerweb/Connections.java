@@ -568,14 +568,15 @@ public class Connections implements java.io.Serializable
      * Notifies all connections of Deletion Point to remove Deletion Point as one of their connections
      * 
      * @param deletionPoint - node to disconnect
-     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point
+     * @pre deletionPoint is a valid node in the HypeerWeb, deletionPoint is actually the deletion point, deletionPoint is the calling instance
      * @post deletionPoint will be disconnected from the HyPeer web
      */
     public static void disconnect(final Node deletionPoint)
     { 
         final Node parent = getParent(deletionPoint);
-                       
-        //TODO this is a serialization problem right now
+        
+        //No serialization issues if precondition met
+        
         // Remove me as a neighbor, set my parent as a surrogate neighbor and you as an inverse surrogate neighbor to parent
         deletionPoint.getConnections().iterateNeighbors(deletionPoint, parent, Action.REMOVE_NEIGHBOR);
         // Remove me as an inverse surrogate neighbor
@@ -644,6 +645,9 @@ public class Connections implements java.io.Serializable
      * 
      * @param selfNode - node to be replaced
      * @param deletionPoint - node to be replaced with
+     * @pre selfNode and deletionPoint are nodes in a valid hypeerweb
+     *      deletionPoint is the highest node in the hypeerweb
+     *      selfNode is the instance calling this method, and the owner of this Connections instance
      */
     //called on a node to be deleted
     public static void replace(final Node selfNode, final Node deletionPoint)
@@ -653,7 +657,6 @@ public class Connections implements java.io.Serializable
         deletionPoint.setWebId(new WebId(selfNode.getWebId()));
         deletionPoint.setState(selfNode.getState());
         
-        //TODO possible serialization issue here
         // Replace selfNode with deletionPoint node in all connections
         selfNode.getConnections().iterateNeighbors(selfNode, deletionPoint, Action.REPLACE_NEIGHBOR);
         selfNode.getConnections().iterateSurrogateNeighbors(selfNode, deletionPoint, Action.REPLACE_INV_SURR_NEIGHBOR);

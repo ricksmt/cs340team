@@ -260,7 +260,18 @@ public class HyPeerWeb extends ProxyableObject
     }
     
     
-    
+    /**
+     * Moves all of this hypeerweb segments nodes to another segment in the same hypeerweb (if one exists)
+     * 
+     * @pre 
+     * @post Condition 1) If nextSegment is not null, all the nodes on this will
+     *                    be copied onto nextSegment and will update their connections
+     *                    to point to the new location.
+     *       Condition 2) If nextSegment is null, but previousSegment is not, then all 
+     *                    the nodes on this will be copied onto previousSegment and will
+     *                    update their connections to point to the new location.
+     *       Condition 3) If nextSegment and previousSegment are both null, no change occurs
+     */
     public void migrateNodes()
     {
         HyPeerWeb destination;
@@ -274,22 +285,30 @@ public class HyPeerWeb extends ProxyableObject
         }
         else
         {
-            //We have no where to migrate to. Your nodes will become extinct.
+            //We have no where to migrate to. Your nodes will become extinct, sorry.
             return;
         }
         
-        //String newMachineAddress = destination.getId().getMachineAddr();
-        //PortNumber newPortNumber = destination.getId().getPortNumber();
         for (Node node : nodes.values())
         {
-            node = destination.migrateNodeToSegment(node);
+            node = destination.migrateNodeToThisSegment(node);
         }
     }
-
-    public Node migrateNodeToSegment(Node node)
+    
+    /**
+     * Copies the given node, stores it on this instance, and updates the copied node's connections.
+     * 
+     * @param node: the node to migrate here
+     * @pre node is on this segment, but is part of the same hypeerweb as this segment.
+     * @post node will be copied and all of its connections will be updated to point to the new copy.
+     * @return the new instance of node
+     */
+    public Node migrateNodeToThisSegment(Node node)
     {
         Node newNode = new Node(node);
+        nodes.put(newNode.getFoldId(),newNode);
         newNode.notifyAllConnectionsOfChangeInId();
+        
         return newNode;
     }
 }

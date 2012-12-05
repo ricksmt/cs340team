@@ -193,13 +193,13 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
-    public Node migrateNodeToSegment(Node node)
+    public Node migrateNodeToThisSegment(Node node)
     {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Node";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = node;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodeToSegment", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodeToThisSegment", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Node)result;
     }
