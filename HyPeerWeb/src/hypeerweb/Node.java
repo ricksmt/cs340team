@@ -196,7 +196,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     }
 
 
-    protected State getState()
+    public State getState()
     {
         return state;
     }
