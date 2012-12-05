@@ -196,7 +196,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     }
 
 
-    protected State getState()
+    public State getState()
     {
         return state;
     }
@@ -526,12 +526,12 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
      */
     public synchronized Node findCapNode(Node startNode)
     {
-        Node currentNode = startNode.state.findCapNode(startNode);
+        Node currentNode = startNode.getState().findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
         while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
-            currentNode = currentNode.state.findCapNode(currentNode);
+            currentNode = currentNode.getState().findCapNode(currentNode);
         }//The cap node is now found (currentNode).
         
         return currentNode;
@@ -588,12 +588,12 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
      */
     private synchronized Node findDeletionPoint(Node startNode)
     {
-        Node currentNode = startNode.state.findCapNode(startNode);
+        Node currentNode = startNode.getState().findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
         while(!currentNode.equals(startNode))
         {
             startNode = currentNode;
-            currentNode = currentNode.state.findCapNode(currentNode);
+            currentNode = currentNode.getState().findCapNode(currentNode);
         }//The cap node is now found (currentNode).
         
         // Node 0 
