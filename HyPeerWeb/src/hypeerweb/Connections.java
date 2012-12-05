@@ -28,7 +28,7 @@ import java.util.TreeSet;
  *      
  * @author Trevor Bentley
  */
-public class Connections //implements java.io.Serializable
+public class Connections implements java.io.Serializable
 {
     public enum Action
     {   
