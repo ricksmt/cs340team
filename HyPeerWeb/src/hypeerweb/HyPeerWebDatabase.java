@@ -3,6 +3,8 @@ package hypeerweb;
 import java.sql.*;
 import java.util.*;
 
+import command.GlobalObjectId;
+
 /**
  * The helper class that allows saving and loading the HyPeerWeb from the database.
  * <br>
@@ -178,6 +180,13 @@ public class HyPeerWebDatabase
                             "InvSurNeighbor int not null," +
                             "SurNeighbor int not null)"
             );
+            createTables.addBatch(
+                    "CREATE TABLE IF NOT EXISTS GlobalObjectId (" +
+                    "WebId int primary key asc," +
+                    "MachineName varchar(255)," +
+                    "PortNumber int not null," +
+                    "LocalObjectId int not null)"
+    );
             
             createTables.executeBatch();
             createTables.close();
@@ -217,6 +226,8 @@ public class HyPeerWebDatabase
                 dropTables.executeUpdate("DROP TABLE IF EXISTS Nodes");
                 dropTables.executeUpdate("DROP TABLE IF EXISTS SurNeighbors");
                 dropTables.executeUpdate("DROP TABLE IF EXISTS Neighbors");
+                dropTables.executeUpdate("DROP TABLE IF EXISTS GlobalObjectId");                
+                
                 dropTables.close();
             }
             catch(final SQLException e)
@@ -250,7 +261,7 @@ public class HyPeerWebDatabase
             while (rs.next())
             {
                 final int webId = rs.getInt("WebId");
-                final Node newNode = new Node(webId);
+                final Node newNode = new Node(webId, getGlobalObjectId(webId));
                 nodes.put(webId, newNode);                               
             }
                     
@@ -267,19 +278,66 @@ public class HyPeerWebDatabase
                 
                 if(nodeSet.next())
                 {
-                    if(nodeSet.getInt("Fold")>=0) currNode.setFold(nodes.get(nodeSet.getInt("Fold")));
-                    if(nodeSet.getInt("InvSurFold")>=0) currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
-                    if(nodeSet.getInt("SurFold")>=0) currNode.setSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
+                    if(nodeSet.getInt("Fold")>=0 && nodes.containsKey(nodeSet.getInt("Fold"))) 
+                        currNode.setFold(nodes.get(nodeSet.getInt("Fold")));
+                    else if(nodeSet.getInt("Fold")>=0) //not in the node table so is a proxy node
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(nodeSet.getInt("Fold")));
+                        currNode.setFold(proxy);
+                    }    
+                        
+                    if(nodeSet.getInt("InvSurFold")>=0 && nodes.containsKey(nodeSet.getInt("InvSurFold")))
+                        currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("InvSurFold")));
+                    else if(nodeSet.getInt("InvSurFold")>=0)
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(nodeSet.getInt("InvSurFold")));
+                        currNode.setFold(proxy);
+                    }
+                    
+                    if(nodeSet.getInt("SurFold")>=0 && nodes.containsKey(nodeSet.getInt("SurFold")))
+                        currNode.setInverseSurrogateFold(nodes.get(nodeSet.getInt("SurFold")));
+                    else if(nodeSet.getInt("SurFold")>=0)
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(nodeSet.getInt("SurFold")));
+                        currNode.setFold(proxy);
+                    }
                 }
                 nodeStat.close();
                 final HashSet<Integer> neighbors = loadNeighbors(id);
-                for(int neighborId: neighbors) currNode.addNeighbor(nodes.get(neighborId));
+                for(int neighborId: neighbors) 
+                {
+                    if(nodes.containsKey(neighborId))
+                        currNode.addNeighbor(nodes.get(neighborId));
+                    else
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(neighborId));
+                        currNode.addNeighbor(proxy);                         
+                    }
+                }
                 
                 final HashSet<Integer> surNeighbors = loadSurNeighbors(id);
-                for(int neighborId: surNeighbors) currNode.addDownPointer(nodes.get(neighborId));
+                for(int neighborId: surNeighbors) 
+                {
+                    if(nodes.containsKey(neighborId))
+                        currNode.addDownPointer(nodes.get(neighborId));
+                    else
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(neighborId));
+                        currNode.addDownPointer(proxy);                         
+                    }
+                }
                 
                 final HashSet<Integer> invSurNeighbors = loadInvSurNeighbors(id);
-                for(int neighborId: invSurNeighbors) currNode.addUpPointer(nodes.get(neighborId));
+                for(int neighborId: invSurNeighbors)
+                {
+                    if(nodes.containsKey(neighborId))
+                        currNode.addUpPointer(nodes.get(neighborId));
+                    else
+                    {
+                        command.NodeProxy proxy = new command.NodeProxy(getGlobalObjectId(neighborId));
+                        currNode.addUpPointer(proxy);                         
+                    }
+                }
             }
             return nodes;
         }
@@ -290,6 +348,8 @@ public class HyPeerWebDatabase
         }
         return new HashMap<Integer,Node>();
     }
+
+    
 
     /**
      * Creates a SimplifiedNodeDomain representing the node with indicated webId. The information is retrieved from the database. 
@@ -468,6 +528,11 @@ public class HyPeerWebDatabase
                                 + node.getWebId() + " to the database.");
             e.printStackTrace();
         }
+        
+        saveGlobalObjectId(node);
+        saveGlobalObjectId(node.getFold());
+        saveGlobalObjectId(node.getConnections().getSurrogateFold());
+        saveGlobalObjectId(node.getConnections().getInverseSurrogateFold());
     }
     
     /**
@@ -514,6 +579,10 @@ public class HyPeerWebDatabase
             System.out.println("There was an error saving a neighbor relationship of node "
                                         + node.getWebId() + " to the database.");
             e.printStackTrace();
+        }
+        
+        for (Node neighbor : node.getConnections().getNeighbors()){
+            saveGlobalObjectId(neighbor);
         }
     }
     /**
@@ -563,5 +632,104 @@ public class HyPeerWebDatabase
                                                 + node.getWebId() + " to the database.");
             e.printStackTrace();
         }  
+        
+        for (Node surNeighbor : node.getConnections().getSurrogateNeighbors()){
+            saveGlobalObjectId(surNeighbor);
+        }
+    }
+    
+    private void saveGlobalObjectId(final Node node)
+    {
+        if(node==null) return;
+        final int webId = node.getWebId();
+        boolean alreadySaved = false;
+        
+       
+        try 
+        {
+            PreparedStatement getGlobalObjectId = connection.prepareStatement("SELECT * FROM GlobalObjectId WHERE WebId = ?");
+            getGlobalObjectId.setInt(1, webId);
+            final ResultSet idSet = getGlobalObjectId.executeQuery();
+            if (idSet.next()) alreadySaved = true;
+            getGlobalObjectId.close(); 
+            if(alreadySaved) return;
+            
+        } catch (SQLException e1) {
+            System.out.println("There was an error reading a GlobalObjectId of node " 
+                    + node.getWebId() + " from the database.");
+            e1.printStackTrace();
+        }
+           
+        
+        
+        command.GlobalObjectId globalObjectId = node.getId();
+        
+        try 
+        {
+            final PreparedStatement saveGlobalObjectId = connection.prepareStatement(
+                    "INSERT INTO GlobalObjectId(WebId, MachineName, PortNumber, LocalObjectId) VALUES (?, ?, ?, ?)");
+            
+            
+            saveGlobalObjectId.setInt(1, webId);
+            saveGlobalObjectId.setString(2, globalObjectId.getMachineAddr());
+            saveGlobalObjectId.setInt(3, globalObjectId.getPortNumber().getValue());
+            saveGlobalObjectId.setInt(4, globalObjectId.getLocalObjectId().getId());
+            saveGlobalObjectId.addBatch();
+            
+            connection.setAutoCommit(false);
+            while(true)
+            {
+                try
+                { 
+                    saveGlobalObjectId.executeBatch();
+                    break;
+                }
+                catch(final BatchUpdateException e)
+                {
+                    continue;
+                }
+            }
+            connection.setAutoCommit(true);
+            saveGlobalObjectId.close(); 
+            
+            
+            
+        } catch (SQLException e) {
+            System.out.println("There was an error saving a GlobalObjectId relationship of node " 
+                    + node.getWebId() + " to the database.");
+            e.printStackTrace();
+        }
+        
+      
+    }
+    
+    private command.GlobalObjectId getGlobalObjectId(int webId) {
+        try 
+        {
+            PreparedStatement getGlobalObjectId = connection.prepareStatement("SELECT * FROM GlobalObjectId WHERE WebId = ?");
+            getGlobalObjectId.setInt(1, webId);
+            final ResultSet rs = getGlobalObjectId.executeQuery();
+            if (rs.next())
+            {
+                //MachineName, PortNumber, LocalObjectId
+                final String name = rs.getString("MachineName");
+                final int number = rs.getInt("PortNumber");
+                final int localId = rs.getInt("LocalObjectId");
+                
+                command.PortNumber PortNumber = new command.PortNumber(number);
+                command.LocalObjectId LocalObjectId = new command.LocalObjectId(localId);
+                
+                command.GlobalObjectId GlobalObjectId= new command.GlobalObjectId(name, PortNumber, LocalObjectId);
+                
+                return GlobalObjectId;
+                
+            } 
+            
+        } catch (SQLException e1) {
+            System.out.println("There was an error reading a GlobalObjectId of node " 
+                    + webId + " from the database.");
+            e1.printStackTrace();
+        }
+        return null;
     }
 }

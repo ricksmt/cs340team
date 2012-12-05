@@ -146,11 +146,15 @@ public class HyPeerWebProxy
         return (Integer)result;
     }
     
-    public void connectToSegment(GlobalObjectId segmentId){
-        String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "command.GlobalObjectId";
-        Object[] actualParameters = new Object[1];
-        actualParameters[0] = segmentId;
+    public void connectToSegment(String ipAddress, int portNumber, int localObjectId){
+        String[] parameterTypeNames = new String[3];
+        parameterTypeNames[0] = "java.lang.String";
+        parameterTypeNames[1] = "int";
+        parameterTypeNames[2] = "int";
+        Object[] actualParameters = new Object[3];
+        actualParameters[0] = ipAddress;
+        actualParameters[1] = portNumber;
+        actualParameters[2] = localObjectId;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "connectToSegment", parameterTypeNames, actualParameters, true);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }

@@ -154,6 +154,16 @@ public class Node extends ProxyableObject implements Comparable<Node>
         state = State.CAP;
     }
     
+    public Node(int i, command.GlobalObjectId id) //Wait, how would we even know what it's webId is supposed to be?
+    {
+        super(id);
+        webid = new WebId(i);
+        connections = new Connections();
+        connections.setFold(this);
+        contents = new Contents();
+        state = State.CAP;
+    }
+    
     /**
      * Gets this node's contents
      * 
@@ -202,7 +212,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @post no changes to this node
      * @return SimplifiedNodeDomain representing this node
      */
-    public SimplifiedNodeDomain constructSimplifiedNodeDomain() 
+    public synchronized SimplifiedNodeDomain constructSimplifiedNodeDomain() 
     {
         final HashSet<Integer> intNeighbors = new HashSet<Integer>();
         final HashSet<Integer> intSurrogateNeighbors = new HashSet<Integer>();
@@ -262,7 +272,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param webId 
      */
-    public void setWebId(final WebId webId) 
+    public synchronized void setWebId(final WebId webId) 
     {
         webid = webId;
     }
@@ -271,7 +281,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param state 
      */
-    public void setState(final State state)
+    public synchronized void setState(final State state)
     {
         this.state = state;
     }
@@ -280,7 +290,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void setFold(final Node node) 
+    public synchronized void setFold(final Node node) 
     {
         // if node WebId is fold of this.WebId
         connections.setFold(node);
@@ -290,7 +300,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void setSurrogateFold(final Node node) 
+    public synchronized void setSurrogateFold(final Node node) 
     {
         // if node WebId is surrogate fold of this.WebId
         connections.setSurrogateFold(node);
@@ -300,7 +310,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void setInverseSurrogateFold(final Node node) 
+    public synchronized void setInverseSurrogateFold(final Node node) 
     {
         connections.setInverseSurrogateFold(node);
     }
@@ -311,7 +321,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @pre none
      * @post If node is not this or null, it is added as a neighbor
      */
-    public void addNeighbor(final Node node) 
+    public synchronized void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
         if(node != this && node != null)
@@ -322,7 +332,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void removeNeighbor(final Node node) 
+    public synchronized void removeNeighbor(final Node node) 
     {
         if (node != null)
             connections.removeNeighbor(node);
@@ -353,7 +363,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @pre none
      * @post If node is not this or null, it is added as a inverse surrogate neighbor
      */
-    public void addUpPointer(final Node node0)
+    public synchronized void addUpPointer(final Node node0)
     {
         if(node0 != this && node0 != null)
             connections.addInverseSurrogateNeighbor(node0);
@@ -363,7 +373,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void removeUpPointer(final Node node)
+    public synchronized void removeUpPointer(final Node node)
     {
         connections.removeInverseSurrogateNeighbor(node);
     }
@@ -374,7 +384,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @pre none
      * @post If node is not this or null, it is added as a surrogate neighbor 
      */
-    public void addDownPointer(final Node node)
+    public synchronized void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
         if(node != this && node != null)
@@ -385,7 +395,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @obvious
      * @param node 
      */
-    public void removeDownPointer(final Node node)
+    public synchronized void removeDownPointer(final Node node)
     {
         connections.removeSurrogateNeighbor(node);
     }
@@ -426,7 +436,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @post This node will be part of the HyPeerWeb and all connections will be modified to match the project constraints
      * @param startNode 
      */
-    public void insertSelf(final Node startNode)
+    public synchronized void insertSelf(final Node startNode)
     {
         final Node parent = findInsertionPoint(startNode);
         webid = new WebId((int) (parent.webid.getValue() + 
@@ -454,7 +464,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @post No change to HyPeerWeb
      * @return The cap node of the HyPeerWeb
      */
-    public Node findCapNode(Node startNode)
+    public synchronized Node findCapNode(Node startNode)
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
@@ -474,7 +484,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @post No change to HyPeerWeb.
      * @return The node which is the insertion point
      */
-    private Node findInsertionPoint(Node startNode)
+    private synchronized Node findInsertionPoint(Node startNode)
     {
         Node currentNode = startNode.findCapNode(startNode);
         //The cap node is now found (currentNode).
@@ -496,7 +506,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      *       The nodes in this node's connections are updated to point to the just moved deletionPoint node.
      *       The HyPeerWeb still meets all constraints at the end of the removal.
      */
-    public void removeFromHyPeerWeb()
+    public synchronized void removeFromHyPeerWeb()
     {
         // find deletionPoint from this point
         final Node deletionPoint = findDeletionPoint(this);
@@ -516,7 +526,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * @post No change to HyPeerWeb.
      * @return The node which is the deletion point
      */
-    private Node findDeletionPoint(Node startNode)
+    private synchronized Node findDeletionPoint(Node startNode)
     {
         Node currentNode = startNode.state.findCapNode(startNode);
         //This loop controls the stepping of the algorithm finding the cap node
@@ -549,7 +559,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      * 
      * Called from the deletionPoint node
      */
-    private void disconnectDeletionPoint()
+    private synchronized void disconnectDeletionPoint()
     {
         Connections.disconnect(this);
     }
@@ -657,7 +667,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
         return connections;
     }
     
-    public void setConnections(final Connections newconnections)
+    public synchronized void setConnections(final Connections newconnections)
     {
         connections = newconnections;
     }

@@ -14,6 +14,12 @@ public abstract class ProxyableObject implements java.io.Serializable
        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
    }
    
+   public ProxyableObject(command.GlobalObjectId globalObjectId)
+   {
+       id = globalObjectId;
+       command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
+   }
+   
    public command.GlobalObjectId getId()
    {
        return id;

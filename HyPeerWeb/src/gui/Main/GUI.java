@@ -52,8 +52,7 @@ public class GUI extends JFrame
 	}
 	
 	private void shutdown(){
-		//hypeerweb.saveToDatabase();
-		//ypeerweb.clear();
+
 	}
 	
 	public static GUI getSingleton(HyPeerWeb hypeerweb){
@@ -86,7 +85,7 @@ public class GUI extends JFrame
 	    }
 	    else
 	    {
-	       //TODO init this id object with the args. These will be the values printed by Server.java
+	       //init this id object with the args. These will be the values printed by Server.java
 	       command.PortNumber pn = new command.PortNumber(new Integer(args[1]));
 	       command.LocalObjectId loid = new command.LocalObjectId(new Integer(args[2]));
 	       command.GlobalObjectId id = new command.GlobalObjectId(args[0], pn, loid);
