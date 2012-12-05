@@ -500,7 +500,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     /**
      * @obvious
      */
-    private void parentNotify()
+    public void parentNotify()
     {
         connections.parentNotify(this);
     }
@@ -510,7 +510,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
      * @obvious
      * @return
      */
-    private Connections getChildConnections()
+    public Connections getChildConnections()
     {
         return connections.getChildConnections(this);
     }
