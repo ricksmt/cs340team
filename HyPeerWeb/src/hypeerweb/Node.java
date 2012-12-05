@@ -518,7 +518,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
             startNode = currentNode;
             currentNode = currentNode.getLowestNeighborWithoutChild();
         }
-        while(currentNode != startNode);
+        while(!currentNode.equals(startNode));
         return currentNode;
     }
     
