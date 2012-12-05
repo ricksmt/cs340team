@@ -475,14 +475,14 @@ public class Connections //implements java.io.Serializable
      *      - fold = parent's fold or inverse surrogate fold
      * @return child's connections
      */
-    public Connections getChildConnections(final Node parent)
+    public Connections getChildConnections(final Node selfNode)
     {
        final Connections childConnections = new Connections();
        //Neighbors
        childConnections.neighbors = new TreeSet<Node>(inverseSurrogateNeighbors);
-       childConnections.addNeighbor(parent);
+       childConnections.addNeighbor(selfNode);
        
-       childConnections.surrogateNeighbors = getLargerNeighbors(parent);
+       childConnections.surrogateNeighbors = getLargerNeighbors(selfNode);
        
        // Fold
        if (inverseSurrogateFold == Node.NULL_NODE) childConnections.fold = fold;

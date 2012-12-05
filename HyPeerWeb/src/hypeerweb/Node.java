@@ -346,7 +346,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public synchronized void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
-        if(!node.equals(this) && node != null)
+        if(node != null && !node.equals(this))
             connections.addNeighbor(node);
     }
     
@@ -387,7 +387,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
      */
     public synchronized void addUpPointer(final Node node0)
     {
-        if(!node0.equals(this) && node0 != null)
+        if(node0 != null && !node0.equals(this) )
             connections.addInverseSurrogateNeighbor(node0);
     }
     
@@ -409,7 +409,7 @@ public class Node extends ProxyableObject implements Comparable<Node>
     public synchronized void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
-        if(!node.equals(this) && node != null)
+        if(node != null && !node.equals(this))
             connections.addSurrogateNeighbor(node);
     }
     
@@ -466,20 +466,40 @@ public class Node extends ProxyableObject implements Comparable<Node>
                 Math.pow(2, parent.getHeight())));
         
         // Give child its' connections.
-        connections = parent.connections.getChildConnections(parent);
-        connections.addNeighbor(parent);
+        connections = parent.getChildConnections();
+        //connections.addNeighbor(parent);
         
         // Update states
-        setState(parent.state.getInitialStateofChild());
-        parent.setState(parent.state.getNextState());
+        setState(parent.getState().getInitialStateofChild());
+        parent.setState(parent.getState().getNextState());
         
         // Child Notify
         connections.childNotify(this, parent);
         
         // Parent Notify
-        parent.connections.parentNotify(parent);
+        parent.parentNotify();
         return true;
     }
+    
+    /**
+     * @obvious
+     */
+    private void parentNotify()
+    {
+        connections.parentNotify(this);
+    }
+
+
+    /**
+     * @obvious
+     * @return
+     */
+    private Connections getChildConnections()
+    {
+        return connections.getChildConnections(this);
+    }
+
+
     /**
      * findCapNode
      * @param startNode
