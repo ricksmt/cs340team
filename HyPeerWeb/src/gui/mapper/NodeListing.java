@@ -99,7 +99,8 @@ public class NodeListing extends JPanel {
 	
 	public int getSelectedNodeId(){
         int index = nodeList.getSelectedIndex();
-        if (index >= 0)
+       
+        if (index >= 0 && listSize != 0)
             return new Integer((String) nodeListModel.get(index));
         
         return index;
