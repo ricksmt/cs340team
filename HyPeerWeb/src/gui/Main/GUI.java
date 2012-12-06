@@ -29,31 +29,40 @@ public class GUI extends JFrame implements Observer
 	private HyPeerWeb hypeerweb;
 	private JScrollPane scrollPane;
 	
+	public GUI()
+	{
+	    init(HyPeerWeb.getSingleton());
+	}
+	
 	/**
 	 * Creates and initializes the GUI as being the root
 	 */
 	public GUI(HyPeerWeb hypeerweb){
-		this.hypeerweb = hypeerweb;
-		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
-		
-		// Make GUI an observer of hypeerweb
+		init(hypeerweb);
+	}
+	
+	private void init(HyPeerWeb hypeerweb){
+	    this.hypeerweb = hypeerweb;
+        this.setTitle("HyPeerWeb DEBUGGER V 1.1");
+        
+        // Make GUI an observer of hypeerweb
         this.hypeerweb.addNewObserver(this);
         System.out.println(this.hypeerweb.getCountObservers());
 
-		this.addWindowListener(new WindowAdapter() {
-			  public void windowClosing(WindowEvent we) {
-				shutdown();
-			    System.exit(0);
-			  }
-			});
-		
-		debugger = new HyPeerWebDebugger(this);
-		scrollPane = new JScrollPane(debugger);
-		scrollPane.setPreferredSize(new Dimension(debugger.WIDTH+20, debugger.HEIGHT));
-		
-		this.getContentPane().add(scrollPane);
-		
-		this.pack();
+        this.addWindowListener(new WindowAdapter() {
+              public void windowClosing(WindowEvent we) {
+                shutdown();
+                System.exit(0);
+              }
+            });
+        
+        debugger = new HyPeerWebDebugger(this);
+        scrollPane = new JScrollPane(debugger);
+        scrollPane.setPreferredSize(new Dimension(debugger.WIDTH+20, debugger.HEIGHT));
+        
+        this.getContentPane().add(scrollPane);
+        
+        this.pack();
 	}
 	
 	private void shutdown(){
@@ -138,6 +147,12 @@ public class GUI extends JFrame implements Observer
          */
         // arg = transient Map<Integer,Node> nodes;
         
+    }
+    
+    public Object writeReplace()
+    {
+        command.GUIProxy myProx = new command.GUIProxy(getId());
+        return myProx;
     }
 
 }

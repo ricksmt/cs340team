@@ -246,12 +246,12 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     {
         //assert id >= 0 && id < size();
         final Node node = getNode(id);
-        boolean success = nodes.remove(node);//TODO why doesn't this work!??!
+        boolean success = nodes.remove(node);
         if (success)
         {
             node.removeFromHyPeerWeb();
         }
-        else
+        else //if the treeset is out of order
         {
             Iterator<Node> iter = nodes.iterator();
             while(iter.hasNext())
