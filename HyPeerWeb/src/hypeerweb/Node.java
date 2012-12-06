@@ -21,6 +21,11 @@ import java.util.*;
 public class Node extends ProxyableObject implements Comparable<Node>, java.io.Serializable
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = -7376541449070536670L;
+
+    /**
      * This represents the state of the node in the cap node finding algorithm.
      * The findCapNode method is called to produce the correct behavior at each step.
      * 
@@ -102,10 +107,30 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
      */
     private transient WebId webid;
     
+    public class NodeContents extends Contents{
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 6266951046428408629L;
+
+        public NodeContents() {
+            super();
+        }
+        
+        public NodeContents(Contents contents) {
+            super(contents);
+        }
+
+        public Set<String> getKeys() {
+            return map.keySet();
+        }
+    }
+    
     /**
      * This node's contents.
      */
-    private transient Contents contents;
+    private transient NodeContents contents;
     
     /**
      * All of this nodes relations to other nodes (neighbors, folds, surrogates, etc.)
@@ -140,7 +165,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
         webid = new WebId(i);
         connections = new Connections();
         connections.setFold(this);
-        contents = new Contents();
+        contents = new NodeContents();
         state = State.CAP;
         
         /*//Proxyable object
@@ -159,7 +184,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
         webid = new WebId(0);
         connections = new Connections();
         connections.setFold(this);
-        contents = new Contents();
+        contents = new NodeContents();
         state = State.CAP;
         
         //Proxyable object
@@ -173,7 +198,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
         webid = new WebId(i);
         connections = new Connections();
         connections.setFold(this);
-        contents = new Contents();
+        contents = new NodeContents();
         state = State.CAP;
         
         //Proxyable object
@@ -191,7 +216,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
         super();
         webid = new WebId(node.getWebId());
         connections = new Connections(node.getConnections());
-        contents = new Contents(node.getContents());
+        contents = new NodeContents(node.getContents());
         state = node.getState();
     }
 
@@ -313,6 +338,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
     public synchronized void setWebId(final WebId webId) 
     {
         webid = webId;
+        notifyChange();
     }
     
     /**
@@ -690,7 +716,15 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
      */
     public void accept(final Visitor visitor, final Parameters parameters)
     {
+        NodeContents oldContents = contents;
         visitor.visit(this, parameters);
+        Contents changes = new NodeContents();
+        for(String key: contents.getKeys()){
+            if(!oldContents.containsKey(key) || !oldContents.get(key).equals(contents.get(key))){
+                changes.set(key, "Node = " + getWebId() + ", message = '" + contents.get(key) + "'.\n");
+            }
+        }
+        notifyChange(changes);
     }
 
     

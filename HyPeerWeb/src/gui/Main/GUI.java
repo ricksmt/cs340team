@@ -1,6 +1,7 @@
 package gui.Main;
 
 import hypeerweb.HyPeerWeb;
+import hypeerweb.Node.NodeContents;
 
 import gui.Main.HyPeerWebDebugger;
 
@@ -142,7 +143,13 @@ public class GUI extends JFrame implements Observer
     public void update(Observable o, Object arg) {
         // TODO update GUI with nodes from HyPeerWeb
         System.out.println("Change observed.");
+        
         debugger.getMapper().getNodeListing().updateList();
+        if(arg instanceof NodeContents){
+            for(String key: ((NodeContents)arg).getKeys()){
+                getSingleton(null).printToTracePanel(((NodeContents)arg).get(key));
+            }
+        }
         
         /* Check the nodes
          * Update the GUI representation of HyPeerWeb so that it is accurate
