@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.ListSelectionModel;
 
 import gui.menus.NodeOptions;
 import gui.Main.GUI;
+import hypeerweb.Node;
 
 /**
  *  Gui component for listing nodes in a HyperPeerWeb 
@@ -101,16 +103,31 @@ public class NodeListing extends JPanel {
 	public void initList()
 	{
 		listSize = main.getHyPeerWeb().size();
-		for(int i = 0; i < MAX_NUMBER_OF_NODES; i++){
+		/*for(int i = 0; i < MAX_NUMBER_OF_NODES; i++){
 			if(i >= listSize){
 				nodeListModel.addElement("");
 			} else {
 				nodeListModel.addElement(Integer.toString(i));
 			}
-		}
+		}*/
+		
+		//This does not guarantee order.
+		Iterator<Node> iter = main.getHyPeerWeb().copyNodeSet().iterator();
+		for(int i = 0; i < MAX_NUMBER_OF_NODES; i++)
+		{
+            if (iter.hasNext())
+            {
+                nodeListModel.addElement(iter.next().getWebId() + "");
+            }
+            else
+            {
+                nodeListModel.addElement("");
+            }
+        }
+		
 	}
 	
-	public void increaseListSize(){
+	/*public void increaseListSize(){
 		nodeListModel.set(listSize,Integer.toString(listSize));
 		listSize++;
 	}
@@ -120,6 +137,23 @@ public class NodeListing extends JPanel {
 			nodeListModel.set(listSize-1, "");
 			listSize--;
 		}
+	}*/
+	
+	public void updateList()
+	{
+	    listSize = main.getHyPeerWeb().size();
+        Iterator<Node> iter = main.getHyPeerWeb().copyNodeSet().iterator();
+        for(int i = 0; i < MAX_NUMBER_OF_NODES; i++)
+        {
+            if (iter.hasNext())
+            {
+                nodeListModel.set(i,iter.next().getWebId() + "");
+            }
+            else
+            {
+                nodeListModel.set(i,"");
+            }
+        }
 	}
 	
 	private void clearButtonPressed(){

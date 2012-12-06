@@ -26,6 +26,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     
     private transient HyPeerWeb nextSegment;
     private transient HyPeerWeb previousSegment;
+    
 
     // For Proxyable
     private transient command.GlobalObjectId id;
@@ -115,6 +116,11 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
                 return node;
 	    }
 	    return Node.NULL_NODE;
+	}
+	
+	public Set<Node> copyNodeSet()
+	{
+	    return new TreeSet<Node>(nodes);
 	}
 
 	/**
