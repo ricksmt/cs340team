@@ -36,13 +36,13 @@ public abstract class ProxyableObject extends Observable implements java.io.Seri
    //abstract public int compareTo(Object o);
    public void notifyChange()
    {
-       hasChanged();
+       setChanged();
        notifyObservers();
    }
    
    public void notifyChange(Object o)
    {
-       hasChanged();
+       setChanged();
        if(o instanceof Integer) notifyObservers((Integer) o);
        else if(o instanceof Contents) notifyObservers((Contents) o);
    }
