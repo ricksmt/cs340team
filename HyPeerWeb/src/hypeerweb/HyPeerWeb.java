@@ -111,7 +111,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	{
 	    //assert i >= 0 && i < size();
 	    Node toReturn =  nodes.get(i);
-	    if (toReturn.getWebId() == i)
+	    if (toReturn != null && toReturn.getWebId() == i)
 	    {
 	        return toReturn;
 	    }
