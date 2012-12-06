@@ -373,8 +373,16 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         {
             destination.migrateNodeToThisSegment(node);
         }
+        this.clear();
+        destination.notifyObservers();
+        this.notifyObservers();
     }
     
+    public void disconnectFromSegment() {
+        if(previousSegment != null) previousSegment.setNextSegment(nextSegment);
+        if(nextSegment != null) nextSegment.setPreviousSegment(previousSegment);        
+    }
+
     /**
      * Copies the given node, stores it on this instance, and updates the copied node's connections.
      * 
