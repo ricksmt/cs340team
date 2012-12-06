@@ -12,7 +12,7 @@ import command.PortNumber;
 /**
  * The Class HyPeerWeb.
  */
-public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Serializable
+public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Serializable, Observer
 {
     
     /** The nodes. */
@@ -401,6 +401,14 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
             toReturn += " node" + node.getWebId();
         }
         return toReturn;
+    }
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        assert(o instanceof Node);
+        if(arg == null) notifyChange(((Node)o).getWebId());
+        else notifyChange(arg);
     }
     
     /*// Proxyable method

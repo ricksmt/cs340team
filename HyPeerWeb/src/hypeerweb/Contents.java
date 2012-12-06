@@ -8,10 +8,14 @@ import java.util.Map;
  * 
  * @author Matthew
  */
-public final class Contents implements java.io.Serializable
+public class Contents implements java.io.Serializable
 {
     
-    Map<String, Object> map = new HashMap<String, Object>();
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6804549108318040302L;
+    protected Map<String, Object> map = new HashMap<String, Object>();
 
     /**
      * The default constructor
