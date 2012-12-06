@@ -26,8 +26,6 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
     
     private transient HyPeerWeb nextSegment;
     private transient HyPeerWeb previousSegment;
-    
-    private transient HyPeerWebObservable observable;
 
     /*// For Proxyable
     private transient command.GlobalObjectId id;*/
@@ -45,7 +43,6 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         database = HyPeerWebDatabase.getSingleton();
         nextSegment = null;
         previousSegment = null;
-        observable = new HyPeerWebObservable();
         
         /*//Proxyable object
         id = new command.GlobalObjectId();
@@ -137,7 +134,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 		reload(null);	
 		
 		// Observer Pattern
-        observable.notifyObservers();
+		notifyChange();
 	}
 
 	/**
@@ -165,10 +162,9 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	        nodes.add(node0);
 	    
 	    // Observer Pattern
-        System.out.println(observable.countObservers());
+        System.out.println(getCountObservers());
         
-        observable.changed();
-        observable.notifyObservers();
+        notifyChange();
 	}
 
 	/**
@@ -275,7 +271,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         
         
         // Observer Pattern
-        observable.notifyObservers();
+        notifyChange();
         return removed;
     }
     
@@ -307,15 +303,10 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
             addToHyPeerWeb(nodeToInsert,startNode);
         }
         
-        segment.notifyObservers();
+        segment.notifyChange();
     }
 
-    public void notifyObservers()
-    {
-        observable.changed();
-        observable.notifyObservers();
-        
-    }
+    
 
     public synchronized void setNextSegment(HyPeerWeb nextSegment2)
     {
@@ -374,8 +365,8 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
             destination.migrateNodeToThisSegment(node);
         }
         this.clear();
-        destination.notifyObservers();
-        this.notifyObservers();
+        destination.notifyChange();
+        notifyChange();
     }
     
     public void disconnectFromSegment() {
@@ -400,15 +391,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         return newNode;
     }
     
-    public void addNewObserver(Observer o)
-    {
-        observable.addObserver(o);
-    }
     
-    public int getCountObservers()
-    {
-        return observable.countObservers();
-    }
     
     public String toString()
     {
