@@ -25,9 +25,15 @@ public class DebugMenu extends JMenuBar {
 	
 	/**Connect */
 	JMenuItem connect;
+    
+    /**Save */
+    JMenuItem save;
+    
+    /**Load */
+    JMenuItem load;
 	
-	/**Shut down*/
-	JMenuItem shutdown;
+	/**Migrate */
+	JMenuItem migrate;
 	
 	/**
 	 * Create a Debug Menu
@@ -53,8 +59,14 @@ public class DebugMenu extends JMenuBar {
 		
 		connect = new DebugConnectMenu(main);
 		this.add(connect);
+        
+        save = new SaveMenu(main);
+        this.add(save);
+        
+        load = new LoadMenu(main);
+        this.add(load);
 		
-	    shutdown = new DebugShutdownMenu(main);
-	    this.add(shutdown);
+        migrate = new DebugShutdownMenu(main);
+	    this.add(migrate);
 	}
 }

@@ -8,11 +8,11 @@ import javax.swing.JOptionPane;
 
 import gui.Main.GUI;
 
-public class DebugShutdownMenu extends JMenuItem implements ActionListener{
+public class SaveMenu extends JMenuItem implements ActionListener{
 
     GUI main;
     
-    public DebugShutdownMenu(GUI main) {
+    public SaveMenu(GUI main) {
         this.main = main;
         init();
     }
@@ -22,7 +22,7 @@ public class DebugShutdownMenu extends JMenuItem implements ActionListener{
      */
     public void init()
     {
-        this.setText("Migrate");
+        this.setText("Save");
         
         this.addActionListener(this);
     }
@@ -32,8 +32,7 @@ public class DebugShutdownMenu extends JMenuItem implements ActionListener{
      */
     public void actionPerformed(ActionEvent e) 
     {
-        main.getHyPeerWeb().migrateNodes();
-        main.getHyPeerWeb().disconnectFromSegment();
+        main.getHyPeerWeb().saveToDatabase();
         main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
         
     }   
