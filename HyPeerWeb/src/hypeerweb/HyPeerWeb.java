@@ -312,6 +312,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 
     public void notifyObservers()
     {
+        observable.changed();
         observable.notifyObservers();
         
     }
