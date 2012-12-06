@@ -306,6 +306,14 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         {
             addToHyPeerWeb(nodeToInsert,startNode);
         }
+        
+        segment.notifyObservers();
+    }
+
+    public void notifyObservers()
+    {
+        observable.notifyObservers();
+        
     }
 
     public synchronized void setNextSegment(HyPeerWeb nextSegment2)
@@ -391,6 +399,16 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
     public int getCountObservers()
     {
         return observable.countObservers();
+    }
+    
+    public String toString()
+    {
+        String toReturn = "HyPeerWeb:";
+        for (Node node : nodes)
+        {
+            toReturn += " node" + node.getWebId();
+        }
+        return toReturn;
     }
     
     /*// Proxyable method
