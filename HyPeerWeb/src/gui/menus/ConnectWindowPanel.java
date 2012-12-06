@@ -30,7 +30,7 @@ public class ConnectWindowPanel
         localObjectIDLabel = new JLabel("Local ObjectID");
         
         globalObjectID = new JTextField(20);    
-        port = new JTextField(3);
+        port = new JTextField(6);
         localObjectID = new JTextField(20);
         
         //Build the send button

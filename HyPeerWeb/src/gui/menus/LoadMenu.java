@@ -32,6 +32,7 @@ public class LoadMenu extends JMenuItem implements ActionListener{
      */
     public void actionPerformed(ActionEvent e) 
     {
+        LoadWindow loadwindow = new LoadWindow(main,"Load");
         main.getHyPeerWeb().reload();
         main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
         
