@@ -72,7 +72,7 @@ public class DebugPrinter extends JPanel {
 	public void print(Object msg)	{
 		mainTab.print(msg);
 	}
-	
+	 
 	public void println()	{
 		mainTab.println();
 	}
