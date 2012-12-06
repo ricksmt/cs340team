@@ -202,7 +202,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
      * @post this HyPeerWeb is valid, no nodes previously within HyPeerWeb have changed IDs,
      *  and HyPeerWeb contains newNode or a newly created Node. 
 	 */
-	public synchronized void addToHyPeerWeb(final Node newNode, final Node startNode)
+	public synchronized boolean addToHyPeerWeb(final Node newNode, final Node startNode)
 	{
 	    Node toAdd = newNode;
 	    boolean success = true;
@@ -222,8 +222,9 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	    }
 	    else
 	    {
-	        System.out.println("ERROR, unable to add node");
+	        return false;
 	    }
+	    return true;
 	}
 	
 	/** DEPRECATED THIS IS NOT GUARENTEED TO WORK IN DISTRIBUTED ENV
@@ -232,9 +233,9 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	 * @post one node is removed from the HypeerWeb and
 	 *     the HypeerWeb is valid
 	 */
-	public synchronized void removeFromHyPeerWeb()
+	public synchronized boolean removeFromHyPeerWeb()
 	{
-	    removeFromHyPeerWeb((new Random()).nextInt(nodes.size()));
+	    return removeFromHyPeerWeb((new Random()).nextInt(nodes.size()));
 	}
 	
 	/** 
@@ -244,18 +245,21 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
      * @post one node is removed from the HypeerWeb
      * @param id the webId of the node you want to remove
      */
-    public synchronized void removeFromHyPeerWeb(final int id)
+    public synchronized boolean removeFromHyPeerWeb(final int id)
     {
         //assert id >= 0 && id < size();
         final Node node = getNode(id);
+        boolean removed = false;
         boolean success = nodes.remove(node);
         if (success)
         {
             node.removeFromHyPeerWeb();
+            removed = true;
         }
         else //if the treeset is out of order
         {
             Iterator<Node> iter = nodes.iterator();
+            
             while(iter.hasNext())
             {
                 Node n = iter.next();
@@ -263,6 +267,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
                 {
                     iter.remove();
                     node.removeFromHyPeerWeb();
+                    removed = true;
                     break;
                 }
             }
@@ -271,6 +276,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
         
         // Observer Pattern
         observable.notifyObservers();
+        return removed;
     }
     
     public synchronized void connectToSegment(String ipAddress, int portNumber, int localObjectId)
