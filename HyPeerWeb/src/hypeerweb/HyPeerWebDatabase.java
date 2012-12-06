@@ -32,7 +32,7 @@ public class HyPeerWebDatabase
     /**
      * The default name of the file that holds the sqlite3 database. Currently it is "HyPeerWeb.db".
      */
-    public static String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
+    public static String DEFAULT_DATABASE_NAME = "HyPeerWebDatabase.db";
     
     
     
