@@ -154,6 +154,9 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	        nodes.put(node0.getWebId(), node0);
 	    
 	    // Observer Pattern
+        System.out.println(this.countObservers());
+        
+        setChanged();
         notifyObservers(nodes);
 	}
 
@@ -335,6 +338,16 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         newNode.notifyAllConnectionsOfChangeInId();
         
         return newNode;
+    }
+    
+    public void addNewObserver(Observer o)
+    {
+        addObserver(o);
+    }
+    
+    public int getCountObservers()
+    {
+        return countObservers();
     }
     
     // Proxyable method
