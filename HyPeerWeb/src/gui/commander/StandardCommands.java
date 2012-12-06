@@ -173,7 +173,7 @@ public class StandardCommands extends JPanel
             // First node in HyPeerWeb - add it to HyPeerWeb
             if(size == 0){
                 main.getHyPeerWeb().addToHyPeerWeb(null, start);
-                main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
             }
             // Start is null and HyPeerWeb has nodes in it, Error
             else if(start == Node.NULL_NODE){
@@ -184,7 +184,7 @@ public class StandardCommands extends JPanel
             // Add Node to HyPeerWeb
             else{
                 main.getHyPeerWeb().addToHyPeerWeb(node, start);
-                main.getHyPeerWebDebugger().getMapper().getNodeListing().increaseListSize();
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
             }
         }
 	}
@@ -214,7 +214,7 @@ public class StandardCommands extends JPanel
             }
             else{
                 main.getHyPeerWeb().removeFromHyPeerWeb(id);
-                main.getHyPeerWebDebugger().getMapper().getNodeListing().decreaseListSize();
+                main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
             }
         }
 	}

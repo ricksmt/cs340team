@@ -131,6 +131,7 @@ public class GUI extends JFrame implements Observer
     public void update(Observable o, Object arg) {
         // TODO update GUI with nodes from HyPeerWeb
         System.out.println("Change observed.");
+        debugger.getMapper().getNodeListing().updateList();
         
         /* Check the nodes
          * Update the GUI representation of HyPeerWeb so that it is accurate
