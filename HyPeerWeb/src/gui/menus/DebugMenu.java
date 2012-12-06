@@ -26,6 +26,9 @@ public class DebugMenu extends JMenuBar {
 	/**Connect */
 	JMenuItem connect;
 	
+	/**Shut down*/
+	JMenuItem shutdown;
+	
 	/**
 	 * Create a Debug Menu
 	 * @param main
@@ -50,5 +53,8 @@ public class DebugMenu extends JMenuBar {
 		
 		connect = new DebugConnectMenu(main);
 		this.add(connect);
+		
+	    shutdown = new DebugShutdownMenu(main);
+	    this.add(shutdown);
 	}
 }

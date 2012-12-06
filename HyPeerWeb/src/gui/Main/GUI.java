@@ -47,7 +47,7 @@ public class GUI extends JFrame implements Observer
         
         // Make GUI an observer of hypeerweb
         this.hypeerweb.addNewObserver(this);
-        System.out.println(this.hypeerweb.getCountObservers());
+        //System.out.println(this.hypeerweb.getCountObservers());
 
         this.addWindowListener(new WindowAdapter() {
               public void windowClosing(WindowEvent we) {
@@ -65,7 +65,8 @@ public class GUI extends JFrame implements Observer
         this.pack();
 	}
 	
-	private void shutdown(){
+	private void shutdown()
+	{
 
 	}
 	
@@ -129,7 +130,8 @@ public class GUI extends JFrame implements Observer
 		debugger.getTracePanel().print(msg);
 	}
 	
-	public void finalize(){
+	public void finalize()
+	{
         hypeerweb.saveToDatabase();
         hypeerweb.clear();
 	}
