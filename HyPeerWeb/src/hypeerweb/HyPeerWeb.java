@@ -16,7 +16,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 {
     
     /** The nodes. */
-    private transient Map<Integer,Node> nodes;
+    private transient SortedSet<Node> nodes;
     
     /** The singleton. */
     private transient static HyPeerWeb singleton;
@@ -39,7 +39,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     protected HyPeerWeb()
     {
         super();
-        nodes = new HashMap<Integer,Node>();
+        nodes = new TreeSet<Node>();
         database = HyPeerWebDatabase.getSingleton();
         nextSegment = null;
         previousSegment = null;
@@ -97,7 +97,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         database = HyPeerWebDatabase.getSingleton();
 	    
         nodes.clear(); 
-        nodes.putAll(database.loadNodeSet());
+        nodes.addAll(database.loadNodeSet().values());
 	}
 
 	/**
@@ -109,19 +109,10 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	 */
 	public Node getNode(final int i)
 	{
-	    //assert i >= 0 && i < size();
-	    Node toReturn =  nodes.get(i);
-	    if (toReturn != null && toReturn.getWebId() == i)
+	    for (Node node : nodes)
 	    {
-	        return toReturn;
-	    }
-	    else
-	    {
-	        for (Node node : nodes.values())
-	        {
-	            if (node.getWebId() == i)
-	                return node;
-	        }
+            if (node.getWebId() == i)
+                return node;
 	    }
 	    return Node.NULL_NODE;
 	}
@@ -149,7 +140,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	 */
 	public synchronized void saveToDatabase()
 	{
-	    database.save(nodes.values());
+	    database.save(nodes);
 	}
 
 	/**
@@ -161,10 +152,9 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	 */
 	public synchronized void addNode(final Node node0)
 	{
-	    assert !nodes.containsKey(node0.getWebId());
 	    
 	    if (node0.getClass() != NodeProxy.class )
-	        nodes.put(node0.getWebId(), node0);
+	        nodes.add(node0);
 	    
 	    // Observer Pattern
         System.out.println(this.countObservers());
@@ -183,7 +173,16 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	 */
 	public boolean contains(final Node node0)
 	{
-	    return nodes.containsValue(node0);
+	    boolean toReturn = nodes.contains(node0);
+	    if (!toReturn)
+	    {
+	        for (Node node : nodes)
+	        {
+	            if (node.equals(node0))
+	                return true;
+	        }
+	    }
+	    return toReturn;
 	}
 	
 	/**
@@ -219,7 +218,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	    }
 	}
 	
-	/** 
+	/** DEPRECATED THIS IS NOT GUARENTEED TO WORK IN DISTRIBUTED ENV
 	 * Remove a random node from the HypeerWeb
 	 * @pre HypeerWeb has at least 2 nodes
 	 * @post one node is removed from the HypeerWeb and
@@ -239,11 +238,28 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
      */
     public synchronized void removeFromHyPeerWeb(final int id)
     {
-        assert id >= 0 && id < size();
+        //assert id >= 0 && id < size();
         final Node node = getNode(id);
-        node.removeFromHyPeerWeb();
-        nodes.put(id, getNode(size() - 1));
-        nodes.remove(size() - 1);
+        boolean success = nodes.remove(node);//TODO why doesn't this work!??!
+        if (success)
+        {
+            node.removeFromHyPeerWeb();
+        }
+        else
+        {
+            Iterator<Node> iter = nodes.iterator();
+            while(iter.hasNext())
+            {
+                Node n = iter.next();
+                if (n.equals(node))
+                {
+                    iter.remove();
+                    node.removeFromHyPeerWeb();
+                    break;
+                }
+            }
+        }
+        
         
         // Observer Pattern
         notifyObservers(nodes);
@@ -269,7 +285,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         Node startNode = null;
         
         if (nodes.size() > 0)
-            startNode = nodes.values().iterator().next();
+            startNode = nodes.iterator().next();
         
         //Insert all the nodes from the other segment's hypeerweb into my hypeerweb
         for (Node nodeToInsert : toInsert)
@@ -293,7 +309,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         if (nodes.size() > 0)
         {
             HyPeerWebVisitor visitor = new HyPeerWebVisitor();
-            Node startNode = nodes.values().iterator().next();
+            Node startNode = nodes.iterator().next();
             visitor.visit(startNode, BroadcastVisitor.createInitialParameters());
             return visitor.getNodes();
         }
@@ -330,9 +346,9 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
             return;
         }
         
-        for (Node node : nodes.values())
+        for (Node node : nodes)
         {
-            node = destination.migrateNodeToThisSegment(node);
+            destination.migrateNodeToThisSegment(node);
         }
     }
     
@@ -347,7 +363,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     public Node migrateNodeToThisSegment(Node node)
     {
         Node newNode = new Node(node);
-        nodes.put(newNode.getFoldId(),newNode);
+        nodes.add(newNode);
         newNode.notifyAllConnectionsOfChangeInId();
         
         return newNode;

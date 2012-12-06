@@ -699,10 +699,18 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
             return getWebId() - o.getWebId();
     }
     
-    public boolean equals(final Object o)
+    
+    @Override
+    public boolean equals(Object o)
     {
         return getWebId() == ((Node) o).getWebId();
     }
+    @Override
+    public int hashCode()
+    {
+        return getWebId();
+    }
+    
     
     /**
      * 
