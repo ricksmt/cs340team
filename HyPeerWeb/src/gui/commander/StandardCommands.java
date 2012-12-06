@@ -168,7 +168,7 @@ public class StandardCommands extends JPanel
             Node node = new Node(0);
             
             // Get which node is selected in the displayed nodes window
-            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
+            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedNodeId();
             
             // start is null if size is 0, or the node with id
             final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
@@ -229,7 +229,7 @@ public class StandardCommands extends JPanel
         if(size == 1) main.getHyPeerWebDebugger().getStatus().
             setContent("Minimum number of nodes reached. Node not removed.");
         else{
-            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedIndex();
+            final int id = main.getHyPeerWebDebugger().getMapper().getNodeListing().getSelectedNodeId();
             final Node start = main.getHyPeerWeb().getNode(id);
             if(start == Node.NULL_NODE){
                 main.getHyPeerWebDebugger().getStatus().

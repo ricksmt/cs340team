@@ -97,6 +97,14 @@ public class NodeListing extends JPanel {
 		return nodeList.getSelectedIndex();
 	}
 	
+	public int getSelectedNodeId(){
+        int index = nodeList.getSelectedIndex();
+        if (index >= 0)
+            return new Integer((String) nodeListModel.get(index));
+        
+        return index;
+    }
+	
 	/**
 	 * updates the list of components used by the node list
 	 */
