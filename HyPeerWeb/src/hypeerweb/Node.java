@@ -794,4 +794,9 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
     {
         return id;   
     }
+    
+    public java.lang.String toString()
+    {
+        return "Node" + getWebId();
+    }
 }
