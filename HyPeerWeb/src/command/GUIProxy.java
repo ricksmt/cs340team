@@ -32,13 +32,15 @@ public class GUIProxy
     }
 
     public boolean equals(java.lang.Object p0){
-        String[] parameterTypeNames = new String[1];
+        /*String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "java.lang.Object";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "equals", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Boolean)result;
+        return (Boolean)result;*/
+        GlobalObjectId otherId = ((GUIProxy) p0).globalObjectId;
+        return globalObjectId.equals(otherId);
     }
 
     public int hashCode(){

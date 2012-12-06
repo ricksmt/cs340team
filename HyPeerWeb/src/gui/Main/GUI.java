@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import command.GlobalObjectId;
 import command.PeerCommunicator;
+import command.PortNumber;
 
 /**
  * The central GUI used to display information about the HyPeerWeb and debug information
@@ -38,11 +39,13 @@ public class GUI extends JFrame implements Observer
 	/**
 	 * Creates and initializes the GUI as being the root
 	 */
-	public GUI(HyPeerWeb hypeerweb){
+	public GUI(HyPeerWeb hypeerweb)
+	{
 		init(hypeerweb);
 	}
 	
-	private void init(HyPeerWeb hypeerweb){
+	private void init(HyPeerWeb hypeerweb)
+	{
 	    this.hypeerweb = hypeerweb;
         this.setTitle("HyPeerWeb DEBUGGER V 1.1");
         
@@ -71,7 +74,8 @@ public class GUI extends JFrame implements Observer
 
 	}
 	
-	public static GUI getSingleton(HyPeerWeb hypeerweb){
+	public static GUI getSingleton(HyPeerWeb hypeerweb)
+	{
 		if(singleton == null){
 			try{
 				singleton = new GUI(hypeerweb);
@@ -92,7 +96,8 @@ public class GUI extends JFrame implements Observer
 	/**
 	 * Start Point of the Program
 	 */
-	public static void main (String[] args){
+	public static void main (String[] args)
+	{
 	   // GUI gui;
 	    if (args.length == 0)
 	    {
@@ -111,6 +116,11 @@ public class GUI extends JFrame implements Observer
 	            System.err.println("ERROR:" + e.getMessage());
 	            System.err.println(e.getStackTrace());
 	        }
+	       int port = -1;
+           if (args.length > 3)
+           {
+               PortNumber.setApplicationsPortNumber(new PortNumber(new Integer(args[3])));
+           }
 	       getSingleton(new command.HyPeerWebProxy(id));
 	    }
 	}
