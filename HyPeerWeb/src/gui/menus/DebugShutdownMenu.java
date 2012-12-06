@@ -34,6 +34,7 @@ public class DebugShutdownMenu extends JMenuItem implements ActionListener{
     {
         main.getHyPeerWeb().migrateNodes();
         main.getHyPeerWeb().disconnectFromSegment();
+        main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
             
     }   
 }
