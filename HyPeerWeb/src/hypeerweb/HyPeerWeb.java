@@ -110,7 +110,20 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	public Node getNode(final int i)
 	{
 	    assert i >= 0 && i < size();
-	    return nodes.get(i);
+	    Node toReturn =  nodes.get(i);
+	    if (toReturn.getWebId() == i)
+	    {
+	        return toReturn;
+	    }
+	    else
+	    {
+	        for (Node node : nodes.values())
+	        {
+	            if (node.getWebId() == i)
+	                return node;
+	        }
+	    }
+	    return Node.NULL_NODE;
 	}
 
 	/**
@@ -227,9 +240,9 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     public synchronized void removeFromHyPeerWeb(final int id)
     {
         assert id >= 0 && id < size();
-        final Node node = nodes.get(id);
+        final Node node = getNode(id);
         node.removeFromHyPeerWeb();
-        nodes.put(id, nodes.get(size() - 1));
+        nodes.put(id, getNode(size() - 1));
         nodes.remove(size() - 1);
         
         // Observer Pattern
