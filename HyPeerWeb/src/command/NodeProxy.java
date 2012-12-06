@@ -220,15 +220,44 @@ public class NodeProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public java.util.HashSet getNeighborsIds(){
+    public java.util.HashSet getNeighborsIds()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getNeighborsIds", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (java.util.HashSet)result;
     }
+    
+    public java.util.Set<hypeerweb.Node> getNeighbors()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getNeighbors", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (java.util.Set<hypeerweb.Node>)result;
+    }
+    
+    public java.util.Set<hypeerweb.Node> getSurrogateNeighbors()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getSurrogateNeighbors", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (java.util.Set<hypeerweb.Node>)result;
+    }
+    
+    public java.util.Set<hypeerweb.Node> getInverseSurrogateNeighbors()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getInverseSurrogateNeighbors", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (java.util.Set<hypeerweb.Node>)result;
+    }
 
-    public java.util.HashSet getSurNeighborsIds(){
+    public java.util.HashSet getSurNeighborsIds()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getSurNeighborsIds", parameterTypeNames, actualParameters, true);
@@ -279,7 +308,8 @@ public class NodeProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public int getFoldId(){
+    public int getFoldId()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getFoldId", parameterTypeNames, actualParameters, true);
@@ -287,21 +317,43 @@ public class NodeProxy
         return (Integer)result;
     }
 
-    public int getSurrogateFoldId(){
+    public int getSurrogateFoldId()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getSurrogateFoldId", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Integer)result;
     }
+    
+    public hypeerweb.Node getSurrogateFold()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getSurrogateFold", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (hypeerweb.Node)result;
+    }
 
-    public int getInverseSurrogateFoldId(){
+    public int getInverseSurrogateFoldId()
+    {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getInverseSurrogateFoldId", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Integer)result;
     }
+    
+    public hypeerweb.Node getInverseSurrogateFold()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "getInverseSurrogateFold", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (hypeerweb.Node)result;
+    }
+    
+    
 
     public hypeerweb.Connections getConnections()
     {
@@ -327,6 +379,14 @@ public class NodeProxy
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "parentNotify", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void notifyAllConnectionsOfChangeInId()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "notifyAllConnectionsOfChangeInId", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
