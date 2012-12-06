@@ -43,7 +43,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public synchronized void addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1)
+    public synchronized boolean addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1)
     {
         String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "hypeerweb.Node";
@@ -51,26 +51,29 @@ public class HyPeerWebProxy
         Object[] actualParameters = new Object[2];
         actualParameters[0] = null;//we don't really need to pass p0
         actualParameters[1] = p1;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "addToHyPeerWeb", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "addToHyPeerWeb", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean) result;
     }
 
-    public synchronized void removeFromHyPeerWeb()
+    public synchronized boolean removeFromHyPeerWeb()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "removeFromHyPeerWeb", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "removeFromHyPeerWeb", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean) result;
     }
 
-    public synchronized void removeFromHyPeerWeb(int p0)
+    public synchronized boolean removeFromHyPeerWeb(int p0)
     {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "int";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "removeFromHyPeerWeb", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "removeFromHyPeerWeb", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean) result;
     }
 
     public synchronized void clear()

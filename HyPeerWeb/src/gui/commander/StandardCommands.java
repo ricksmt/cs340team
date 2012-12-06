@@ -158,9 +158,12 @@ public class StandardCommands extends JPanel
 		//              1. invoke your "addToHyPeerWeb" command on the startNode passing in the new node created previously.
 		//				2. Increase the nodeListing size (See the NodeListing class for details).
 	    int size = main.getHyPeerWebDebugger().getMapper().getNodeListing().listSize();
-	    if(size >= NodeListing.MAX_NUMBER_OF_NODES) main.getHyPeerWebDebugger().getStatus().
-	        setContent("Maximum number of nodes reached. Node not added.");
-	    else{
+	    if(size >= NodeListing.MAX_NUMBER_OF_NODES) 
+	    {
+	        main.getHyPeerWebDebugger().getStatus().setContent("Maximum number of nodes reached. Node not added.");
+	    } 
+	    else
+	    {
             // New Node
             Node node = new Node(0);
             
@@ -171,20 +174,40 @@ public class StandardCommands extends JPanel
             final Node start = size!=0?main.getHyPeerWeb().getNode(id):null;
             
             // First node in HyPeerWeb - add it to HyPeerWeb
-            if(size == 0){
-                main.getHyPeerWeb().addToHyPeerWeb(null, start);
+            if(size == 0)
+            {
+                boolean success = main.getHyPeerWeb().addToHyPeerWeb(null, start);
+                if (success)
+                {
+                    main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
+                }
+                else
+                {
+                    main.getHyPeerWebDebugger().getStatus().
+                    setContent("Error. Node not added.");
+                }
                 main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
             }
             // Start is null and HyPeerWeb has nodes in it, Error
-            else if(start == Node.NULL_NODE){
+            else if(start == Node.NULL_NODE)
+            {
                 main.getHyPeerWebDebugger().getStatus().
                     setContent("No start node selected. Node not added.");
             }
             
             // Add Node to HyPeerWeb
-            else{
-                main.getHyPeerWeb().addToHyPeerWeb(node, start);
-                main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
+            else
+            {
+                boolean success = main.getHyPeerWeb().addToHyPeerWeb(node, start);
+                if (success)
+                {
+                    main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
+                }
+                else
+                {
+                    main.getHyPeerWebDebugger().getStatus().
+                    setContent("Error. Node not added.");
+                }
             }
         }
 	}
@@ -213,8 +236,16 @@ public class StandardCommands extends JPanel
                     setContent("No start node selected. Node not removed.");
             }
             else{
-                main.getHyPeerWeb().removeFromHyPeerWeb(id);
-                main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
+                boolean success = main.getHyPeerWeb().removeFromHyPeerWeb(id);
+                if (success)
+                {
+                    main.getHyPeerWebDebugger().getMapper().getNodeListing().updateList();
+                }
+                else
+                {
+                    main.getHyPeerWebDebugger().getStatus().
+                    setContent("Error. Node not removed.");
+                }
             }
         }
 	}
