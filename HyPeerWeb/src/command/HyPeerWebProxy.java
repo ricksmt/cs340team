@@ -230,7 +230,7 @@ public class HyPeerWebProxy
     
     public void addNewObserver(java.util.Observer p0){
         String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "interface java.util.Observer";
+        parameterTypeNames[0] = "java.util.Observer";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "addNewObserver", parameterTypeNames, actualParameters, false);
