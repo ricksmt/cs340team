@@ -140,7 +140,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
     /**
      * Global object ID for proxyable object
      */
-    private transient command.GlobalObjectId id;
+    //private transient command.GlobalObjectId id;
     
     public static final Node NULL_NODE = null;
     

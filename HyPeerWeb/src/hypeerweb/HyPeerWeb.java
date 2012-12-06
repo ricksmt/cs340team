@@ -145,6 +145,7 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	 */
 	public synchronized void saveToDatabase()
 	{
+	    HyPeerWebDatabase.initHyPeerWebDatabase(null);
 	    database.save(nodes);
 	}
 
