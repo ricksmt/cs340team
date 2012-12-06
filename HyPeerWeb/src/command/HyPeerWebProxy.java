@@ -3,7 +3,7 @@ package command;
 import hypeerweb.Connections;
 import hypeerweb.Node;
 
-import java.util.Collection;
+import java.util.*;
 
 //import GlobalObjectId;
 public class HyPeerWebProxy
@@ -25,7 +25,7 @@ public class HyPeerWebProxy
         return (hypeerweb.HyPeerWeb)result;
     }
 
-    public void saveToDatabase()
+    public synchronized void saveToDatabase()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
@@ -33,7 +33,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void addNode(hypeerweb.Node p0)
+    public synchronized void addNode(hypeerweb.Node p0)
     {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.Node";
@@ -43,7 +43,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1)
+    public synchronized void addToHyPeerWeb(hypeerweb.Node p0, hypeerweb.Node p1)
     {
         String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "hypeerweb.Node";
@@ -55,7 +55,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void removeFromHyPeerWeb()
+    public synchronized void removeFromHyPeerWeb()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
@@ -63,7 +63,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void removeFromHyPeerWeb(int p0)
+    public synchronized void removeFromHyPeerWeb(int p0)
     {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "int";
@@ -73,7 +73,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void clear()
+    public synchronized void clear()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
@@ -101,7 +101,7 @@ public class HyPeerWebProxy
         return (Integer)result;
     }
 
-    public void reload(java.lang.String p0)
+    public synchronized void reload(java.lang.String p0)
     {
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "java.lang.String";
@@ -111,7 +111,7 @@ public class HyPeerWebProxy
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void reload()
+    public synchronized void reload()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
@@ -168,7 +168,7 @@ public class HyPeerWebProxy
         return (Integer)result;
     }
     
-    public void connectToSegment(String ipAddress, int portNumber, int localObjectId)
+    public synchronized void connectToSegment(String ipAddress, int portNumber, int localObjectId)
     {
         String[] parameterTypeNames = new String[3];
         parameterTypeNames[0] = "java.lang.String";
@@ -179,6 +179,24 @@ public class HyPeerWebProxy
         actualParameters[1] = portNumber;
         actualParameters[2] = localObjectId;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "connectToSegment", parameterTypeNames, actualParameters, true);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public synchronized void setNextSegment(hypeerweb.HyPeerWeb p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.HyPeerWeb";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "setNextSegment", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public synchronized void setPreviousSegment(hypeerweb.HyPeerWeb p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.HyPeerWeb";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "setPreviousSegment", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
@@ -208,6 +226,80 @@ public class HyPeerWebProxy
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "migrateNodeToThisSegment", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Node)result;
+    }
+    
+    public void addNewObserver(java.util.Observer p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "interface java.util.Observer";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "addNewObserver", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void notifyObservers(java.lang.Object p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "java.lang.Object";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "notifyObservers", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void notifyObservers(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "notifyObservers", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public synchronized boolean hasChanged(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "hasChanged", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean)result;
+    }
+    
+    public int getCountObservers(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "getCountObservers", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Integer)result;
+    }
+    
+    public synchronized int countObservers(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "countObservers", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Integer)result;
+    }
+    
+    public synchronized void addObserver(java.util.Observer p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "interface java.util.Observer";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "addObserver", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public synchronized void deleteObserver(java.util.Observer p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "interface java.util.Observer";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "deleteObserver", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public synchronized void deleteObservers(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "deleteObservers", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
 

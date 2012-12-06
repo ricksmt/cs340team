@@ -37,7 +37,8 @@ public class GUI extends JFrame implements Observer
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
 		
 		// Make GUI an observer of hypeerweb
-        hypeerweb.addObserver(this);
+        this.hypeerweb.addNewObserver(this);
+        System.out.println(this.hypeerweb.getCountObservers());
 
 		this.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent we) {
