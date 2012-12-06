@@ -8,6 +8,7 @@
 package hypeerweb;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
@@ -234,7 +235,22 @@ public class Connections implements java.io.Serializable
      */
     public void removeSurrogateNeighbor(final Node node) 
     {
-        if(node != null) surrogateNeighbors.remove(node);
+        if(node != null)
+        {
+            boolean success = surrogateNeighbors.remove(node);
+            if (!success)
+            {
+                Iterator<Node> iter = surrogateNeighbors.iterator();
+                while (iter.hasNext())
+                {
+                    if (iter.next().equals(node))
+                    {
+                        iter.remove();
+                        break;
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -255,7 +271,22 @@ public class Connections implements java.io.Serializable
      */
     public void removeInverseSurrogateNeighbor(final Node node) 
     {
-        if(node != null) inverseSurrogateNeighbors.remove(node);
+        if(node != null)
+        {
+            boolean success = inverseSurrogateNeighbors.remove(node);
+            if (!success)
+            {
+                Iterator<Node> iter = inverseSurrogateNeighbors.iterator();
+                while (iter.hasNext())
+                {
+                    if (iter.next().equals(node))
+                    {
+                        iter.remove();
+                        break;
+                    }
+                }
+            }
+        }
     }
     
     /**
