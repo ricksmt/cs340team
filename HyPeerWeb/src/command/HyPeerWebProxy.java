@@ -178,7 +178,7 @@ public class HyPeerWebProxy
         actualParameters[0] = ipAddress;
         actualParameters[1] = portNumber;
         actualParameters[2] = localObjectId;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "connectToSegment", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWeb", "connectToSegment", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     

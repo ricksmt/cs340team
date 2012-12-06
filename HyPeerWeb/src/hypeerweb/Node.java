@@ -49,7 +49,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
             @Override
             public Node findCapNode(final Node n)
             {
-                if(n.connections.getSurrogateNeighbors().size() > 0)
+                if(n.getConnections().getSurrogateNeighbors().size() > 0)
                 {
                     return n.getHighestSurrogateNeighbor();
                 }
@@ -597,7 +597,7 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         }//The cap node is now found (currentNode).
         
         // Node 0 
-        currentNode = currentNode.connections.getFold();
+        currentNode = currentNode.getConnections().getFold();
         if(currentNode.getLowestNeighbor() != Node.NULL_NODE)
             currentNode = currentNode.getLowestNeighbor();
         
