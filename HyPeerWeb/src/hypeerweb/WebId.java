@@ -22,7 +22,7 @@ package hypeerweb;
  * 
  * @author Scott Woodfield
  */
-public class WebId implements Comparable<WebId>
+public class WebId implements Comparable<WebId>, java.io.Serializable
 {
     //I don't know why the previous line shows as yellow in the coverage report.  It is not even
     //an executable statement much less a boolean expression.
