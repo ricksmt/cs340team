@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import command.GlobalObjectId;
 import command.PeerCommunicator;
 
 /**
@@ -31,7 +32,6 @@ public class GUI extends JFrame implements Observer
 	
 	public GUI()
 	{
-	    init(HyPeerWeb.getSingleton());
 	}
 	
 	/**
@@ -151,7 +151,9 @@ public class GUI extends JFrame implements Observer
     
     public Object writeReplace()
     {
-        command.GUIProxy myProx = new command.GUIProxy(getId());
+        GlobalObjectId id = new GlobalObjectId();
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
+        command.GUIProxy myProx = new command.GUIProxy(id);
         return myProx;
     }
 

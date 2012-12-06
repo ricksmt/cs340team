@@ -12,7 +12,7 @@ import command.PortNumber;
 /**
  * The Class HyPeerWeb.
  */
-public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializable
+public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Serializable
 {
     
     /** The nodes. */
@@ -27,9 +27,10 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     private transient HyPeerWeb nextSegment;
     private transient HyPeerWeb previousSegment;
     
+    private transient HyPeerWebObservable observable;
 
-    // For Proxyable
-    private transient command.GlobalObjectId id;
+    /*// For Proxyable
+    private transient command.GlobalObjectId id;*/
     
     /**
      * Instantiates a new HyPeerWeb.
@@ -44,10 +45,11 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         database = HyPeerWebDatabase.getSingleton();
         nextSegment = null;
         previousSegment = null;
+        observable = new HyPeerWebObservable();
         
-        //Proxyable object
+        /*//Proxyable object
         id = new command.GlobalObjectId();
-        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);*/
     }
 	
     /**
@@ -135,7 +137,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 		reload(null);	
 		
 		// Observer Pattern
-        notifyObservers(nodes);
+        observable.notifyObservers();
 	}
 
 	/**
@@ -163,10 +165,10 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
 	        nodes.add(node0);
 	    
 	    // Observer Pattern
-        System.out.println(this.countObservers());
+        System.out.println(observable.countObservers());
         
-        setChanged();
-        notifyObservers(nodes);
+        observable.changed();
+        observable.notifyObservers();
 	}
 
 	/**
@@ -268,7 +270,7 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
         
         
         // Observer Pattern
-        notifyObservers(nodes);
+        observable.notifyObservers();
     }
     
     public synchronized void connectToSegment(String ipAddress, int portNumber, int localObjectId)
@@ -377,17 +379,17 @@ public class HyPeerWeb extends Observable implements Proxyable, java.io.Serializ
     
     public void addNewObserver(Observer o)
     {
-        addObserver(o);
+        observable.addObserver(o);
     }
     
     public int getCountObservers()
     {
-        return countObservers();
+        return observable.countObservers();
     }
     
-    // Proxyable method
+    /*// Proxyable method
     public command.GlobalObjectId getId()
     {
         return id;   
-    }
+    }*/
 }

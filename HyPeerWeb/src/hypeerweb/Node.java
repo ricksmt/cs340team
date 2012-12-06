@@ -18,7 +18,7 @@ package hypeerweb;
 import java.util.*;
 
 
-public class Node extends Observable implements Comparable<Node>, Proxyable, java.io.Serializable
+public class Node extends ProxyableObject implements Comparable<Node>, java.io.Serializable
 {
     /**
      * This represents the state of the node in the cap node finding algorithm.
@@ -143,9 +143,9 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         contents = new Contents();
         state = State.CAP;
         
-        //Proxyable object
+        /*//Proxyable object
         id = new command.GlobalObjectId();
-        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);*/
     }
     
     /**
@@ -163,13 +163,13 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         state = State.CAP;
         
         //Proxyable object
-        id = new command.GlobalObjectId();
-        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);
+        /*id = new command.GlobalObjectId();
+        command.ObjectDB.getSingleton().store(id.getLocalObjectId(), this);*/
     }
     
     public Node(int i, command.GlobalObjectId id) //Wait, how would we even know what it's webId is supposed to be?
     {
-        super();
+        super(id);
         webid = new WebId(i);
         connections = new Connections();
         connections.setFold(this);
@@ -177,8 +177,8 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         state = State.CAP;
         
         //Proxyable object
-        this.id = id;
-        command.ObjectDB.getSingleton().store(this.id.getLocalObjectId(), this);
+        /*this.id = id;
+        command.ObjectDB.getSingleton().store(this.id.getLocalObjectId(), this);*/
     }
     
     /**
@@ -797,11 +797,11 @@ public class Node extends Observable implements Comparable<Node>, Proxyable, jav
         return connections.getInverseSurrogateNeighbors();
     }
     
-    // Proxyable Method
+    /*// Proxyable Method
     public command.GlobalObjectId getId()
     {
         return id;   
-    }
+    }*/
     
     public java.lang.String toString()
     {
