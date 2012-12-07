@@ -45,7 +45,7 @@ public class NodeListing extends JPanel {
 	
 	public static final int MAX_NUMBER_OF_NODES = 128;
 	
-	private int listSize = 1;
+	private int listSize = 0;
 	
 	/**
 	 * Creates and intializes a Node Listing
@@ -101,7 +101,14 @@ public class NodeListing extends JPanel {
         int index = nodeList.getSelectedIndex();
        
         if (index >= 0 && listSize != 0)
-            return new Integer((String) nodeListModel.get(index));
+        {   
+            String num = (String) nodeListModel.get(index);
+            if (num.equals(""))
+            {
+                return -1;
+            }
+            return new Integer(num);
+        }
         
         return index;
     }
@@ -170,7 +177,7 @@ public class NodeListing extends JPanel {
 		for(int i = 1; i < listSize; i++){
 			nodeListModel.set(i,"");
 		}
-		listSize = 1;
+		listSize = 0;
 	}
 	
 	/**
