@@ -8,7 +8,7 @@ public abstract class ProxyableObject extends Observable implements java.io.Seri
    /**
      * 
      */
-   //private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 702635535335858345L;
 
    private transient command.GlobalObjectId id;
    //private transient hypeerweb.ObservabilityObject observable;
