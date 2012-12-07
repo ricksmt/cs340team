@@ -408,7 +408,7 @@ public class NodeProxy
         return (hypeerweb.Node.State)result;
     }
     
-    private synchronized void disconnectDeletionPoint()
+    public synchronized void disconnectDeletionPoint()
     {
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
