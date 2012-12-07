@@ -77,7 +77,7 @@ public class SendWindowPanel
     	//			2. Otherwise, get the message from the "messageBox" component and send it from the start node to the target node
     	//				in the HyPeerWeb using the "GUISender" visitor.
         final Node start = main.getHyPeerWeb().getNode(Integer.parseInt(startingNode.getText()));
-        final Node end = main.getHyPeerWeb().getNode(Integer.parseInt(endingNode.getText()));
+        final Node end = new Node(Integer.parseInt(endingNode.getText()));//main.getHyPeerWeb().getNode(Integer.parseInt(endingNode.getText()));
         if(start == Node.NULL_NODE){
             main.getHyPeerWebDebugger().getPrinter().println("Could not find node " + startingNode.getText());
         }
