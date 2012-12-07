@@ -645,7 +645,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
      * 
      * Called from the deletionPoint node
      */
-    private synchronized void disconnectDeletionPoint()
+    public synchronized void disconnectDeletionPoint()
     {
         Connections.disconnect(this);
     }

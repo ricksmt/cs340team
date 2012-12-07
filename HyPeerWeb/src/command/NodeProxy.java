@@ -408,6 +408,14 @@ public class NodeProxy
         return (hypeerweb.Node.State)result;
     }
     
+    public synchronized void disconnectDeletionPoint()
+    {
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.Node", "disconnectDeletionPoint", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
 
     public command.GlobalObjectId getId(){
         /*String[] parameterTypeNames = new String[0];

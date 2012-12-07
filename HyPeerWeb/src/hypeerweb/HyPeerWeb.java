@@ -69,7 +69,8 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	 */
 	public synchronized void clear()
 	{
-	    nodes.clear();
+	    while (nodes.size() > 0)
+	        removeFromHyPeerWeb(nodes.iterator().next().getWebId());
 	}
 
 	/**
