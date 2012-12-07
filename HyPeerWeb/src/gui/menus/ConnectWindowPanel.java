@@ -77,7 +77,7 @@ public class ConnectWindowPanel
     {
         /*main.getHyPeerWeb().connectToSegment(globalObjectID.getText(),
                 Integer.parseInt(port.getText()), Integer.parseInt(localObjectID.getText())); */
-        main.getHyPeerWeb().connectToSegment("192.168.2.153",
+        main.getHyPeerWeb().connectToSegment("192.168.2.160",
                 55555,-2147483648); 
     }
 }

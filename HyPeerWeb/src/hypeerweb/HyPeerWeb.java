@@ -160,7 +160,10 @@ public class HyPeerWeb extends ProxyableObject implements Proxyable, java.io.Ser
 	{
 	    
 	    if (node0.getClass() != NodeProxy.class )
+	    {
 	        nodes.add(node0);
+	        node0.addNewObserver(this);
+	    }
 	    
 	    // Observer Pattern
         System.out.println(getCountObservers());
