@@ -388,7 +388,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
     public synchronized void addNeighbor(final Node node) 
     {
         // if WebIds are neighbors - can't add itself as a neighbor
-        if(node != null && !node.equals(this))
+        if(node != null && !node.getId().equals(getId()))
             connections.addNeighbor(node);
     }
     
@@ -429,7 +429,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
      */
     public synchronized void addUpPointer(final Node node0)
     {
-        if(node0 != null && !node0.equals(this) )
+        if(node0 != null && !node0.getId().equals(getId()) )
             connections.addInverseSurrogateNeighbor(node0);
     }
     
@@ -451,7 +451,7 @@ public class Node extends ProxyableObject implements Comparable<Node>, java.io.S
     public synchronized void addDownPointer(final Node node)
     {
         // Cannot add itself as a Down Pointer
-        if(node != null && !node.equals(this))
+        if(node != null && !node.getId().equals(getId()))
             connections.addSurrogateNeighbor(node);
     }
     
